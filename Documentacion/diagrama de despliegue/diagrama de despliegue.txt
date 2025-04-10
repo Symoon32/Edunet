@@ -1,0 +1,32 @@
++-----------------------------------------------------------+
+|                 Nodo: Infraestructura AWS                 |
+|       (Nube donde se despliega el sistema del colegio)   |
+|                                                           |
+|   +----------------------------------------------+        |
+|   | Nodo: Servidor Backend (EC2 - Node.js)       |        |
+|   |                                              |        |
+|   |  [Artifact: API REST - Node.js + Express]    |        |
+|   |  [Artifact: Autenticación (JWT)]             |        |
+|   |  [Artifact: Servidor Web / Express Static]   |        |
+|   |  [Artifact: Logger / Monitor (Winston)]      |        |
+|   +----------------------------------------------+        |
+|                                                           |
+|   +----------------------------------------------+        |
+|   | Nodo: Base de Datos (RDS - MySQL)            |        |
+|   |                                              |        |
+|   |  [Artifact: MySQL Engine]                    |        |
+|   |  [Artifact: Esquema Institucional]           |        |
+|   |  [Artifact: Backups Automáticos (Snapshot)]  |        |
+|   +----------------------------------------------+        |
++-----------------------------------------------------------+
+
+                         ↑
+                         | HTTPS (TLS)
+                         |
++--------------------------------------------------+
+| Nodo: Computadora del Usuario Final             |
+| (Dispositivo con navegador web)                 |
+|                                                |
+|  [Artifact: Navegador Web]                     |
+|  [Artifact: App Web (Frontend)]                |
++--------------------------------------------------+
