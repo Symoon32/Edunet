@@ -1,0 +1,92 @@
+
+-- 1. Listar todos los estudiantes con su curso y grado
+SELECT 
+    Estudiante.idEstudiante,
+    Estudiante.nombre,
+    Estudiante.apellido,
+    Curso.nombre AS nombreCurso,
+    Grado.nombre AS nombreGrado
+FROM Estudiante
+JOIN Matricula ON Estudiante.idMatricula = Matricula.idMatricula
+JOIN Curso ON Matricula.idCurso = Curso.idCurso
+JOIN Grado ON Curso.idGrado = Grado.idGrado;
+
+-- 2. Obtener los profesores con las materias que dictan
+SELECT 
+    Profesor.idProfesor,
+    Profesor.nombre,
+    Profesor.apellido,
+    Materia.nombre AS nombreMateria
+FROM Profesor
+JOIN Materia ON Profesor.idProfesor = Materia.idProfesor;
+
+-- 3. Promedio de notas por estudiante
+SELECT 
+    Estudiante.idEstudiante,
+    Estudiante.nombre,
+    Estudiante.apellido,
+    AVG(Nota.nota) AS promedioNota
+FROM Estudiante
+JOIN Nota ON Estudiante.idEstudiante = Nota.idEstudiante
+GROUP BY Estudiante.idEstudiante, Estudiante.nombre, Estudiante.apellido;
+
+-- 4. Lista de estudiantes con su acudiente
+SELECT 
+    Estudiante.nombre AS nombreEstudiante,
+    Estudiante.apellido AS apellidoEstudiante,
+    Acudiente.nombre AS nombreAcudiente,
+    Acudiente.apellido AS apellidoAcudiente,
+    Acudiente.parentesco,
+    Acudiente.telefono
+FROM Estudiante
+JOIN Acudiente ON Estudiante.idEstudiante = Acudiente.idEstudiante;
+
+-- 5. Eventos del calendario por curso
+SELECT 
+    Curso.nombre AS nombreCurso,
+    Calendario.nombreEvento,
+    Calendario.tipoEvento,
+    Calendario.fecha
+FROM Calendario
+JOIN Curso ON Calendario.idCurso = Curso.idCurso
+ORDER BY Calendario.fecha;
+
+-- 6. Observaciones realizadas a cada estudiante
+SELECT 
+    Estudiante.nombre AS nombreEstudiante,
+    Estudiante.apellido AS apellidoEstudiante,
+    Observacion.nombre AS nombreObservacion,
+    Observacion.tipo AS tipoObservacion,
+    Observacion.fecha AS fechaObservacion,
+    Profesor.nombre AS nombreProfesor,
+    Profesor.apellido AS apellidoProfesor
+FROM Observacion
+JOIN Estudiante ON Observacion.idEstudiante = Estudiante.idEstudiante
+JOIN Profesor ON Observacion.idProfesor = Profesor.idProfesor;
+
+-- 7. Mensajes enviados por cada profesor
+SELECT 
+    Mensaje.idMensaje,
+    Mensaje.emisor,
+    Mensaje.receptor,
+    Mensaje.fechaEnvio,
+    Profesor.nombre AS nombreProfesor,
+    Profesor.apellido AS apellidoProfesor
+FROM Mensaje
+JOIN Profesor ON Mensaje.idProfesor = Profesor.idProfesor
+WHERE Mensaje.emisor = CONCAT(Profesor.nombre, ' ', Profesor.apellido);
+
+-- 8. Listado de recursos disponibles por materia
+SELECT 
+    Recurso.nombre AS nombreRecurso,
+    Recurso.tipo AS tipoRecurso,
+    Recurso.fechaSubida,
+    Materia.nombre AS nombreMateria
+FROM Recurso
+JOIN Materia ON Recurso.idMateria = Materia.idMateria;
+
+-- 9. Actualizar el correo electrónico de un estudiante específico
+UPDATE Estudiante
+SET correo = 'nuevo_correo_estudiante@example.com'
+WHERE idEstudiante = 1;
+
