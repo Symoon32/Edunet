@@ -1,0 +1,5 @@
+Flask==2.0.3
+Flask-Bcrypt==1.0.1
+PyMySQL==1.1.0
+Werkzeug==2.0.3
+python-dotenv==1.0.1
