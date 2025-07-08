@@ -4,25 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Acudientes - Comunicación con Docentes</title>
-  <link rel="stylesheet" href="/static/css tutor/bootstrap.min.css">
-  <link rel="stylesheet" href="/static/css tutor/comunicacion.css">
+  <link rel="stylesheet" href="/Edunet-Estructura/static/css tutor/bootstrap.min.css">
+  <link rel="stylesheet" href="/Edunet-Estructura/static/css tutor/comunicacion.css">
 </head>
 <body class="min-vh-100 d-flex flex-column">
 
   <header class="d-flex align-items-center bg-primary text-white p-3">
-    <img src="/static/img/logo sin fondo.png" alt="Logo" class="me-3" style="height:60px;">
+    <img src="/Edunet-Estructura/static/img/logo sin fondo.png" alt="Logo" class="me-3" style="height:60px;">
     <h1 class="h4 mb-0">Portal de Padres</h1>
   </header>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item mx-4"><a class="nav-link" href="./principal acudiente.html">Inicio</a></li>
-        <li class="nav-item mx-4"><a class="nav-link" href="./acudiente observaciones.html">Observaciones</a></li>
-        <li class="nav-item mx-4"><a class="nav-link" href="./notas acudiente.html">Notas</a></li>
-        <li class="nav-item mx-4"><a class="nav-link active" href="./acudiente comunicacion.html">Mensajes</a></li>
-        <li class="nav-item mx-4"><a class="nav-link" href="./acudiente calendario.html">Calendario</a></li>
-        <li class="nav-item mx-4"><a class="nav-link" href="#">Salir</a></li>
+  <nav class="background-dark">
+    <div class="container">
+      <ul class="nav nav-pills py-2">
+        <li class="nav-item"><a class="nav-link text-white" href="/Edunet-Estructura/app/templates/html tutores/principal acudiente.html">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/Edunet-Estructura/app/templates/html tutores/acudiente observaciones.html"> observaciones</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/Edunet-Estructura/app/templates/html tutores/notas acudiente.html">Notas</a></li>
+        <li class="nav-item"><a class="nav-link text-white active" href="/Edunet-Estructura/app/templates/html tutores/acudiente comunicacion.html">Mensajes</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/Edunet-Estructura/app/templates/html tutores/acudiente calendario.html">Calendario</a></li>
+        <a href="/Edunet-Estructura/app/templates/inicio de sesion.html" class="btn btn-danger">
+        <i class="bi bi-box-arrow-right"></i></a>
       </ul>
     </div>
   </nav>
@@ -68,6 +69,6 @@
   <footer class="bg-light text-center py-3 mt-auto">
     <p class="mb-0">&copy; 2025 Edunet - Todos los derechos reservados</p>
   </footer>
-<script src="/static/js tutor/bootstrap.bundle.min.js"></script>
+<script src="/Edunet-Estructura/static/js tutor/bootstrap.bundle.min.js"></script>
 </body>
 </html>
