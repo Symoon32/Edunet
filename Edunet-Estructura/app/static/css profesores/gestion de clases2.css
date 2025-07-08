@@ -1,0 +1,102 @@
+:root {
+  --color-azul: #0057A8;
+  --color-rojo: #C1272D;
+  --color-claro: #f4f6f9;
+  --color-gris: #e0e0e0;
+  --color-texto: #333;
+  --color-hover: #0d6efd;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background-color: var(--color-claro);
+  color: var(--color-texto);
+}
+
+header {
+  background-color: var(--color-azul);
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+header .logo {
+  height: 60px;
+}
+
+nav.background-dark {
+  background-color: #222;
+}
+
+.nav-pills .nav-link {
+  color: #dfefff;
+  margin-right: 10px;
+  font-weight: 500;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .nav-link:hover {
+  background-color: var(--color-hover);
+  color: white !important;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-danger {
+  margin-left: auto;
+}
+
+main.container {
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+
+.clases h2 {
+  text-align: center;
+  color: var(--color-azul);
+  margin-bottom: 20px;
+}
+
+.clases p {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #555;
+}
+
+.clase-card {
+  background-color: white;
+  border: 1px solid var(--color-gris);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.clase-card h3 {
+  color: var(--color-azul);
+  margin-bottom: 10px;
+}
+
+.clase-card button {
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.clase-card button.eliminar {
+  background-color: var(--color-rojo);
+}
+
+.clase-card button:hover {
+  opacity: 0.85;
+}
+
+
