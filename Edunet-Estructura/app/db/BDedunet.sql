@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `Directivo` (
 
 -- Tabla: Matricula
 
-DROP TABLE IF EXISTS `Matricula`;
+
 
 CREATE TABLE IF NOT EXISTS `Matricula` (
     `idMatricula` INT NOT NULL COMMENT 'Identificador único de la matrícula',
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `Matricula` (
 
 -- Tabla Estudiante
 
-DROP TABLE IF EXISTS `Estudiante`;
+
 
 CREATE TABLE IF NOT EXISTS `Estudiante` (
     `idEstudiante` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del estudiante',
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `Estudiante` (
 
 -- Tabla: Acudiente
 
-DROP TABLE IF EXISTS `Acudiente`;
+
 
 CREATE TABLE IF NOT EXISTS `Acudiente` (
     `idAcudiente` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del acudiente',
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `Acudiente` (
 
 -- Tabla: Profesor
 
-DROP TABLE IF EXISTS `Profesor`;
+
 
 CREATE TABLE IF NOT EXISTS `Profesor` (
     `idProfesor` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del profesor',
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `Profesor` (
 
 -- Tabla: Curso
 
-DROP TABLE IF EXISTS `Curso`;
+
 
 CREATE TABLE IF NOT EXISTS `Curso` (
     `idCurso` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del curso',
@@ -145,7 +145,7 @@ CREATE TABLE IF NOT EXISTS `Curso` (
 
 -- Tabla: Nota
 
-DROP TABLE IF EXISTS `Nota`;
+
 
 CREATE TABLE IF NOT EXISTS `Nota` (
     `idAsignacion` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador de la asignación o nota',
@@ -188,49 +188,9 @@ CREATE TABLE IF NOT EXISTS `Nota` (
 
 -- Tabla: Grado
 
-DROP TABLE IF EXISTS `Grado`;
 
-CREATE TABLE IF NOT EXISTS `Grado` (
-  `idGrado` VARCHAR(45) NOT NULL COMMENT 'Identificador único del grado',
-  `nombreGrado` VARCHAR(45) NOT NULL COMMENT 'Nombre del grado (Octavo, Séptimo, etc.)',
-  `horario` VARCHAR(45) NOT NULL COMMENT 'Horario de las materias',
 
-  `Profesor_idProfesor` INT NOT NULL COMMENT 'ID del profesor',
-  `Curso_idCurso` INT NOT NULL COMMENT 'ID del curso',
-  `Curso_Estudiantes_idEstudiante` INT NOT NULL COMMENT 'ID del estudiante del curso',
-  `Curso_Estudiantes_Matricula_idMatricula` INT NOT NULL COMMENT 'ID de la matrícula del curso',
 
-  PRIMARY KEY (
-    `idGrado`,
-    `Profesor_idProfesor`,
-    `Curso_idCurso`,
-    `Curso_Estudiantes_idEstudiante`,
-    `Curso_Estudiantes_Matricula_idMatricula`
-  ),
-
-  INDEX `idx_Grado_Profesor` (`Profesor_idProfesor`),
-  INDEX `idx_Grado_Curso` (`Curso_idCurso`, `Curso_Estudiantes_idEstudiante`, `Curso_Estudiantes_Matricula_idMatricula`),
-
-  CONSTRAINT `fk_Grado_Profesor`
-    FOREIGN KEY (`Profesor_idProfesor`)
-    REFERENCES `Profesor` (`idProfesor`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-
-  CONSTRAINT `fk_Grado_Curso`
-    FOREIGN KEY (
-      `Curso_idCurso`,
-      `Curso_Estudiantes_idEstudiante`,
-      `Curso_Estudiantes_Matricula_idMatricula`
-    )
-    REFERENCES `Curso` (
-      `idCurso`,
-      `Estudiantes_idEstudiante`,
-      `Estudiantes_Matricula_idMatricula`
-    )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
 
 
 
@@ -238,54 +198,15 @@ CREATE TABLE IF NOT EXISTS `Grado` (
 
 -- Tabla: Materia
 
-DROP TABLE IF EXISTS `Materia`;
 
-CREATE TABLE IF NOT EXISTS `Materia` (
-  `idMateria` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador único de la materia',
-  `nombre` VARCHAR(50) NOT NULL COMMENT 'Nombre de la materia',
-  `descripcion` VARCHAR(100) NOT NULL COMMENT 'Descripción de la materia',
-  
-  `Curso_idCurso` INT NOT NULL COMMENT 'ID del curso al que pertenece la materia',
-  `Curso_Estudiantes_idEstudiante` INT NOT NULL COMMENT 'ID del estudiante vinculado al curso',
-  `Curso_Estudiantes_Matricula_idMatricula` INT NOT NULL COMMENT 'ID de la matrícula del estudiante',
-  `Profesor_idProfesor` INT NOT NULL COMMENT 'ID del profesor encargado de la materia',
 
-  PRIMARY KEY (`idMateria`),
 
-  INDEX `idx_Materia_Curso` (
-    `Curso_idCurso`,
-    `Curso_Estudiantes_idEstudiante`,
-    `Curso_Estudiantes_Matricula_idMatricula`
-  ),
-
-  INDEX `idx_Materia_Profesor` (`Profesor_idProfesor`),
-
-  CONSTRAINT `fk_Materia_Curso`
-    FOREIGN KEY (
-      `Curso_idCurso`,
-      `Curso_Estudiantes_idEstudiante`,
-      `Curso_Estudiantes_Matricula_idMatricula`
-    )
-    REFERENCES `Curso` (
-      `idCurso`,
-      `Estudiantes_idEstudiante`,
-      `Estudiantes_Matricula_idMatricula`
-    )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-
-  CONSTRAINT `fk_Materia_Profesor`
-    FOREIGN KEY (`Profesor_idProfesor`)
-    REFERENCES `Profesor` (`idProfesor`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
 
 
 
 -- Tabla: Observacion
 
-DROP TABLE IF EXISTS `Observacion`;
+
 
 CREATE TABLE IF NOT EXISTS `Observacion` (
   `idObservacion` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador único de la observación',
@@ -331,129 +252,20 @@ CREATE TABLE IF NOT EXISTS `Observacion` (
 
 -- Tabla Mesaje
 
-DROP TABLE IF EXISTS `Mensaje`;
-
-CREATE TABLE IF NOT EXISTS `Mensaje` (
-  `idMensaje` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del mensaje',
-  `emisor` VARCHAR(30) NOT NULL COMMENT 'Nombre del remitente',
-  `receptor` VARCHAR(30) NOT NULL COMMENT 'Nombre o rol del destinatario',
-  `fechaEnvio` DATE NOT NULL COMMENT 'Fecha en que se envió el mensaje',
-  `contenido` TEXT NOT NULL COMMENT 'Texto o cuerpo del mensaje',
-
-  `idDirectivo` INT NULL COMMENT 'ID del directivo involucrado',
-  `idAcudiente` INT NULL COMMENT 'ID del acudiente involucrado',
-  `idProfesor` INT NULL COMMENT 'ID del profesor involucrado',
-  `idEstudiante` INT NULL COMMENT 'ID del estudiante involucrado',
-
-  PRIMARY KEY (`idMensaje`),
-
-  INDEX (`idDirectivo`),
-  INDEX (`idAcudiente`),
-  INDEX (`idProfesor`),
-  INDEX (`idEstudiante`),
-
-  CONSTRAINT `fk_Mensaje_Directivo`
-    FOREIGN KEY (`idDirectivo`)
-    REFERENCES `Directivo` (`idDirectivo`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE,
-
-  CONSTRAINT `fk_Mensaje_Acudiente`
-    FOREIGN KEY (`idAcudiente`)
-    REFERENCES `Acudiente` (`idAcudiente`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE,
-
-  CONSTRAINT `fk_Mensaje_Profesor`
-    FOREIGN KEY (`idProfesor`)
-    REFERENCES `Profesor` (`idProfesor`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE,
-
-  CONSTRAINT `fk_Mensaje_Estudiante`
-    FOREIGN KEY (`idEstudiante`)
-    REFERENCES `Estudiante` (`idEstudiante`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE
-) ENGINE = InnoDB;
 
 
 
 
 -- Tabla: Calendario
 
-DROP TABLE IF EXISTS `Calendario`;
 
-CREATE TABLE IF NOT EXISTS `Calendario` (
-  `idCalendario` INT NOT NULL COMMENT 'Identificador único del evento',
-  `nombreEvento` VARCHAR(45) NOT NULL COMMENT 'Nombre del evento',
-  `tipoDeEvento` VARCHAR(100) NOT NULL COMMENT 'Tipo de evento (reunión, salida pedagógica, etc.)',
-  `fechaEvento` DATE NOT NULL COMMENT 'Fecha en que se realiza el evento',
 
-  `Acudiente_idAcudiente` INT NOT NULL COMMENT 'ID del acudiente',
-  `Acudiente_Estudiantes_idEstudiante` INT NOT NULL COMMENT 'ID del estudiante relacionado con el acudiente',
-  `Acudiente_Estudiantes_Matricula_idMatricula` INT NOT NULL COMMENT 'ID de la matrícula del estudiante del acudiente',
 
-  `Estudiante_idEstudiante` INT NOT NULL COMMENT 'ID del estudiante directamente relacionado',
-  `Estudiante_Matricula_idMatricula` INT NOT NULL COMMENT 'ID de la matrícula del estudiante',
-  `Estudiante_Matricula_Directivo_idDirectivo` INT NOT NULL COMMENT 'ID del directivo que aprobó la matrícula',
-
-  `Profesor_idProfesor` INT NOT NULL COMMENT 'ID del profesor involucrado en el evento',
-
-  PRIMARY KEY (
-    `idCalendario`,
-    `Acudiente_idAcudiente`,
-    `Acudiente_Estudiantes_idEstudiante`,
-    `Acudiente_Estudiantes_Matricula_idMatricula`,
-    `Estudiante_idEstudiante`,
-    `Estudiante_Matricula_idMatricula`,
-    `Estudiante_Matricula_Directivo_idDirectivo`,
-    `Profesor_idProfesor`
-  ),
-
-  INDEX `idx_Calendario_Acudiente` (`Acudiente_idAcudiente`, `Acudiente_Estudiantes_idEstudiante`, `Acudiente_Estudiantes_Matricula_idMatricula`),
-  INDEX `idx_Calendario_Estudiante` (`Estudiante_idEstudiante`, `Estudiante_Matricula_idMatricula`, `Estudiante_Matricula_Directivo_idDirectivo`),
-  INDEX `idx_Calendario_Profesor` (`Profesor_idProfesor`),
-
-  CONSTRAINT `fk_Calendario_Acudiente`
-    FOREIGN KEY (
-      `Acudiente_idAcudiente`,
-      `Acudiente_Estudiantes_idEstudiante`,
-      `Acudiente_Estudiantes_Matricula_idMatricula`
-    )
-    REFERENCES `Acudiente` (
-      `idAcudiente`,
-      `Estudiantes_idEstudiante`,
-      `Estudiantes_Matricula_idMatricula`
-    )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-
-  CONSTRAINT `fk_Calendario_Estudiante`
-    FOREIGN KEY (
-      `Estudiante_idEstudiante`,
-      `Estudiante_Matricula_idMatricula`,
-      `Estudiante_Matricula_Directivo_idDirectivo`
-    )
-    REFERENCES `Estudiante` (
-      `idEstudiante`,
-      `Matricula_idMatricula`,
-      `Matricula_Directivo_idDirectivo`
-    )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-
-  CONSTRAINT `fk_Calendario_Profesor`
-    FOREIGN KEY (`Profesor_idProfesor`)
-    REFERENCES `Profesor` (`idProfesor`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
 
 
 -- 	Tabla Documento
 
-DROP TABLE IF EXISTS `DocumentoIdentidad`;
+
 
 CREATE TABLE IF NOT EXISTS `DocumentoIdentidad` (
   `idDocumento` INT NOT NULL AUTO_INCREMENT COMMENT 'ID del documento',
@@ -478,81 +290,11 @@ CREATE TABLE IF NOT EXISTS `DocumentoIdentidad` (
 
 -- Tabla: calificaciones
 
-DROP TABLE IF EXISTS `calificaciones`;
 
-CREATE TABLE IF NOT EXISTS `calificaciones` (
-  `id_calificaciones` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador exclusivo de la calificación',
-  `nota_calificacion` DOUBLE NULL COMMENT 'Nota obtenida',
-  `promedio_calificacion` DOUBLE NULL COMMENT 'Promedio de la calificación',
 
-  `Nota_idAsignación` INT NOT NULL COMMENT 'ID de la asignación',
-  `Nota_Estudiante_idEstudiante` INT NOT NULL COMMENT 'ID del estudiante de la asignación',
-  `Nota_Estudiante_Matricula_idMatricula` INT NOT NULL COMMENT 'ID de matrícula de la asignación',
-  `Nota_Estudiante_Matricula_Directivo_idDirectivo` INT NOT NULL COMMENT 'ID del directivo de la asignación',
-
-  `Curso_idCurso` INT NOT NULL COMMENT 'ID del curso',
-  `Curso_Estudiantes_idEstudiante` INT NOT NULL COMMENT 'ID del estudiante del curso',
-  `Curso_Estudiantes_Matricula_idMatricula` INT NOT NULL COMMENT 'ID de matrícula del curso',
-
-  PRIMARY KEY (
-    `id_calificaciones`,
-    `Nota_idAsignación`,
-    `Nota_Estudiante_idEstudiante`,
-    `Nota_Estudiante_Matricula_idMatricula`,
-    `Nota_Estudiante_Matricula_Directivo_idDirectivo`,
-    `Curso_idCurso`,
-    `Curso_Estudiantes_idEstudiante`,
-    `Curso_Estudiantes_Matricula_idMatricula`
-  ),
-
-  INDEX `idx_Calificaciones_Nota` (`Nota_idAsignación`, `Nota_Estudiante_idEstudiante`, `Nota_Estudiante_Matricula_idMatricula`, `Nota_Estudiante_Matricula_Directivo_idDirectivo`),
-  INDEX `idx_Calificaciones_Curso` (`Curso_idCurso`, `Curso_Estudiantes_idEstudiante`, `Curso_Estudiantes_Matricula_idMatricula`),
-
-  CONSTRAINT `fk_Calificaciones_Nota`
-    FOREIGN KEY (`Nota_idAsignación`, `Nota_Estudiante_idEstudiante`, `Nota_Estudiante_Matricula_idMatricula`, `Nota_Estudiante_Matricula_Directivo_idDirectivo`)
-    REFERENCES `Nota` (`idAsignación`, `Estudiante_idEstudiante`, `Estudiante_Matricula_idMatricula`, `Estudiante_Matricula_Directivo_idDirectivo`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-
-  CONSTRAINT `fk_Calificaciones_Curso`
-    FOREIGN KEY (`Curso_idCurso`, `Curso_Estudiantes_idEstudiante`, `Curso_Estudiantes_Matricula_idMatricula`)
-    REFERENCES `Curso` (`idCurso`, `Estudiantes_idEstudiante`, `Estudiantes_Matricula_idMatricula`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
-
--- Tabla Calificaciones
-
-DROP TABLE IF EXISTS `calificaciones`;
-
-CREATE TABLE IF NOT EXISTS `calificaciones` (
-  `id_calificaciones` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador exclusivo de la calificación',
-  `nota_calificacion` DOUBLE NULL COMMENT 'Nota obtenida',
-  `promedio_calificacion` DOUBLE NULL COMMENT 'Promedio de la calificación',
-
-  `idNota` INT NOT NULL COMMENT 'ID de la nota (asignación)',
-  `idCurso` INT NOT NULL COMMENT 'Curso relacionado con la calificación',
-
-  PRIMARY KEY (`id_calificaciones`),
-
-  INDEX `idx_Calificaciones_Nota` (`idNota`),
-  INDEX `idx_Calificaciones_Curso` (`idCurso`),
-
-  CONSTRAINT `fk_Calificaciones_Nota`
-    FOREIGN KEY (`idNota`)
-    REFERENCES `Nota` (`idAsignacion`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-
-  CONSTRAINT `fk_Calificaciones_Curso`
-    FOREIGN KEY (`idCurso`)
-    REFERENCES `Curso` (`idCurso`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-) ENGINE = InnoDB;
 
 -- Tablas Daniel
-drop table usuarios;
+
 CREATE TABLE usuarios (
   idUsuarios INT NOT NULL AUTO_INCREMENT,
   nombres VARCHAR(45) NOT NULL,
@@ -595,4 +337,3 @@ INSERT INTO roles (nombreRol) VALUES ("estudiante");
 INSERT INTO roles (nombreRol) VALUES ("profesor");
 INSERT INTO roles (nombreRol) VALUES ("acudiente");
 INSERT INTO roles (nombreRol) VALUES ("administrador");
-
