@@ -1,0 +1,109 @@
+:root {
+  --color-azul: #0057A8;
+  --color-rojo: #C1272D;
+  --color-blanco: #FFFFFF;
+  --color-texto: #333333;
+  --color-neutro: #E0E0E0;
+  --color-destacado: #FFD700;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  background-color: var(--color-blanco);
+  color: var(--color-texto);
+}
+
+.banner {
+  background-color: var(--color-azul);
+  color: var(--color-blanco);
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  width: 50px;
+  height: auto;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.navbar a {
+  color: var(--color-blanco);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.calendario-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: var(--color-neutro);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.calendario-container h2 {
+  margin-bottom: 20px;
+  color: var(--color-azul);
+}
+
+.calendario {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  background-color: var(--color-blanco);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.dia, .dia-header {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.dia-header {
+  background-color: var(--color-azul);
+  color: var(--color-blanco);
+  font-weight: bold;
+}
+
+.dia.destacado {
+  background-color: var(--color-destacado);
+  font-weight: bold;
+  cursor: help;
+}
+
+.leyenda {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.cuadro {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-color: var(--color-destacado);
+  margin-right: 8px;
+  vertical-align: middle;
+  border-radius: 3px;
+}
+
+footer {
+  background-color: var(--color-neutro);
+  color: #333333;
+  padding: 10px;
+  text-align: center;
+}
