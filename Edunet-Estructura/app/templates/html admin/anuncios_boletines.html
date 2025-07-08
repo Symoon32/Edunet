@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/app/static/css admin/anuncios_boletines.css">
 </head>
 <body>
-
+    
    <header class="d-flex align-items-center p-3 header-color text-white">
     <img src="/app/static/img/logo sin fondo.png" alt="Escudo del colegio" class="logo me-3" />
     <h1 class="h4 m-0">Bienvenidos a EduNet - Admin</h1>
@@ -53,33 +53,30 @@
             <textarea class="form-control" rows="4" placeholder="Contenido del anuncio o boletín..."></textarea>
           </div>
 
-          <div class="row g-2 mb-4">
-            <div class="col-md-4">
-              <button class="btn btn-success w-100">Publicar</button>
-            </div>
-            <div class="col-md-4">
-              <button class="btn btn-warning w-100">Editar</button>
-            </div>
-            <div class="col-md-4">
-              <button class="btn btn-danger w-100">Eliminar</button>
-            </div>
+         <div class="row g-2 mb-4">
+          <div class="col-md-4">
+            <button id="btn-publicar" class="btn btn-success w-100">Publicar</button>
           </div>
+          <div class="col-md-4">
+            <button id="btn-editar" class="btn btn-warning w-100">Editar</button>
+          </div>
+          <div class="col-md-4">
+            <button id="btn-eliminar" class="btn btn-danger w-100">Eliminar</button>
+          </div>
+        </div>
 
+          </div>
           <h6 class="fw-bold mb-2">Últimos boletines</h6>
           <ul class="list-group">
-            <li class="list-group-item">
-              <strong>[18/06/2025] - Inicio del tercer periodo académico</strong><br>
-              Se recomienda a los estudiantes revisar su horario actualizado en la plataforma.
-            </li>
-            <li class="list-group-item">
-              <strong>[15/06/2025] - Reunión de padres de familia</strong><br>
-              El evento se llevará a cabo en el auditorio principal a las 6:00 p.m.
-            </li>
           </ul>
+
+          
         </div>
       </div>
     </div>
   </main>
+  <script src="/app/static/js/js admin/anuncios_boletines.js"></script>
+
 <footer class="text-center py-3 footer-color">
     <p class="mb-0">&copy; 2025 Colegio Jorge Isaacs - EduNet</p>
   </footer>
