@@ -1,0 +1,86 @@
+:root {
+    --color-azul: #0057A8;
+    --color-rojo: #C1272D;
+    --color-blanco: #FFFFFF;
+    --color-texto: #333333;
+    --color-neutro: #E0E0E0;
+    font-family: sans-serif;
+  }
+  
+  body {
+    margin: 0;
+    background-color: var(--color-blanco);
+    color: var(--color-texto);
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .banner {
+    background-color: var(--color-azul);
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 20px;
+  }
+  
+  .logo {
+    height: 60px;
+  }
+  
+  .navbar {
+    background-color: var(--color-azul);
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+    font-size: x-large;
+  }
+  
+  .navbar a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .navbar a:hover {
+    text-decoration: underline;
+  }
+  
+  .contenedor {
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .tabla-historial {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-neutro);
+  }
+  
+  .tabla-historial th,
+  .tabla-historial td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  footer {
+    background-color: var(--color-neutro);
+    color: #333333;
+    padding: 10px;
+    text-align: center;
+  }
+  

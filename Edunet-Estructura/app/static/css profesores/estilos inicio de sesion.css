@@ -1,0 +1,74 @@
+:root {
+  --color-azul: #0057A8;
+  --color-rojo: #C1272D;
+  --color-blanco: #FFFFFF;
+  --color-texto: #333333;
+  --color-neutro: #E0E0E0;
+  --color-destacado: #FFD700;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f5f5;
+  color: var(--color-texto);
+}
+
+header {
+  background-color: var(--color-azul);
+  color: var(--color-blanco);
+  font-size: x-large;
+
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+h1, h2 {
+  font-weight: 600;
+}
+
+.img-mapa {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-inner img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.img-edu {
+  width: 180px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.col-md-7{
+  font-size: medium;
+  font-family: 'Segoe UI', sans-serif;
+}
