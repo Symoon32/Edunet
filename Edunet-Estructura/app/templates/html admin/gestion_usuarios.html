@@ -12,34 +12,33 @@
 
   <div class="container-fluid p-0">
 
-    <header class="d-flex align-items-center p-3 header-color text-white">
-      <img src="/app/static/img/logo sin fondo.png" alt="Escudo del colegio" class="logo me-3" />
-      <h1 class="h4 m-0">Bienvenidos a EduNet - Admin</h1>
-      <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
-        <span style="color: white;">Nombre del Usuario</span>
-        <a href="/app/templates/html estudiantes/perfilbootstrap.html" title="Perfil del usuario">
-          <img src="/app/static/img/foto perfil.avif" alt="Perfil" style="width: 32px; height: 32px; border-radius: 50%;">
-        </a>
-      </div>
-    </header>
+     <header class="d-flex align-items-center p-3 header-color text-white">
+    <img src="/app/static/img/logo sin fondo.png" alt="Escudo del colegio" class="logo me-3" />
+    <h1 class="h4 m-0">Bienvenidos a EduNet - Admin</h1>
+        <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+      <span style="color: white;">Nombre del Usuario</span>
+      <a href="/app/templates/html estudiantes/perfilbootstrap.html" title="Perfil del usuario">
+        <img src="/app/static/img/foto perfil.avif" alt="Perfil" style="width: 32px; height: 32px; border-radius: 50%;">
+      </a>
+    </div>
+  </header>
 
     <nav class="background-dark">
-      <div class="container">
-        <ul class="nav nav-pills py-2">
-          <li class="nav-item"><a class="nav-link" href="./principal.html">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link active" href="./gestion_usuarios.html">Gestión de Usuarios</a></li>
-          <li class="nav-item"><a class="nav-link" href="./Gestion Academica.html">Gestión Académica</a></li>
-          <li class="nav-item"><a class="nav-link" href="./configurar_cursos.html">Configurar Cursos</a></li>
-          <li class="nav-item"><a class="nav-link" href="./reportes.html">Reportes</a></li>
-          <li class="nav-item"><a class="nav-link" href="./informes.html">Estadísticas</a></li>
-          <li class="nav-item"><a class="nav-link" href="./comunicacion_general.html">Comunicación general</a></li>
-          <li class="nav-item"><a class="nav-link" href="./anuncios_boletines.html">Anuncios y Boletines</a></li>
-          <a href="/app/templates/inicio de sesion.html" class="btn btn-danger">
-            <i class="bi bi-box-arrow-right"></i>
-          </a>
-        </ul>
-      </div>
-    </nav>
+    <div class="container">
+      <ul class="nav nav-pills py-2">
+        <li class="nav-item"><a class="nav-link" href="./principal.html">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link active" href="./gestion_usuarios.html">Gestión de Usuarios</a></li>
+        <li class="nav-item"><a class="nav-link" href="./Gestion Academica.html">Gestión Académica</a></li>
+        <li class="nav-item"><a class="nav-link" href="./configurar_cursos.html">Configurar Cursos</a></li>
+        <li class="nav-item"><a class="nav-link" href="./reportes.html">Reportes</a></li>
+        <li class="nav-item"><a class="nav-link" href="./informes.html">Estadísticas</a></li>
+        <li class="nav-item"><a class="nav-link" href="./comunicacion_general.html">Comunicacion general</a></li>
+        <li class="nav-item"><a class="nav-link" href="./anuncios_boletines.html">Anuncios y Boletines</a></li>
+        <a href="/app/templates/inicio de sesion.html" class="btn btn-danger">
+        <i class="bi bi-box-arrow-right"></i></a>
+      </ul>
+    </div>
+  </nav>
 
     <main class="container py-5">
       <div class="row justify-content-center">
@@ -61,106 +60,36 @@
 
             <div class="row g-2 mb-4">
               <div class="col-md-4">
-                <a href="/app/templates/html admin/crear_usuario.html" class="btn btn-success w-100">Crear Usuario</a>
+                <button class="btn btn-success w-100">Crear Usuario</button>
+              </div>
+              <div class="col-md-4">
+                <button class="btn btn-warning w-100">Modificar Usuario</button>
+              </div>
+              <div class="col-md-4">
+                <button class="btn btn-danger w-100">Eliminar Usuario</button>
               </div>
             </div>
 
             <div>
               <h6 class="fw-bold mb-3">Usuarios Registrados</h6>
               <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <div>
-                    <span class="fw-bold">Juan Pérez</span> - Estudiante
-                    <span class="badge bg-success ms-2">Activo</span>
-                  </div>
-                  <div>
-                    <a href="/app/templates/html admin/editar_usuarios.html" class="btn btn-warning btn-sm me-2">Editar</a>
-                    <button class="btn btn-danger btn-sm" onclick="inactivarUsuario(this)">Inactivar</button>
-                  </div>
-                </li>
-
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <div>
-                    <span class="fw-bold">Laura Gómez</span> - Docente
-                    <span class="badge bg-danger ms-2">Inactivo</span>
-                  </div>
-                  <div>
-                    <a href="/app/templates/html admin/editar_usuarios.html" class="btn btn-warning btn-sm me-2">Editar</a>
-                    <button class="btn btn-danger btn-sm" onclick="activarUsuario(this)">Activar</button>
-                  </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <div>
-                    <span class="fw-bold">Andrés López</span> - Administrativo
-                    <span class="badge bg-success ms-2">Activo</span>
-                  </div>
-                  <div>
-                    <a href="/app/templates/html admin/editar_usuarios.html" class="btn btn-warning btn-sm me-2">Editar</a>
-                    <button class="btn btn-danger btn-sm" onclick="inactivarUsuario(this)">Inactivar</button>
-                  </div>
-                </li>
-
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <div>
-                    <span class="fw-bold">Camila Rojas</span> - Estudiante
-                    <span class="badge bg-success ms-2">Activo</span>
-                  </div>
-                  <div>
-                    <a href="/app/templates/html admin/editar_usuarios.html" class="btn btn-warning btn-sm me-2">Editar</a>
-                    <button class="btn btn-danger btn-sm" onclick="inactivarUsuario(this)">Inactivar</button>
-                  </div>
-                </li>
-
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <div>
-                    <span class="fw-bold">Miguel Díaz</span> - Docente
-                    <span class="badge bg-success ms-2">Activo</span>
-                  </div>
-                  <div>
-                    <a href="/app/templates/html admin/editar_usuarios.html" class="btn btn-warning btn-sm me-2">Editar</a>
-                    <button class="btn btn-danger btn-sm" onclick="inactivarUsuario(this)">Inactivar</button>
-                  </div>
-                </li>
-
+                <li class="list-group-item">Juan Pérez - Estudiante</li>
+                <li class="list-group-item">Laura Gómez - Docente</li>
+                <li class="list-group-item">Andrés López - Administrativo</li>
+                <li class="list-group-item">Camila Rojas - Estudiante</li>
+                <li class="list-group-item">Miguel Díaz - Docente</li>
               </ul>
             </div>
-
           </div>
         </div>
       </div>
     </main>
   </div>
-
-  <footer class="text-center py-3 footer-color">
+<footer class="text-center py-3 footer-color">
     <p class="mb-0">&copy; 2025 Colegio Jorge Isaacs - EduNet</p>
   </footer>
-  <script>
-    function inactivarUsuario(button) {
-      const badge = button.parentElement.parentElement.querySelector('.badge');
-      badge.textContent = 'Inactivo';
-      badge.classList.remove('bg-success');
-      badge.classList.add('bg-danger');
-      button.textContent = 'Activar';
-      button.classList.remove('btn-danger');
-      button.classList.add('btn-success');
-      button.setAttribute('onclick', 'activarUsuario(this)');
-    }
-
-    function activarUsuario(button) {
-      const badge = button.parentElement.parentElement.querySelector('.badge');
-      badge.textContent = 'Activo';
-      badge.classList.remove('bg-danger');
-      badge.classList.add('bg-success');
-      button.textContent = 'Inactivar';
-      button.classList.remove('btn-success');
-      button.classList.add('btn-danger');
-      button.setAttribute('onclick', 'inactivarUsuario(this)');
-    }
-  </script>
 </body>
 </html>
-
-
 
 <!--
 function buscarUsuario() {
