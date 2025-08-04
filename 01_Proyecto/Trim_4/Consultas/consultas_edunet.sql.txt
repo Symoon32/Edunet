@@ -1,0 +1,184 @@
+
+======================
+🔹 Nivel 1: Básico (SELECT, WHERE, ORDER BY)
+======================
+
+1. Mostrar todos los profesores:
+SELECT * FROM Profesor;
+
+2. Mostrar los estudiantes con apellido "Gómez":
+SELECT * FROM Estudiante WHERE apellido = 'Gómez';
+
+3. Listar todos los cursos ordenados alfabéticamente:
+SELECT * FROM Curso ORDER BY nombre;
+
+4. Mostrar directivos con cargo "Rector":
+SELECT * FROM Directivo WHERE cargo = 'Rector';
+
+5. Consultar todas las materias de tipo "Matemáticas":
+SELECT * FROM Materia WHERE nombre LIKE '%Mate%';
+
+6. Estudiantes con correo institucional (que termine en .edu):
+SELECT * FROM Estudiante WHERE correo LIKE '%.edu';
+
+7. Ver todas las observaciones hechas en 2024:
+SELECT * FROM Observacion WHERE YEAR(fecha) = 2024;
+
+8. Mostrar estudiantes inscritos entre enero y junio de 2025:
+SELECT * FROM Estudiante e
+JOIN Matricula m ON e.idMatricula = m.idMatricula
+WHERE MONTH(m.fechaMatricula) BETWEEN 1 AND 6 AND YEAR(m.fechaMatricula) = 2025;
+
+======================
+🔹 Nivel 2: Agregación y Agrupamiento
+======================
+
+9. Contar la cantidad de estudiantes:
+SELECT COUNT(*) AS total_estudiantes FROM Estudiante;
+
+10. Obtener el promedio de notas:
+SELECT AVG(nota) AS promedio_general FROM Nota;
+
+11. Mostrar cantidad de materias por curso:
+SELECT idCurso, COUNT(*) AS total_materias
+FROM Materia
+GROUP BY idCurso;
+
+12. Ver cantidad de observaciones por tipo:
+SELECT tipo, COUNT(*) FROM Observacion GROUP BY tipo;
+
+13. Máxima nota registrada:
+SELECT MAX(nota) AS nota_maxima FROM Nota;
+
+14. Notas promedio por estudiante:
+SELECT idEstudiante, AVG(nota) AS promedio FROM Nota GROUP BY idEstudiante;
+
+15. Cantidad de estudiantes por curso:
+SELECT c.nombre, COUNT(e.idEstudiante) AS total_estudiantes
+FROM Curso c
+JOIN Matricula m ON c.idCurso = m.idCurso
+JOIN Estudiante e ON m.idMatricula = e.idMatricula
+GROUP BY c.nombre;
+
+======================
+🔹 Nivel 3: JOINs
+======================
+
+16. Listar estudiantes con su curso:
+SELECT e.nombre, e.apellido, c.nombre AS curso
+FROM Estudiante e
+JOIN Matricula m ON e.idMatricula = m.idMatricula
+JOIN Curso c ON m.idCurso = c.idCurso;
+
+17. Ver materias con el nombre del profesor:
+SELECT m.nombre, p.nombre AS profesor
+FROM Materia m
+JOIN Profesor p ON m.idProfesor = p.idProfesor;
+
+18. Ver observaciones con nombre del estudiante y profesor:
+SELECT o.nombre, e.nombre AS estudiante, p.nombre AS profesor
+FROM Observacion o
+JOIN Estudiante e ON o.idEstudiante = e.idEstudiante
+JOIN Profesor p ON o.idProfesor = p.idProfesor;
+
+19. Ver notas con nombre de estudiante y materia:
+SELECT e.nombre AS estudiante, ma.nombre AS materia, n.nota
+FROM Nota n
+JOIN Estudiante e ON n.idEstudiante = e.idEstudiante
+JOIN Materia ma ON n.idMateria = ma.idMateria;
+
+20. Ver recursos con nombre de materia:
+SELECT r.nombre, r.tipo, m.nombre AS materia
+FROM Recurso r
+JOIN Materia m ON r.idMateria = m.idMateria;
+
+======================
+🔹 Nivel 4: Subconsultas
+======================
+
+21. Estudiantes con promedio mayor a 4.5:
+SELECT idEstudiante FROM Nota
+GROUP BY idEstudiante
+HAVING AVG(nota) > 4.5;
+
+22. Profesores que tienen materias asignadas:
+SELECT * FROM Profesor WHERE idProfesor IN (SELECT idProfesor FROM Materia);
+
+23. Cursos con más de 3 materias:
+SELECT idCurso FROM Materia GROUP BY idCurso HAVING COUNT(*) > 3;
+
+24. Estudiantes sin observaciones:
+SELECT * FROM Estudiante WHERE idEstudiante NOT IN (SELECT idEstudiante FROM Observacion);
+
+25. Notas mayores al promedio general:
+SELECT * FROM Nota WHERE nota > (SELECT AVG(nota) FROM Nota);
+
+======================
+🔹 Nivel 5: Vistas, Funciones, Procedimientos
+======================
+
+26. Crear una vista de estudiantes con curso:
+CREATE VIEW vista_estudiantes_curso AS
+SELECT e.nombre, e.apellido, c.nombre AS curso
+FROM Estudiante e
+JOIN Matricula m ON e.idMatricula = m.idMatricula
+JOIN Curso c ON m.idCurso = c.idCurso;
+
+27. Usar vista creada:
+SELECT * FROM vista_estudiantes_curso;
+
+28. Función para contar materias por curso:
+DELIMITER //
+CREATE FUNCTION contar_materias(id INT) RETURNS INT
+DETERMINISTIC
+BEGIN
+  DECLARE total INT;
+  SELECT COUNT(*) INTO total FROM Materia WHERE idCurso = id;
+  RETURN total;
+END;
+//
+DELIMITER ;
+
+29. Usar función:
+SELECT contar_materias(1);
+
+30. Stored Procedure para insertar nota:
+DELIMITER //
+CREATE PROCEDURE insertar_nota (
+  IN est INT, IN mat INT, IN valor DECIMAL(5,2), IN fechaNota DATE)
+BEGIN
+  INSERT INTO Nota (idEstudiante, idMateria, nota, fecha)
+  VALUES (est, mat, valor, fechaNota);
+END;
+//
+DELIMITER ;
+
+31. Ejecutar procedimiento:
+CALL insertar_nota(1, 2, 4.8, '2025-06-01');
+
+======================
+🔹 Nivel 6: Extras con múltiples joins y funciones agregadas
+======================
+
+32. Ver promedio por curso:
+SELECT c.nombre, AVG(n.nota) AS promedio
+FROM Curso c
+JOIN Materia m ON c.idCurso = m.idCurso
+JOIN Nota n ON m.idMateria = n.idMateria
+GROUP BY c.nombre;
+
+33. Ver datos completos de mensajes:
+SELECT m.emisor, m.receptor, m.fechaEnvio, e.nombre AS estudiante, p.nombre AS profesor
+FROM Mensaje m
+LEFT JOIN Estudiante e ON m.idEstudiante = e.idEstudiante
+LEFT JOIN Profesor p ON m.idProfesor = p.idProfesor;
+
+34. Cursos con eventos programados:
+SELECT c.nombre, cal.nombreEvento, cal.fecha
+FROM Curso c
+JOIN Calendario cal ON c.idCurso = cal.idCurso;
+
+35. Mostrar usuarios con su rol:
+SELECT u.nombres, u.apellidos, r.nombreRol
+FROM usuarios u
+JOIN roles r ON u.idRol = r.idRol;
