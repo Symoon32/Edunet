@@ -5,8 +5,13 @@
   --color-texto: #333333;
   --color-neutro: #E0E0E0;
   --color-destacado: #FFD700;
+  --bs-light: #dddddd;
 }
 
+.bg-light {
+      background-color: var(--bs-light) !important;
+    }
+    
 body {
   background-color: #f4f6f9;
   font-family: 'Segoe UI', sans-serif;
