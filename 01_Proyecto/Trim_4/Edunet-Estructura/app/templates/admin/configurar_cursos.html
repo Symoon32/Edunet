@@ -1,0 +1,57 @@
+{% extends 'admin/base.html' %}
+{% block title %}Configurar Cursos - EduNet{% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css admin/configurar_cursos.css') }}">
+{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-10 col-xl-8">
+    <div class="card p-4 shadow-sm">
+      <h2 class="mb-3">Configurar Cursos</h2>
+      <p class="text-muted">Organiza los programas académicos y asigna docentes a los cursos.</p>
+
+      <div class="row g-2 mb-3">
+        <div class="col-md-6">
+          <input type="text" class="form-control" placeholder="Nombre del curso o programa">
+        </div>
+        <div class="col-md-6">
+          <select class="form-select">
+            <option value="">Asignar docente...</option>
+            <option value="1">Laura Gómez</option>
+            <option value="2">Miguel Díaz</option>
+            <option value="3">Andrés López</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-2 mb-4">
+        <div class="col-md-4">
+          <button class="btn btn-success w-100">Crear Curso</button>
+        </div>
+        <div class="col-md-4">
+          <button class="btn btn-warning w-100">Modificar Curso</button>
+        </div>
+        <div class="col-md-4">
+          <button class="btn btn-danger w-100">Eliminar Curso</button>
+        </div>
+      </div>
+
+      <h6 class="fw-bold mb-2">Cursos Configurados</h6>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <strong>6°A - Matemáticas</strong><br>
+          Docente: Laura Gómez
+        </li>
+        <li class="list-group-item">
+          <strong>7°B - Historia</strong><br>
+          Docente: Miguel Díaz
+        </li>
+        <li class="list-group-item">
+          <strong>9°A - Informática</strong><br>
+          Docente: Andrés López
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

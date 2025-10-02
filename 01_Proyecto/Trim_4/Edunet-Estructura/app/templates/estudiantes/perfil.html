@@ -1,0 +1,25 @@
+{% extends 'estudiantes/base_estudiantes.html' %}
+{% block title %}Observaciones - EduNet{% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css estudiante/perfil.css') }}">
+  {% endblock %}
+  {% block content %}
+    <h2 class="mb-4">Mi Información Personal</h2>
+
+    <div class="d-flex flex-column align-items-center">
+      <div class="foto-perfil mb-4">
+        <img src="{{ url_for('static', filename='img/foto perfil.avif') }}" alt="Foto de perfil del usuario" class="rounded-circle shadow" width="150" height="150">
+      </div>
+
+      <div class="card p-4 shadow-sm" style="max-width: 500px; width: 100%;">
+        <p><strong>Nombre:</strong> Sara Ruiz</p>
+        <p><strong>Correo:</strong> sara@yahoo.com</p>
+        <p><strong>Documento:</strong> 123456789</p>
+        <p><strong>Curso:</strong> 11°</p>
+        <p><strong>Teléfono:</strong> 3001234567</p>
+        <p><strong>Dirección:</strong> Calle #123, Bogotá</p>
+      </div>
+    </div>
+  {% endblock %}
+
+
