@@ -1,0 +1,49 @@
+
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  private apiUrl = 'http://localhost:3000/api/users';
+  private authUrl = 'http://localhost:3000/api/auth';
+  private http = inject(HttpClient);
+
+  getUsers(): Observable<any> {
+    return this.http.get(this.apiUrl);
+  }
+
+  getUserByCorreo(correo: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${correo}`);
+  }
+
+  createUser(usuario: any): Observable<any> {
+    return this.http.post(this.apiUrl, usuario);
+  }
+
+  updateUser(correo: string, usuario: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${correo}`, usuario);
+  }
+
+  deleteUser(correo: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${correo}`);
+  }
+
+  login(correo: string, password: string): Observable<any> {
+    return this.http.post(`${this.authUrl}/login`, { correo, password });
+  }
+
+  forgotPassword(correo: string): Observable<any> {
+    return this.http.post(`${this.authUrl}/forgot-password`, { correo });
+  }
+
+  resetPassword(token: string, password: string): Observable<any> {
+    return this.http.post(`${this.authUrl}/reset-password`, { token, password });
+  }
+  uploadProfilePhoto(formData: FormData) {
+    return this.http.post<any>(`${this.apiUrl}/upload-profile`, formData);
+  }
+
+}

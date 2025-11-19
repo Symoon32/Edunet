@@ -1,0 +1,35 @@
+<main class="container my-5">
+  <h2 class="text-primary mb-4">Cargar Notas y Observaciones</h2>
+
+  <section class="bg-white p-4 rounded shadow-sm mb-4">
+    <div class="mb-3">
+      <label for="estudiante" class="form-label">Estudiante:</label>
+      <input [(ngModel)]="estudiante" type="text" id="estudiante" class="form-control" placeholder="Nombre del estudiante">
+    </div>
+
+    <div class="mb-3">
+      <label for="materia" class="form-label">Materia:</label>
+      <input [(ngModel)]="materia" type="text" id="materia" class="form-control" placeholder="Ej: Matemáticas">
+    </div>
+
+    <div class="mb-3">
+      <label for="nota" class="form-label">Nota:</label>
+      <input [(ngModel)]="nota" type="number" id="nota" class="form-control" placeholder="Ej: 4.5" step="0.1" min="0" max="5">
+    </div>
+
+    <div class="mb-3">
+      <label for="observacion" class="form-label">Observación:</label>
+      <textarea [(ngModel)]="observacion" id="observacion" class="form-control" rows="3" placeholder="Escribe una observación..."></textarea>
+    </div>
+
+    <button (click)="guardarNota()" class="btn btn-primary w-100">Guardar</button>
+  </section>
+
+  <section class="bg-light border border-primary border-dashed p-4 rounded mb-4">
+    <h4 class="text-primary">Boletín para la Comunidad</h4>
+    <textarea [(ngModel)]="anuncio" id="anuncio" class="form-control mb-3" rows="3" placeholder="Escribe un anuncio o boletín..."></textarea>
+    <button (click)="enviarAnuncio()" class="btn btn-secondary">Enviar Boletín</button>
+  </section>
+
+  <section id="resultado" class="resultado mt-4" [innerHTML]="resultado"></section>
+</main>

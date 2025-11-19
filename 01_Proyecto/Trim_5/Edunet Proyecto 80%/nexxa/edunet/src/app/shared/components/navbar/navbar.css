@@ -1,0 +1,16 @@
+
+.profile-img-link {
+	display: flex;
+	align-items: center;
+	margin-left: auto;
+}
+
+.profile-img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid #fff;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+	cursor: pointer;
+}

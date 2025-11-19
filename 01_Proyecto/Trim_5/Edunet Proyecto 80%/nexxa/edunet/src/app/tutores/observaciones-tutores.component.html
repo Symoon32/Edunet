@@ -1,0 +1,24 @@
+<main class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-primary mb-4" id="observaciones-titulo">Observaciones del Estudiante</h2>
+          <form class="row g-3 align-items-center mb-4">
+            <div class="col-auto">
+              <label for="seleccionar-estudiante" class="col-form-label fw-bold">Seleccionar estudiante:</label>
+            </div>
+            <div class="col-auto">
+              <select id="seleccionar-estudiante" class="form-select" [(ngModel)]="estudianteSeleccionado" name="estudianteSeleccionado">
+                <option value="">-- Selecciona --</option>
+                <option value="juan">Juan Ruiz</option>
+                <option value="camila">Camila Gómez</option>
+              </select>
+            </div>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
