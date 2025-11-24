@@ -1,30 +1,35 @@
-.logo {
+.icon-box {
+  width: 60px;
   height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
 }
 
-.container {
-  color: inherit; 
+.card-hover:hover .icon-box {
+  transform: scale(1.1) rotate(10deg);
 }
 
-.foto {
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Background colors for icons (Bootstrap subles fallback) */
+.bg-primary-subtle { background-color: rgba(13, 110, 253, 0.1); color: #0d6efd; }
+.bg-success-subtle { background-color: rgba(25, 135, 84, 0.1); color: #198754; }
+.bg-warning-subtle { background-color: rgba(255, 193, 7, 0.1); color: #ffc107; }
+.bg-info-subtle { background-color: rgba(13, 202, 240, 0.1); color: #0dcaf0; }
+
+.gallery-thumb {
+  transition: transform 0.3s ease;
   width: 100%;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s, box-shadow 0.3s;
+  height: 100px;
+  object-fit: cover;
 }
 
-.foto:hover {
+.gallery-thumb:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
-.card h2 {
-  color: #000000;
-}
-
-.list-group-item {
-  font-size: 16px;
-  border-color: #e0e0e0;
-  line-height: 1.5;
-}
+/* Animations are inherited from global styles.css */
