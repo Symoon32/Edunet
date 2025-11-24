@@ -1,0 +1,17 @@
+<div class="list-profesor">
+  <h2>Gestión de Profesores</h2>
+  <div class="actions">
+    <input [(ngModel)]="busqueda" placeholder="Buscar profesor...">
+    <button (click)="buscarProfesor()">Buscar</button>
+    <button (click)="crearProfesor()">Crear Profesor</button>
+  </div>
+  <ul>
+    <li *ngFor="let p of profesoresFiltrados" (click)="seleccionarProfesor(p)" [class.selected]="profesorSeleccionado===p">
+      {{p.nombres}} {{p.apellidos}} - {{p.correo}}
+    </li>
+  </ul>
+  <div class="controls">
+    <button (click)="modificarProfesor()" [disabled]="!profesorSeleccionado">Editar</button>
+    <button (click)="eliminarProfesor()" [disabled]="!profesorSeleccionado">Eliminar</button>
+  </div>
+</div>

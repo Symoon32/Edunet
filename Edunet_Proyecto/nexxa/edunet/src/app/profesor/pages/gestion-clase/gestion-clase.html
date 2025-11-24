@@ -1,0 +1,17 @@
+<main class="container my-5">
+  <section class="clases">
+    <h2 class="mb-3">Gestión de Clases</h2>
+    <p class="text-muted mb-4">Desde aquí puedes visualizar, modificar o eliminar las clases asignadas.</p>
+
+    <div *ngFor="let clase of clases; let i = index" class="clase-card p-3 mb-3 rounded shadow-sm">
+      <h3>{{ clase.materia }} - Grado {{ clase.grado }}</h3>
+      <p>Horario: {{ clase.horario }}</p>
+      <button class="btn btn-warning me-2" (click)="editarClase(i)">Editar</button>
+      <button class="btn btn-danger" (click)="eliminarClase(i)">Eliminar</button>
+    </div>
+
+    <div *ngIf="clases.length === 0" class="alert alert-info mt-4">
+      📚 No hay clases registradas actualmente.
+    </div>
+  </section>
+</main>

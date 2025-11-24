@@ -1,0 +1,68 @@
+<header class="d-flex align-items-center bg-primary text-white p-3 justify-content-between">
+	<div class="d-flex align-items-center">
+		<img src="logo-sin-fondo.png" alt="Logo" class="me-3" style="height:60px;">
+		<h1 class="h4 mb-0">Edunet</h1>
+	</div>
+	<a class="profile-img-link" [routerLink]="['/perfil']">
+		
+		<img [src]="profileImgUrl || 'public/foto-perfil.avif' || 'public/foto perfil.avif'" alt="Foto de perfil" class="profile-img" />
+	</a>
+</header>
+<nav class="bg-dark">
+	<div class="container">
+			<ul class="nav nav-pills py-2">
+								<!-- Admin links -->
+								<ng-container *ngIf="isAdmin">
+									<li class="nav-item"><a class="nav-link" routerLink="/inicio-admin" routerLinkActive="">Inicio</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/gestion-usuarios" routerLinkActive="">Gestión de Usuarios</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/config-cursos" routerLinkActive="">Configurar Cursos</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/create-user" routerLinkActive="">Crear Usuario</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/reportes" routerLinkActive="">Reportes</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/estadisticas" routerLinkActive="">Estadísticas</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/comunicacion" routerLinkActive="">Comunicacion general</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/anuncios-boletines" routerLinkActive="">Anuncios y Boletines</a></li>
+								</ng-container>
+
+								<!-- Profesor links -->
+								<ng-container *ngIf="isProfesor">
+									<li class="nav-item"><a class="nav-link" routerLink="/profesor" routerLinkActive="">Inicio Profesor</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/profesor/calificar" routerLinkActive="">Calificar</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/profesor/cargar-notas" routerLinkActive="">Cargar Notas</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/profesor/estadisticas" routerLinkActive="">Estadísticas</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/profesor/reportes" routerLinkActive="">Reportes</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/profesor/gestion-clase" routerLinkActive="">Gestión de Clase</a></li>
+								</ng-container>
+								<!-- Tutores links -->
+								<ng-container *ngIf="isAcudiente">
+									<li class="nav-item"><a class="nav-link" routerLink="/tutores" routerLinkActive="">Inicio Acudiente</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/tutores/comunicacion" routerLinkActive="">Comunicacion</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/tutores/calendario" routerLinkActive="">Calendario</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/tutores/notas" routerLinkActive="">Notas</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/tutores/observaciones" routerLinkActive="">Observaciones</a></li>
+									
+									
+								</ng-container>
+								<!-- Estudiante links -->
+								<ng-container *ngIf="isEstudiante">
+									<li class="nav-item"><a class="nav-link" routerLink="/estudiantes" routerLinkActive="">Inicio</a></li>
+        							<li class="nav-item"><a class="nav-link" routerLink="/estudiantes/perfil" routerLinkActive="">Perfil</a></li>
+        							<li class="nav-item"><a class="nav-link" routerLink="/estudiantes/historial" routerLinkActive="">Mi Historial Academico</a></li>
+        							<li class="nav-item"><a class="nav-link" routerLink="/estudiantes/material" routerLinkActive="">Materiales Academicos</a></li>
+        							<li class="nav-item"><a class="nav-link" routerLink="/estudiantes/tareas" routerLinkActive="">Mis Tareas y proyectos</a></li>
+        							<li class="nav-item"><a class="nav-link" routerLink="/estudiantes/calendario">Calendario Escolar</a></li>
+								</ng-container>
+								
+								<ng-container *ngIf="isAdmin || isProfesor">
+									<li class="nav-item"><a class="nav-link" routerLink="/gestion-profesores" routerLinkActive="">Gestión de Profesores</a></li>
+								</ng-container>
+
+								<li class="nav-item ms-auto">
+										<!-- Mostrar logout si hay sesión -->
+										<button *ngIf="isAdmin || isProfesor || isEstudiante || isAcudiente" (click)="logout()" class="btn btn-danger">
+												Salir <i class="bi bi-box-arrow-right"></i>
+										</button>
+										<a *ngIf="!(isAdmin || isProfesor || isEstudiante || isAcudiente)" routerLink="/login" class="btn btn-primary" routerLinkActive="active">Iniciar sesión</a>
+								</li>
+			</ul>
+	</div>
+</nav>
