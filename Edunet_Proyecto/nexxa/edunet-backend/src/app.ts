@@ -10,6 +10,9 @@ import calificacionesRoutes from './routes/calificaciones';
 import asistenciaRoutes from './routes/asistencia';
 import reportesRoutes from './routes/reportes';
 import clasesRoutes from './routes/clases';
+import mensajesRoutes from './routes/mensajes';
+import materialesRoutes from './routes/materiales';
+import eventosRoutes from './routes/eventos';
 
 dotenv.config();
 
@@ -36,6 +39,9 @@ app.use('/api/calificaciones', calificacionesRoutes);
 app.use('/api/asistencia', asistenciaRoutes);
 app.use('/api/reportes', reportesRoutes);
 app.use('/api/clases', clasesRoutes);
+app.use('/api/mensajes', mensajesRoutes);
+app.use('/api/materiales', materialesRoutes);
+app.use('/api/eventos', eventosRoutes);
 
 // Ruta raíz: información básica de la API
 app.get('/', (req: express.Request, res: express.Response) => {

@@ -41,7 +41,7 @@ export async function createUser(req: Request, res: Response) {
     const conn = await connectDB();
     try {
       const sql = `INSERT INTO usuarios (nombres, apellidos, correo, documento, telefono, direccion, fotoPerfil, password, grado, contacto_emergencia, telefono_contacto_emergencia, curso_asignado, nombre_estudiante_acargo, parentezco, cargo_admin, idRol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-      await conn.execute(sql, [
+      const [result]: any = await conn.execute(sql, [
       nombres,
       apellidos,
       correo,
@@ -59,7 +59,29 @@ export async function createUser(req: Request, res: Response) {
       cargo,
       rol
     ]);
-      res.status(201).json({ message: 'Usuario registrado correctamente' });
+
+      const idUsuarioCreado = result.insertId;
+
+      // Si es un acudiente (rol 3) y se proporcionó el documento del estudiante, crear relación
+      if (Number(rol) === 3 && estudiante_relacionado) {
+        // Buscar al estudiante por su documento (asumiendo que estudiante_relacionado contiene el documento o nombre)
+        // Si es nombre, es ambiguo. Intentaremos asumir que el frontend enviará el documento en un campo adicional 'documento_estudiante'
+        // o que 'estudiante_relacionado' es el documento.
+        // Dado el esquema actual, usaremos 'documento_estudiante' del body si existe.
+
+        const documentoEstudiante = req.body.documento_estudiante;
+        if (documentoEstudiante) {
+          const [estudiantes]: any = await conn.execute('SELECT idUsuarios FROM usuarios WHERE documento = ? AND idRol = 1', [documentoEstudiante]);
+          if (estudiantes.length > 0) {
+            const idEstudiante = estudiantes[0].idUsuarios;
+            await conn.execute('INSERT INTO padre_estudiante (idPadre, idEstudiante) VALUES (?, ?)', [idUsuarioCreado, idEstudiante]);
+          } else {
+            console.warn(`No se encontró estudiante con documento ${documentoEstudiante} para asociar al padre.`);
+          }
+        }
+      }
+
+      res.status(201).json({ message: 'Usuario registrado correctamente', idUsuario: idUsuarioCreado });
     } finally {
       try { conn.release(); } catch (e) { /* ignore */ }
     }

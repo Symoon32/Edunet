@@ -212,6 +212,25 @@ export class AsistenciaController {
     const conn = await connection.getConnection();
     try {
       const { idEstudiante, idCurso } = req.params;
+      const usuarioSolicitante = req.user;
+
+      // Verificación de acceso
+      if (usuarioSolicitante?.rol === 1) { // Estudiante
+        if (usuarioSolicitante.id !== Number(idEstudiante)) {
+          res.status(403).json({ message: 'No tiene permiso para ver la asistencia de otro estudiante' });
+          return;
+        }
+      } else if (usuarioSolicitante?.rol === 3) { // Acudiente
+        // Verificar relación padre-estudiante
+        const [relacion]: any = await conn.execute(
+          'SELECT * FROM padre_estudiante WHERE idPadre = ? AND idEstudiante = ?',
+          [usuarioSolicitante.id, idEstudiante]
+        );
+        if (relacion.length === 0) {
+          res.status(403).json({ message: 'Este estudiante no está asociado a su cuenta' });
+          return;
+        }
+      }
 
       const [asistencias] = await conn.execute(
         `SELECT 

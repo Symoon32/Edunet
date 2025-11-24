@@ -174,3 +174,52 @@ CREATE TABLE IF NOT EXISTS usuario_profesor (
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
+
+-- Mensajería
+CREATE TABLE mensajes (
+  idMensaje INT NOT NULL AUTO_INCREMENT,
+  idRemitente INT NOT NULL,
+  idDestinatario INT NOT NULL,
+  asunto VARCHAR(100),
+  contenido TEXT NOT NULL,
+  fecha_envio DATETIME DEFAULT CURRENT_TIMESTAMP,
+  leido BOOLEAN DEFAULT FALSE,
+  PRIMARY KEY (idMensaje),
+  FOREIGN KEY (idRemitente) REFERENCES usuarios(idUsuarios),
+  FOREIGN KEY (idDestinatario) REFERENCES usuarios(idUsuarios)
+);
+
+-- Materiales de estudio
+CREATE TABLE materiales (
+  idMaterial INT NOT NULL AUTO_INCREMENT,
+  idCurso INT NOT NULL,
+  titulo VARCHAR(100) NOT NULL,
+  descripcion TEXT,
+  url_archivo VARCHAR(255),
+  tipo VARCHAR(50), -- 'documento', 'video', 'enlace'
+  fecha_publicacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (idMaterial),
+  FOREIGN KEY (idCurso) REFERENCES cursos(idCurso)
+);
+
+-- Eventos / Avisos
+CREATE TABLE eventos (
+  idEvento INT NOT NULL AUTO_INCREMENT,
+  titulo VARCHAR(100) NOT NULL,
+  descripcion TEXT,
+  fecha_inicio DATETIME NOT NULL,
+  fecha_fin DATETIME,
+  ubicacion VARCHAR(100),
+  tipo VARCHAR(20), -- 'academico', 'evento', 'aviso'
+  destinatarios VARCHAR(20), -- 'todos', 'estudiantes', 'padres', 'profesores'
+  PRIMARY KEY (idEvento)
+);
+
+-- Relación Padre-Estudiante (Mejorando el esquema existente)
+CREATE TABLE padre_estudiante (
+  idPadre INT NOT NULL,
+  idEstudiante INT NOT NULL,
+  PRIMARY KEY (idPadre, idEstudiante),
+  FOREIGN KEY (idPadre) REFERENCES usuarios(idUsuarios),
+  FOREIGN KEY (idEstudiante) REFERENCES usuarios(idUsuarios)
+);

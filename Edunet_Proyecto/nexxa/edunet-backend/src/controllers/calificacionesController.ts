@@ -45,6 +45,24 @@ export class CalificacionesController {
   async getCalificacionesEstudiante(req: Request, res: Response) {
     try {
       const { idCurso, idEstudiante } = req.params;
+      const usuarioSolicitante = req.user;
+
+      // Verificación de acceso
+      if (usuarioSolicitante?.rol === 1) { // Estudiante
+        if (usuarioSolicitante.id !== Number(idEstudiante)) {
+          return res.status(403).json({ message: 'No tiene permiso para ver las calificaciones de otro estudiante' });
+        }
+      } else if (usuarioSolicitante?.rol === 3) { // Acudiente
+        // Verificar relación padre-estudiante
+        const [relacion]: any = await connection.execute(
+          'SELECT * FROM padre_estudiante WHERE idPadre = ? AND idEstudiante = ?',
+          [usuarioSolicitante.id, idEstudiante]
+        );
+        if (relacion.length === 0) {
+          return res.status(403).json({ message: 'Este estudiante no está asociado a su cuenta' });
+        }
+      }
+
       const [rows]: any = await connection.execute(
         `SELECT *
          FROM calificaciones
