@@ -1,9 +1,139 @@
-.gestion-clase { padding:16px; }
-.clase-card {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
+
+/* Layout & Container */
+.container-fluid {
+  max-width: 1400px;
 }
 
-h2 {
-  color: #0d6efd;
+/* Page Header */
+.page-title {
+  color: #1a237e;
+  font-weight: 700;
+  border-left: 5px solid #ffca28; /* Amber accent */
+  padding-left: 1rem;
+}
+
+.text-subtitle {
+  color: #546e7a;
+  font-size: 1.1rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Cards (Courses & Classes) */
+.course-card, .class-card {
+  background: white;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  height: 100%;
+  cursor: pointer;
+  position: relative;
+}
+
+.course-card:hover, .class-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(26, 35, 126, 0.15);
+}
+
+.card-header-custom {
+  background: linear-gradient(135deg, #283593 0%, #455a64 100%);
+  color: white;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.card-header-custom h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.card-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: rgba(255,255,255,0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  backdrop-filter: blur(5px);
+}
+
+.card-body-custom {
+  padding: 1.5rem;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  color: #546e7a;
+  margin-bottom: 0.8rem;
+}
+
+.stat-icon {
+  width: 32px;
+  height: 32px;
+  background-color: #e3f2fd; /* Light Blue 50 */
+  color: #1565c0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+}
+
+/* Action Buttons Grid in Class View */
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.action-btn {
+  background-color: #f5f5f5;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  color: #455a64;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.action-btn i {
+  font-size: 1.5rem;
+  color: #1a237e;
+}
+
+.action-btn:hover {
+  background-color: #e8eaf6;
+  color: #1a237e;
+}
+
+/* Back Button */
+.btn-back {
+  color: #546e7a;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.btn-back:hover {
+  background-color: #eceff1;
+  color: #263238;
 }

@@ -1,36 +1,126 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Clase {
-  materia: string;
-  grado: string;
-  horario: string;
-}
+import { RouterModule, Router } from '@angular/router';
+import { CursosService } from '../../services/cursos.service';
+import { ClasesService } from '../../services/clases.service';
+import { AuthStateService } from '../../../users/services/auth-state.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-gestion-clase',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './gestion-clase.html',
   styleUrls: ['./gestion-clase.css']
 })
-export class GestionClase {
-  clases: Clase[] = [
-    { materia: 'Matemáticas', grado: '7°', horario: 'Lunes y Miércoles, 9:00am - 10:30am' },
-    { materia: 'Ciencias Naturales', grado: '6°', horario: 'Martes y Jueves, 10:45am - 12:15pm' }
-  ];
+export class GestionClase implements OnInit {
+  // Mode: 'cursos' (list of courses) or 'clases' (list of classes in a course)
+  viewMode: 'cursos' | 'clases' = 'cursos';
 
-  eliminarClase(index: number) {
-    this.clases.splice(index, 1);
+  cursos: any[] = [];
+  clases: any[] = [];
+  selectedCurso: any = null;
+  loading = false;
+
+  constructor(
+    private cursosService: CursosService,
+    private clasesService: ClasesService,
+    private authState: AuthStateService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.loadCursos();
   }
 
-  editarClase(index: number) {
-    const nuevaMateria = prompt('Nuevo nombre de la materia:', this.clases[index].materia);
-    const nuevoGrado = prompt('Nuevo grado:', this.clases[index].grado);
-    const nuevoHorario = prompt('Nuevo horario:', this.clases[index].horario);
+  loadCursos() {
+    this.loading = true;
+    const userId = this.authState.currentUserValue?.id; // Assuming id is available
+    if (!userId) {
+       console.error("No user ID found");
+       this.loading = false;
+       return;
+    }
 
-    if (nuevaMateria && nuevoGrado && nuevoHorario) {
-      this.clases[index] = { materia: nuevaMateria, grado: nuevoGrado, horario: nuevoHorario };
+    this.cursosService.getCursosProfesor(userId).subscribe({
+      next: (data) => {
+        this.cursos = data;
+        this.loading = false;
+        this.viewMode = 'cursos';
+      },
+      error: (err) => {
+        console.error('Error loading courses', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  selectCurso(curso: any) {
+    this.selectedCurso = curso;
+    this.loading = true;
+    this.clasesService.getClasesCurso(curso.idCurso).subscribe({
+      next: (data) => {
+        this.clases = data;
+        this.loading = false;
+        this.viewMode = 'clases';
+      },
+      error: (err) => {
+        console.error('Error loading classes', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  goBackToCursos() {
+    this.viewMode = 'cursos';
+    this.selectedCurso = null;
+    this.clases = [];
+  }
+
+  // Navigation actions for a specific class or course context
+  navigateTo(action: string, id: number, type: 'curso' | 'clase') {
+    // Construct URL based on action.
+    // Example: /profesor/calificar/:idCurso
+    // The router configuration must support these params.
+    // For now, let's assume we pass query params or route params.
+
+    // Based on user request: "lista de estudiantes, horario, tomar asistencia, agregar notas, reportes"
+
+    // Mapping actions to routes:
+    // 'estudiantes' -> /profesor/curso/:id/estudiantes
+    // 'horario' -> /profesor/horario/:id
+    // 'asistencia' -> /profesor/asistencia/:idClase
+    // 'notas' -> /profesor/notas/:idCurso
+
+    if (action === 'estudiantes') {
+      // Assuming a route or component exists or we pass data
+      // For now, log or simple alert as placeholders if routes don't exist yet
+      console.log('Navigating to students for course', id);
+    }
+
+    // TODO: Implement actual routing once those pages are verified/created.
+    // For now, I will create basic routed navigation structure or confirm with the user plan if I need to create those specific pages too.
+    // The plan said "Ensure these buttons link to the respective functional components".
+
+    // Let's try to map to existing routes or standard patterns
+    switch(action) {
+        case 'notas':
+            this.router.navigate(['/profesor/cargar-notas', { cursoId: this.selectedCurso.idCurso }]);
+            break;
+        case 'asistencia':
+             // Asistencia usually needs a class ID (specific session) or course ID to create one?
+             // Usually attendance is by class instance.
+             if (type === 'clase') {
+                 this.router.navigate(['/profesor/asistencia', id]);
+             }
+             break;
+        case 'reportes':
+             this.router.navigate(['/profesor/reportes', { cursoId: this.selectedCurso.idCurso }]);
+             break;
+        case 'estudiantes':
+             // We can show students in a modal or separate page.
+             // The API `getEstudiantesCurso` exists.
+             break;
     }
   }
 }

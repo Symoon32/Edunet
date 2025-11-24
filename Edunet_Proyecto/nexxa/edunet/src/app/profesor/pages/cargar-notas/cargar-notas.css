@@ -1,1 +1,95 @@
-.cargar-notas { padding:16px; }
+
+/* Layout */
+.container {
+  max-width: 1200px;
+}
+
+/* Header */
+.header-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+  border-left: 5px solid #1a237e;
+}
+
+/* Student List */
+.student-list-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #eee;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.list-group-item:hover {
+  background-color: #f5f7fa;
+}
+
+.list-group-item.active {
+  background-color: #e8eaf6;
+  color: #1a237e;
+  border-left: 4px solid #1a237e;
+}
+
+/* Grading Form */
+.grading-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  padding: 2rem;
+  position: sticky;
+  top: 2rem;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #455a64;
+}
+
+.form-control:focus {
+  border-color: #1a237e;
+  box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.15);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #1a237e;
+  border-color: #1a237e;
+}
+
+.btn-primary:hover {
+  background-color: #0d47a1;
+}
+
+.btn-outline-secondary {
+  color: #546e7a;
+  border-color: #cfd8dc;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #eceff1;
+  color: #263238;
+}
+
+/* Feedback */
+.alert {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
