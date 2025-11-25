@@ -5,13 +5,29 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class ProfesorService {
   
-  private apiUrl = 'http://localhost:3000/api/users';
+  // URL for Admin management of professors (crud)
+  private apiUsersUrl = 'http://localhost:3000/api/users';
+  // URL for Professor specific actions (dashboard, courses)
+  private apiProfesorUrl = 'http://localhost:3000/api/profesor';
+  private apiClasesUrl = 'http://localhost:3000/api/clases';
+
   private http = inject(HttpClient);
 
-  getProfesores(): Observable<any> { return this.http.get(this.apiUrl); }
-  getProfesorById(id: string): Observable<any> { return this.http.get(`${this.apiUrl}/${id}`); }
-  createProfesor(profesor: any): Observable<any> { return this.http.post(this.apiUrl, profesor); }
-  updateProfesor(id: string, profesor: any): Observable<any> { return this.http.put(`${this.apiUrl}/${id}`, profesor); }
-  deleteProfesor(id: string): Observable<any> { return this.http.delete(`${this.apiUrl}/${id}`); }
-  uploadProfilePhoto(formData: FormData) { return this.http.post<any>(`${this.apiUrl}/upload-profile`, formData); }
+  // --- Admin Methods (Restored) ---
+  getProfesores(): Observable<any> { return this.http.get(this.apiUsersUrl); }
+  getProfesorById(id: string): Observable<any> { return this.http.get(`${this.apiUsersUrl}/${id}`); }
+  createProfesor(profesor: any): Observable<any> { return this.http.post(this.apiUsersUrl, profesor); }
+  updateProfesor(id: string, profesor: any): Observable<any> { return this.http.put(`${this.apiUsersUrl}/${id}`, profesor); }
+  deleteProfesor(id: string): Observable<any> { return this.http.delete(`${this.apiUsersUrl}/${id}`); }
+  uploadProfilePhoto(formData: FormData) { return this.http.post<any>(`${this.apiUsersUrl}/upload-profile`, formData); }
+
+  // --- Professor Dashboard Methods (New) ---
+  getDashboard(id: number): Observable<any> { return this.http.get(`${this.apiProfesorUrl}/dashboard/${id}`); }
+  getPerfil(id: number): Observable<any> { return this.http.get(`${this.apiProfesorUrl}/perfil/${id}`); }
+  updatePerfil(id: number, data: any): Observable<any> { return this.http.put(`${this.apiProfesorUrl}/perfil/${id}`, data); }
+  getHorario(id: number): Observable<any> { return this.http.get(`${this.apiProfesorUrl}/horario/${id}`); }
+
+  // --- Cursos y Clases ---
+  getCursos(id: number): Observable<any> { return this.http.get(`${this.apiProfesorUrl}/cursos/${id}`); }
+  getClasesPorCurso(idCurso: number): Observable<any> { return this.http.get(`${this.apiClasesUrl}/curso/${idCurso}`); }
 }

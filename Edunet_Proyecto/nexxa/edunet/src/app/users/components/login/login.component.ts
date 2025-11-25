@@ -28,11 +28,11 @@ export class LoginComponent {
 
   login() {
     this.authService.login(this.correo, this.password).subscribe({
-      next: (res: AuthResponse) => {
+      next: (res: any) => {
         this.rol = res.rol;
         this.errorMessage = '';
         // Usar AuthStateService para propagar el estado de autenticación
-        this.authState.setAuth(res.token, res.rol);
+        this.authState.setAuth(res.token, res.rol, res.userId);
         let rolNombre = '';
         let ruta = '';
         switch (res.rol) {

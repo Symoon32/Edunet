@@ -244,4 +244,34 @@ export class ProfesorController {
       res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
+
+  // Obtener cursos asignados
+  async getCursos(req: Request, res: Response) {
+    try {
+      const { idProfesor } = req.params;
+      const [rows]: any = await connection.execute(
+        `SELECT
+            c.idCurso,
+            c.periodo,
+            c.anio,
+            c.grado,
+            c.seccion,
+            m.nombre as nombreMateria,
+            m.codigo,
+            COUNT(ce.idEstudiante) as cantidadEstudiantes
+        FROM cursos c
+        INNER JOIN materias m ON c.idMateria = m.idMateria
+        LEFT JOIN curso_estudiante ce ON c.idCurso = ce.idCurso AND ce.estado = 'activo'
+        WHERE c.idProfesor = ?
+        GROUP BY c.idCurso, c.periodo, c.anio, c.grado, c.seccion, m.nombre, m.codigo
+        ORDER BY c.anio DESC, c.periodo DESC`,
+        [idProfesor]
+      );
+
+      res.json(rows);
+    } catch (error) {
+      console.error('Error en getCursos:', error);
+      res.status(500).json({ message: 'Error interno del servidor' });
+    }
+  }
 }

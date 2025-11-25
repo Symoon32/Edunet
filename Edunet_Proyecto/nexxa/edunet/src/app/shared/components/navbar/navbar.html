@@ -1,14 +1,13 @@
-<header class="d-flex align-items-center bg-primary text-white p-3 justify-content-between">
+<header class="d-flex align-items-center p-3 justify-content-between" [ngClass]="{'bg-primary text-white': !isProfesor, 'professor-navbar text-white': isProfesor}">
 	<div class="d-flex align-items-center">
 		<img src="logo-sin-fondo.png" alt="Logo" class="me-3" style="height:60px;">
 		<h1 class="h4 mb-0">Edunet</h1>
 	</div>
 	<a class="profile-img-link" [routerLink]="['/perfil']">
-		
 		<img [src]="profileImgUrl || 'public/foto-perfil.avif' || 'public/foto perfil.avif'" alt="Foto de perfil" class="profile-img" />
 	</a>
 </header>
-<nav class="bg-dark">
+<nav [ngClass]="{'bg-dark': !isProfesor, 'professor-nav-bg': isProfesor}">
 	<div class="container">
 			<ul class="nav nav-pills py-2">
 								<!-- Admin links -->
@@ -25,13 +24,16 @@
 
 								<!-- Profesor links -->
 								<ng-container *ngIf="isProfesor">
-									<li class="nav-item"><a class="nav-link" routerLink="/profesor" routerLinkActive="">Inicio Profesor</a></li>
-									<li class="nav-item"><a class="nav-link" routerLink="/profesor/calificar" routerLinkActive="">Calificar</a></li>
-									<li class="nav-item"><a class="nav-link" routerLink="/profesor/cargar-notas" routerLinkActive="">Cargar Notas</a></li>
-									<li class="nav-item"><a class="nav-link" routerLink="/profesor/estadisticas" routerLinkActive="">Estadísticas</a></li>
-									<li class="nav-item"><a class="nav-link" routerLink="/profesor/reportes" routerLinkActive="">Reportes</a></li>
-									<li class="nav-item"><a class="nav-link" routerLink="/profesor/gestion-clase" routerLinkActive="">Gestión de Clase</a></li>
+									<li class="nav-item"><a class="nav-link" [ngClass]="{'professor-nav-link': isProfesor}" routerLink="/profesor" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
+									<li class="nav-item"><a class="nav-link" [ngClass]="{'professor-nav-link': isProfesor}" routerLink="/profesor/gestion-clase" routerLinkActive="active-link">Mis Cursos</a></li>
+									<!-- Merged into 'Mis Cursos' flow per user request, but keeping direct links if user wants shortcuts or removing them to clean up interface -->
+									<!-- User asked for: "Lista primero de los cursos... al darle clic abra una lista de clases... ver lista de estudiantes, horario, notas, reportes" -->
+									<!-- So Calificar/Cargar Notas/Reportes should be inside the course/class view, but global access might still be useful. -->
+									<!-- User said: "Funcionalidades y vistas: -Unifica y mejora" -->
+									<!-- I will keep the main entry points simple -->
+									<li class="nav-item"><a class="nav-link" [ngClass]="{'professor-nav-link': isProfesor}" routerLink="/profesor/estadisticas" routerLinkActive="active-link">Estadísticas</a></li>
 								</ng-container>
+
 								<!-- Tutores links -->
 								<ng-container *ngIf="isAcudiente">
 									<li class="nav-item"><a class="nav-link" routerLink="/tutores" routerLinkActive="">Inicio Acudiente</a></li>
@@ -39,9 +41,8 @@
 									<li class="nav-item"><a class="nav-link" routerLink="/tutores/calendario" routerLinkActive="">Calendario</a></li>
 									<li class="nav-item"><a class="nav-link" routerLink="/tutores/notas" routerLinkActive="">Notas</a></li>
 									<li class="nav-item"><a class="nav-link" routerLink="/tutores/observaciones" routerLinkActive="">Observaciones</a></li>
-									
-									
 								</ng-container>
+
 								<!-- Estudiante links -->
 								<ng-container *ngIf="isEstudiante">
 									<li class="nav-item"><a class="nav-link" routerLink="/estudiantes" routerLinkActive="">Inicio</a></li>
@@ -52,7 +53,7 @@
         							<li class="nav-item"><a class="nav-link" routerLink="/estudiantes/calendario">Calendario Escolar</a></li>
 								</ng-container>
 								
-								<ng-container *ngIf="isAdmin || isProfesor">
+								<ng-container *ngIf="isAdmin">
 									<li class="nav-item"><a class="nav-link" routerLink="/gestion-profesores" routerLinkActive="">Gestión de Profesores</a></li>
 								</ng-container>
 

@@ -92,9 +92,10 @@ export async function login(req: Request, res: Response) {
 
     console.log('[authController] login successful for user:', user.idUsuarios);
     
-    const response: LoginResponse = {
+    const response: any = {
       token,
-      rol: user.idRol
+      rol: user.idRol,
+      userId: user.idUsuarios
     };
 
     res.json(response);

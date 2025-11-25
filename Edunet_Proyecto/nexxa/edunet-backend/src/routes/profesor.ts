@@ -15,5 +15,6 @@ router.get('/dashboard/:idProfesor', profesorController.getDashboard);
 router.get('/perfil/:idProfesor', profesorController.getPerfil);
 router.put('/perfil/:idProfesor', profesorController.updatePerfil);
 router.get('/horario/:idProfesor', profesorController.getHorario);
+router.get('/cursos/:idProfesor', profesorController.getCursos);
 
 export default router;

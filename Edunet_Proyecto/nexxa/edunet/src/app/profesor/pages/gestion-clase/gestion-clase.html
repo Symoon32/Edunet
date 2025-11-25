@@ -1,17 +1,211 @@
-<main class="container my-5">
-  <section class="clases">
-    <h2 class="mb-3">Gestión de Clases</h2>
-    <p class="text-muted mb-4">Desde aquí puedes visualizar, modificar o eliminar las clases asignadas.</p>
+<div class="gestion-container container">
 
-    <div *ngFor="let clase of clases; let i = index" class="clase-card p-3 mb-3 rounded shadow-sm">
-      <h3>{{ clase.materia }} - Grado {{ clase.grado }}</h3>
-      <p>Horario: {{ clase.horario }}</p>
-      <button class="btn btn-warning me-2" (click)="editarClase(i)">Editar</button>
-      <button class="btn btn-danger" (click)="eliminarClase(i)">Eliminar</button>
+  <!-- Loading & Error -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 text-muted">Cargando información...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close" (click)="error = ''"></button>
+  </div>
+
+  <!-- VIEW 1: LIST OF COURSES -->
+  <div *ngIf="!loading && viewState === 'courses'" class="fade-in">
+    <div class="section-header">
+      <h2>Mis Cursos Asignados</h2>
+      <p class="text-muted">Selecciona un curso para ver las clases y gestionar estudiantes.</p>
     </div>
 
-    <div *ngIf="clases.length === 0" class="alert alert-info mt-4">
-      📚 No hay clases registradas actualmente.
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4" *ngFor="let course of courses">
+        <div class="course-card" (click)="selectCourse(course)">
+          <div class="course-header">
+            <h3>{{ course.nombreMateria }}</h3>
+            <span class="badge">{{ course.grado }} - Sección {{ course.seccion }}</span>
+            <div class="small mt-1 text-light-50">{{ course.periodo }} - {{ course.anio }}</div>
+          </div>
+          <div class="course-body">
+            <div class="course-stat">
+              <i class="bi bi-people-fill"></i>
+              <span>{{ course.cantidadEstudiantes || 0 }} Estudiantes</span>
+            </div>
+            <div class="course-stat">
+              <i class="bi bi-upc-scan"></i>
+              <span>Código: {{ course.codigo }}</span>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+              <span class="text-primary fw-bold small">Ver Clases <i class="bi bi-arrow-right"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
-</main>
+
+    <div *ngIf="courses.length === 0" class="text-center py-5 text-muted">
+      <i class="bi bi-journal-x fs-1"></i>
+      <p class="mt-3">No tienes cursos asignados.</p>
+    </div>
+  </div>
+
+  <!-- VIEW 2: LIST OF CLASSES (SESSIONS) -->
+  <div *ngIf="!loading && viewState === 'classes'" class="fade-in">
+    <div class="section-header d-flex justify-content-between align-items-center">
+      <div>
+        <button class="btn btn-link back-btn p-0 mb-2" (click)="goBackToCourses()">
+          <i class="bi bi-arrow-left"></i> Volver a mis Cursos
+        </button>
+        <h2 *ngIf="selectedCourse">{{ selectedCourse.nombreMateria }} - Clases</h2>
+        <p class="text-muted mb-0">{{ selectedCourse.grado }} {{ selectedCourse.seccion }}</p>
+      </div>
+      <div>
+        <!-- Optional: Button to add a new class session -->
+        <!-- <button class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nueva Clase</button> -->
+      </div>
+    </div>
+
+    <div class="list-group">
+      <div *ngFor="let clase of classes" class="class-list-item d-flex justify-content-between align-items-center" (click)="selectClass(clase)">
+        <div>
+          <div class="class-date">{{ clase.fecha | date:'fullDate' }}</div>
+          <div class="text-muted small">
+            <i class="bi bi-clock me-1"></i> {{ clase.hora_inicio }} - {{ clase.hora_fin }}
+          </div>
+          <div class="mt-1" *ngIf="clase.tema">
+            <span class="badge bg-light text-dark border me-2">Tema</span> {{ clase.tema }}
+          </div>
+        </div>
+        <div class="text-end">
+          <span class="badge"
+            [ngClass]="{
+              'bg-success': clase.estado === 'realizada',
+              'bg-primary': clase.estado === 'programada',
+              'bg-danger': clase.estado === 'cancelada'
+            }">
+            {{ clase.estado | titlecase }}
+          </span>
+          <div class="mt-2 text-primary small">Gestionar <i class="bi bi-chevron-right"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="classes.length === 0" class="text-center py-5 text-muted">
+      <i class="bi bi-calendar-x fs-1"></i>
+      <p class="mt-3">No hay clases registradas para este curso.</p>
+    </div>
+  </div>
+
+  <!-- VIEW 3: CLASS MANAGEMENT (DETAILS) -->
+  <div *ngIf="!loading && viewState === 'details'" class="fade-in">
+    <div class="section-header">
+      <button class="btn btn-link back-btn p-0 mb-2" (click)="goBackToClasses()">
+        <i class="bi bi-arrow-left"></i> Volver a lista de clases
+      </button>
+      <h2 *ngIf="selectedClass">Gestión de Clase: {{ selectedClass.fecha | date:'mediumDate' }}</h2>
+      <p class="text-muted">{{ selectedCourse.nombreMateria }} | {{ selectedClass.hora_inicio }} - {{ selectedClass.hora_fin }}</p>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-0">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'overview'" (click)="setActiveTab('overview')">
+          <i class="bi bi-grid me-2"></i>Resumen
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'students'" (click)="setActiveTab('students')">
+          <i class="bi bi-people me-2"></i>Estudiantes
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'attendance'" (click)="setActiveTab('attendance')">
+          <i class="bi bi-check-square me-2"></i>Asistencia
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'grades'" (click)="setActiveTab('grades')">
+          <i class="bi bi-pencil-square me-2"></i>Calificaciones
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'reports'" (click)="setActiveTab('reports')">
+          <i class="bi bi-file-earmark-bar-graph me-2"></i>Reportes
+        </button>
+      </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content-area">
+
+      <!-- Overview Tab -->
+      <div *ngIf="activeTab === 'overview'">
+        <div class="action-grid">
+          <div class="action-card" (click)="setActiveTab('attendance')">
+            <i class="bi bi-person-check action-icon"></i>
+            <div class="action-title">Tomar Asistencia</div>
+            <p class="text-muted small mt-2">Registrar asistencia de la sesión actual.</p>
+          </div>
+          <div class="action-card" (click)="setActiveTab('students')">
+            <i class="bi bi-people action-icon"></i>
+            <div class="action-title">Ver Lista</div>
+            <p class="text-muted small mt-2">Ver estudiantes inscritos en el curso.</p>
+          </div>
+          <div class="action-card" (click)="setActiveTab('grades')">
+            <i class="bi bi-journal-plus action-icon"></i>
+            <div class="action-title">Agregar Notas</div>
+            <p class="text-muted small mt-2">Gestionar calificaciones del curso.</p>
+          </div>
+        </div>
+
+        <div class="mt-4 p-3 border rounded bg-light">
+          <h5>Detalles de la Sesión</h5>
+          <div class="row mt-3">
+            <div class="col-md-6 mb-2"><strong>Tema:</strong> {{ selectedClass.tema || 'Sin tema' }}</div>
+            <div class="col-md-6 mb-2"><strong>Descripción:</strong> {{ selectedClass.descripcion || 'Sin descripción' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Students Tab (Placeholder) -->
+      <div *ngIf="activeTab === 'students'">
+        <h4 class="mb-4">Lista de Estudiantes</h4>
+        <div class="alert alert-info">
+          Aquí se mostrará la lista completa de estudiantes del curso {{ selectedCourse.nombreMateria }}.
+          <br>
+          <small>Funcionalidad en desarrollo: Conectar con endpoint `getEstudiantesPorCurso`.</small>
+        </div>
+      </div>
+
+      <!-- Attendance Tab (Placeholder) -->
+      <div *ngIf="activeTab === 'attendance'">
+        <h4 class="mb-4">Registro de Asistencia</h4>
+        <div class="alert alert-warning">
+          Módulo de asistencia para la fecha {{ selectedClass.fecha | date }}.
+          <br>
+          <small>Funcionalidad: Listar estudiantes con checkboxes (Presente, Ausente, Tardanza).</small>
+        </div>
+      </div>
+
+      <!-- Grades Tab (Placeholder) -->
+      <div *ngIf="activeTab === 'grades'">
+        <h4 class="mb-4">Gestión de Notas</h4>
+        <div class="alert alert-primary">
+           Módulo para asignar calificaciones a los estudiantes de este curso.
+        </div>
+      </div>
+
+       <!-- Reports Tab (Placeholder) -->
+      <div *ngIf="activeTab === 'reports'">
+        <h4 class="mb-4">Reportes</h4>
+        <div class="alert alert-secondary">
+           Generación de reportes de rendimiento y asistencia.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

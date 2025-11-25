@@ -12,7 +12,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('assets/pattern-bg.png'); /* Optional pattern */
+  /* background-image: url('assets/pattern-bg.png'); */ /* Image removed as it does not exist */
   opacity: 0.1;
   z-index: 0;
 }

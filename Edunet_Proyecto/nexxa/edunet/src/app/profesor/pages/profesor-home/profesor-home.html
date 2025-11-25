@@ -1,22 +1,52 @@
-<div class="container text-center py-4">
-  <section class="mb-5">
-    <img src="logo-sin-fondo.png" alt="Escudo del colegio" class="img-fluid" style="max-width: 250px;" />
-    <h2 class="mt-4 titulo-seccion">Panel de Control Administrador </h2>
-    <p>Desde este panel podrás administrar tus clases, configurar los cursos, generar las observaciones y generar anuncios y boletines para la comunidad escolar.</p>
-  </section>
+<div class="profesor-home-container">
+  <div class="container">
 
-  <section class="mb-5">
-    <h2 class="titulo-seccion">Galería Institucional</h2>
-    <div class="row mt-4 g-3 justify-content-center">
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <img src="grados.jpg" alt="Grados" class="foto" />
+    <!-- Welcome Section -->
+    <section class="welcome-section d-flex align-items-center justify-content-between">
+      <div class="welcome-text">
+        <h1>Bienvenido, {{ nombreProfesor }}</h1>
+        <p>Panel de Gestión Académica - Edunet</p>
+        <p class="small text-light-50">Gestiona tus cursos, estudiantes y calificaciones de manera eficiente.</p>
+        <button class="btn btn-outline-light mt-3" routerLink="/profesor/gestion-clase">
+          Ir a mis Cursos <i class="bi bi-arrow-right ms-2"></i>
+        </button>
       </div>
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <img src="cancha.jpg" alt="Espacios recreativos" class="foto" />
+      <div class="d-none d-md-block">
+        <img src="logo-sin-fondo.png" alt="Edunet Logo" style="height: 150px; opacity: 0.9;">
       </div>
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <img src="colegio-arriba.jpg" alt="Instalaciones del colegio" class="foto" />
+    </section>
+
+    <!-- How it works / Features Section -->
+    <section class="mb-5">
+      <h3 class="mb-4 text-secondary fw-bold border-start border-4 border-primary ps-3">¿Qué puedes hacer aquí?</h3>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3" *ngFor="let item of features; let i = index">
+          <div class="function-card position-relative" [routerLink]="item.link" [style.animation-delay]="item.delay">
+            <span class="step-number">{{ i + 1 }}</span>
+            <div class="icon-container">
+              <i class="bi {{ item.icon }} fs-4"></i>
+            </div>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.desc }}</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <!-- Gallery / Info Section (Kept from original but styled) -->
+    <section class="mb-5">
+      <h3 class="mb-4 text-secondary fw-bold border-start border-4 border-primary ps-3">Institución</h3>
+      <div class="row g-3">
+        <div class="col-sm-6 col-md-4">
+          <img src="grados.jpg" alt="Grados" class="img-fluid gallery-img w-100 h-100 object-fit-cover" style="min-height: 200px;" />
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <img src="cancha.jpg" alt="Cancha" class="img-fluid gallery-img w-100 h-100 object-fit-cover" style="min-height: 200px;" />
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <img src="colegio-arriba.jpg" alt="Colegio" class="img-fluid gallery-img w-100 h-100 object-fit-cover" style="min-height: 200px;" />
+        </div>
+      </div>
+    </section>
+  </div>
 </div>
