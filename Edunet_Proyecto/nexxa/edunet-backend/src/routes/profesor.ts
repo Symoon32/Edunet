@@ -1,19 +1,19 @@
 import { Router } from 'express';
-import { ProfesorController } from '../controllers/profesorController';
+import { getDashboard, getPerfil, updatePerfil, getHorario } from '../controllers/profesorController';
 import { authMiddleware } from '../middleware/auth';
-import { authorize } from '../middleware/authorize';
+import { authorizeRoles } from '../middleware/authorize';
 
 const router = Router();
-const profesorController = new ProfesorController();
+
 
 // Middleware para verificar rol de profesor
 router.use(authMiddleware);
-router.use(authorize('profesor'));
+router.use(authorizeRoles(2)); // 2 = profesor
 
 // Rutas del dashboard y perfil
-router.get('/dashboard/:idProfesor', profesorController.getDashboard);
-router.get('/perfil/:idProfesor', profesorController.getPerfil);
-router.put('/perfil/:idProfesor', profesorController.updatePerfil);
-router.get('/horario/:idProfesor', profesorController.getHorario);
+router.get('/dashboard/:idProfesor', getDashboard);
+router.get('/perfil/:idProfesor', getPerfil);
+router.put('/perfil/:idProfesor', updatePerfil);
+router.get('/horario/:idProfesor', getHorario);
 
 export default router;
