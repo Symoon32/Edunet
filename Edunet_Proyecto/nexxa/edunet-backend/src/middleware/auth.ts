@@ -1,13 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { TokenPayload, verifyToken } from '../utils/jwt';
 
-// Extiende el tipo Request para que tenga la propiedad 'user'
-declare module 'express-serve-static-core' {
-  interface Request {
-    user?: TokenPayload;
-  }
-}
-
 export function authenticateToken(req: Request, res: Response, next: NextFunction) {
   try {
     console.log('authenticateToken: checking token in request headers');

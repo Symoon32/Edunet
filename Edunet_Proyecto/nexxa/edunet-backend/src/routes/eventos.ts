@@ -1,17 +1,22 @@
 import { Router } from 'express';
-import { EventosController } from '../controllers/eventosController';
 import { authMiddleware } from '../middleware/auth';
-import { authorize } from '../middleware/authorize';
+import { authorizeRoles } from '../middleware/authorize';
+import {
+    createEvento,
+    getEventos,
+    updateEvento,
+    deleteEvento
+} from '../controllers/eventosController';
 
 const router = Router();
-const eventosController = new EventosController();
 
 router.use(authMiddleware);
 
-router.get('/', eventosController.getEventos);
+router.get('/', getEventos);
 
-// Solo admin (y quizás profesor) pueden gestionar eventos
-router.post('/', authorize('administrador', 'profesor'), eventosController.createEvento);
-router.delete('/:idEvento', authorize('administrador', 'profesor'), eventosController.deleteEvento);
+// Solo admin (rol 4) pueden crear, actualizar y eliminar eventos.
+router.post('/', authorizeRoles(4), createEvento);
+router.put('/:idEvento', authorizeRoles(4), updateEvento);
+router.delete('/:idEvento', authorizeRoles(4), deleteEvento);
 
 export default router;

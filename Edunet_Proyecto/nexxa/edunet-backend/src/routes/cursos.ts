@@ -1,25 +1,41 @@
 import { Router } from 'express';
-import { CursosController } from '../controllers/cursosController';
+import {
+    createCurso,
+    getCursos,
+    getCurso,
+    updateCurso,
+    deleteCurso,
+    getEstudiantesCurso,
+    addEstudianteCurso,
+    updateEstadoCursoEstudiante,
+    removeEstudianteCurso,
+    assignProfesorToCurso,
+    assignStudentToCurso
+} from '../controllers/cursosController';
 import { authMiddleware } from '../middleware/auth';
-import { authorize } from '../middleware/authorize';
+import { authorizeRoles } from '../middleware/authorize';
+
 
 const router = Router();
-const cursosController = new CursosController();
 
+// Middleware for authentication
 router.use(authMiddleware);
-router.use(authorize('profesor', 'administrador'));
 
-// Rutas de gestión de cursos
-router.post('/', cursosController.createCurso);
-router.get('/profesor/:idProfesor', cursosController.getCursos);
-router.get('/:idCurso', cursosController.getCurso);
-router.put('/:idCurso', cursosController.updateCurso);
-router.delete('/:idCurso', cursosController.deleteCurso);
+// Routes for admins and professors
+const generalRoles = [2, 4];
+router.post('/', authorizeRoles(...generalRoles), createCurso);
+router.get('/profesor/:idProfesor', authorizeRoles(...generalRoles), getCursos);
+router.get('/:idCurso', authorizeRoles(...generalRoles), getCurso);
+router.put('/:idCurso', authorizeRoles(...generalRoles), updateCurso);
+router.delete('/:idCurso', authorizeRoles(...generalRoles), deleteCurso);
+router.get('/:idCurso/estudiantes', authorizeRoles(...generalRoles), getEstudiantesCurso);
+router.post('/:idCurso/estudiantes', authorizeRoles(...generalRoles), addEstudianteCurso);
+router.put('/:idCurso/estudiante/:idEstudiante/estado', authorizeRoles(...generalRoles), updateEstadoCursoEstudiante);
+router.delete('/:idCurso/estudiante/:idEstudiante', authorizeRoles(...generalRoles), removeEstudianteCurso);
 
-// Rutas de gestión de estudiantes en cursos
-router.get('/:idCurso/estudiantes', cursosController.getEstudiantesCurso);
-router.post('/:idCurso/estudiantes', cursosController.addEstudianteCurso);
-router.put('/:idCurso/estudiante/:idEstudiante/estado', cursosController.updateEstadoCursoEstudiante);
-router.delete('/:idCurso/estudiante/:idEstudiante', cursosController.removeEstudianteCurso);
+// Admin-only routes
+router.post('/admin/assign-profesor', authorizeRoles(4), assignProfesorToCurso);
+router.post('/:idCurso/admin/assign-student', authorizeRoles(4), addEstudianteCurso);
+
 
 export default router;
