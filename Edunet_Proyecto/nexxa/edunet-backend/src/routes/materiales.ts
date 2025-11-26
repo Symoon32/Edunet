@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { MaterialesController } from '../controllers/materialesController';
 import { authMiddleware } from '../middleware/auth';
-import { authorize } from '../middleware/authorize';
+import { authorizeRoles } from '../middleware/authorize';
 
 const router = Router();
 const materialesController = new MaterialesController();

@@ -1,42 +1,108 @@
-<div class="row justify-content-center">
-	<div class="col-lg-10 col-xl-8">
-		<div class="card shadow-sm p-4">
-			<div class="mb-3">
-				<h2 class="h5">Gestión de Usuarios</h2>
-				<p class="text-muted">Administra las cuentas de los estudiantes, docentes y personal administrativo.</p>
-			</div>
+<div class="admin-view-container">
+  <div class="header">
+    <h2>{{ tituloVista }}</h2>
+    <button class="btn btn-primary" (click)="crearUsuario()">Crear Nuevo</button>
+  </div>
 
-			<div class="row g-2 align-items-center mb-3">
-				<div class="col-md-9">
-					<input type="text" class="form-control" placeholder="Buscar usuario por nombre o correo..." [(ngModel)]="busqueda">
-				</div>
-				<div class="col-md-3">
-					<button class="btn btn-primary w-100" (click)="buscarUsuario()">Buscar</button>
-				</div>
-			</div>
+  <div class="search-bar">
+    <input type="text" placeholder="Buscar por nombre o correo..." [(ngModel)]="busqueda" (input)="buscarUsuario()">
+  </div>
 
-			<div class="row g-2 mb-4">
-				<div class="col-md-4">
-					<button class="btn btn-success w-100" (click)="crearUsuario()">Crear Usuario</button>
-				</div>
-				<div class="col-md-4">
-					<button class="btn btn-warning w-100" [disabled]="!usuarioSeleccionado" (click)="modificarUsuario()">Modificar Usuario</button>
-				</div>
-				<div class="col-md-4">
-					<button class="btn btn-danger w-100" [disabled]="!usuarioSeleccionado" (click)="eliminarUsuario()">Eliminar Usuario</button>
-				</div>
-			</div>
-
-			<div>
-				<h6 class="fw-bold mb-3">Usuarios Registrados</h6>
-				<ul class="list-group">
-								@for (user of usuariosFiltrados; track user.correo) {
-									<li class="list-group-item" [class.active]="user === usuarioSeleccionado" (click)="seleccionarUsuario(user)">
-										{{ user.nombres }} {{ user.apellidos }} - {{ obtenerRol(user.rol || user.idRol) }}
-									</li>
-								}
-				</ul>
-			</div>
-		</div>
-	</div>
+  <div class="user-list">
+    <div class="user-list-header">
+      <span>Nombre</span>
+      <span>Correo</span>
+      <span>Estado</span>
+      <span>Acciones</span>
+    </div>
+    @for (user of usuariosFiltrados; track user.correo) {
+      <div class="user-list-item" [class.inactive]="!user.is_active" (click)="seleccionarUsuario(user)" [class.selected]="user === usuarioSeleccionado">
+        <span>
+          {{ user.nombres }} {{ user.apellidos }}
+          @if (user.is_rector) {
+            <span class="rector-badge">👑 Rector</span>
+          }
+        </span>
+        <span>{{ user.correo }}</span>
+        <span>
+          <span class="status" [class.status-active]="user.is_active" [class.status-inactive]="!user.is_active">
+            {{ user.is_active ? 'Activo' : 'Inactivo' }}
+          </span>
+        </span>
+        <span class="actions">
+          <button class="btn btn-sm btn-warning" (click)="modificarUsuario()">Editar</button>
+          <button class="btn btn-sm btn-danger" (click)="inactivarUsuario()">Inactivar</button>
+          @if (rolFiltrado === 1) {
+            <button class="btn btn-sm btn-info" (click)="abrirModalAsignarCurso()">Asignar Curso</button>
+          }
+          @if (rolFiltrado === 2) {
+            <button class="btn btn-sm btn-info" (click)="abrirModalAsignarMateria()">Asignar Materias</button>
+          }
+        </span>
+      </div>
+    }
+  </div>
 </div>
+
+<!-- Modal para Asignar Curso -->
+@if (mostrarModalAsignarCurso) {
+  <div class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Asignar Curso a {{ usuarioSeleccionado?.nombres }}</h4>
+        <button class="btn-close" (click)="cerrarModalAsignarCurso()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="cursoSelect">Selecciona un curso:</label>
+          <select class="form-control" id="cursoSelect" [(ngModel)]="selectedCursoId">
+            <option [ngValue]="null" disabled>-- Elige un curso --</option>
+            @for (curso of cursos; track curso.idCurso) {
+              <option [value]="curso.idCurso">{{ curso.grado }} {{ curso.seccion }} - {{ curso.anio }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cerrarModalAsignarCurso()">Cancelar</button>
+        <button class="btn btn-primary" (click)="asignarCurso()">Guardar Asignación</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Modal para Asignar Materias a Profesor -->
+@if (mostrarModalAsignarMateria) {
+    <div class="modal-backdrop">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Asignar Materias a {{ usuarioSeleccionado?.nombres }}</h4>
+          <button class="btn-close" (click)="cerrarModalAsignarMateria()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group mb-3">
+            <label for="cursoMateriaSelect">Selecciona un curso:</label>
+            <select class="form-control" id="cursoMateriaSelect" [(ngModel)]="selectedCursoId">
+              <option [ngValue]="null" disabled>-- Elige un curso --</option>
+              @for (curso of cursos; track curso.idCurso) {
+                <option [value]="curso.idCurso">{{ curso.grado }} {{ curso.seccion }} - {{ curso.anio }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="materiaSelect">Selecciona una materia:</label>
+            <select class="form-control" id="materiaSelect" [(ngModel)]="selectedMateriaId">
+              <option [ngValue]="null" disabled>-- Elige una materia --</option>
+              @for (materia of materias; track materia.idMateria) {
+                <option [value]="materia.idMateria">{{ materia.nombre }}</option>
+              }
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="cerrarModalAsignarMateria()">Cancelar</button>
+          <button class="btn btn-primary" (click)="asignarMateria()">Guardar Asignación</button>
+        </div>
+      </div>
+    </div>
+  }

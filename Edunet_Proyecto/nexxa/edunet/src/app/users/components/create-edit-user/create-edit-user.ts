@@ -32,15 +32,24 @@ export class CreateEditUser {
   };
   editMode = false;
   selectedFile: File | null = null;
+  currentUser: any = null; // To store the logged-in user's info
+  isCurrentUserRector = false;
 
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) {
+    // This is a simplified way to get the current user. In a real app, this would come from a global state/service.
+    const userJson = localStorage.getItem('user');
+    if (userJson) {
+      this.currentUser = JSON.parse(userJson);
+      this.isCurrentUserRector = this.currentUser?.is_rector;
+    }
+
     this.route.paramMap.subscribe(params => {
       const correo = params.get('correo');
       if (correo) {
         this.editMode = true;
         this.userService.getUserByCorreo(correo).subscribe({
           next: (user) => {
-            this.usuario = { ...user, password: '' };
+            this.usuario = { ...user, password: '', is_rector: user.is_rector || false };
           },
           error: () => {
             alert('No se pudo cargar el usuario');

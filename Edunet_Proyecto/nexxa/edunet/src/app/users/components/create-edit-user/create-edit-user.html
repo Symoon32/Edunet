@@ -77,6 +77,14 @@
 						<div class="mb-3">
 							<input placeholder="Cargo dentro de la institución (Ej: Director)" type="text" class="form-control" name="cargo" [(ngModel)]="usuario.cargo">
 						</div>
+						@if (isCurrentUserRector) {
+						  <div class="form-check mb-3">
+							<input class="form-check-input" type="checkbox" id="is_rector" name="is_rector" [(ngModel)]="usuario.is_rector" [disabled]="currentUser?.correo === usuario.correo">
+							<label class="form-check-label" for="is_rector">
+							  Asignar como Rector (Super Administrador)
+							</label>
+						  </div>
+						}
 					}
 
 					<button type="submit" class="btn btn-primary w-100" id="registrar">Registrar</button>

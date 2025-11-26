@@ -11,8 +11,12 @@ export class UserService {
   private authUrl = 'http://localhost:3000/api/auth';
   private http = inject(HttpClient);
 
-  getUsers(): Observable<any> {
-    return this.http.get(this.apiUrl);
+  getUsers(role: number | null = null): Observable<any> {
+    let url = this.apiUrl;
+    if (role) {
+      url += `?rol=${role}`;
+    }
+    return this.http.get(url);
   }
 
   getUserByCorreo(correo: string): Observable<any> {
@@ -28,6 +32,11 @@ export class UserService {
   }
 
   deleteUser(correo: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${correo}`);
+  }
+
+  inactivateUser(correo: string): Observable<any> {
+    // Backend handles DELETE as inactivation
     return this.http.delete(`${this.apiUrl}/${correo}`);
   }
 

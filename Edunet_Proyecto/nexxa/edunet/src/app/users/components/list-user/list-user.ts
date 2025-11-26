@@ -3,28 +3,54 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user-service';
+import { CursosAdminService } from '../../../admin/services/cursos.service';
+import { MateriasAdminService } from '../../../admin/services/materias.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-user',
-  imports: [FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './list-user.html',
-  styleUrl: './list-user.css'
+  styleUrls: ['./list-user.css']
 })
 export class ListUser {
   usuarios: any[] = [];
   usuariosFiltrados: any[] = [];
   busqueda: string = '';
   usuarioSeleccionado: any = null;
+  tituloVista: string = 'Gestión de Usuarios';
+  rolFiltrado: number | null = null;
+  mostrarModalAsignarCurso = false;
+  mostrarModalAsignarMateria = false;
+  cursos: any[] = [];
+  materias: any[] = [];
+  selectedCursoId: number | null = null;
+  selectedMateriaId: number | null = null;
 
   private router = inject(Router);
 
-  constructor(private userService: UserService) {
+  constructor(
+    private userService: UserService,
+    private cursosAdminService: CursosAdminService,
+    private materiasAdminService: MateriasAdminService
+  ) {
+    const currentRoute = this.router.url;
+    if (currentRoute.includes('gestion-estudiantes')) {
+      this.tituloVista = 'Gestión de Estudiantes';
+      this.rolFiltrado = 1;
+    } else if (currentRoute.includes('gestion-profesores')) {
+      this.tituloVista = 'Gestión de Profesores';
+      this.rolFiltrado = 2;
+    } else if (currentRoute.includes('gestion-admins')) {
+      this.tituloVista = 'Gestión de Administradores';
+      this.rolFiltrado = 4;
+    }
     this.cargarUsuarios();
   }
 
   cargarUsuarios() {
-    this.userService.getUsers().subscribe({
+    this.userService.getUsers(this.rolFiltrado).subscribe({
       next: (res) => {
         this.usuarios = res;
         this.filtrarUsuarios();
@@ -69,18 +95,80 @@ export class ListUser {
     }
   }
 
-  eliminarUsuario() {
-    if (this.usuarioSeleccionado && confirm('¿Seguro que deseas eliminar este usuario?')) {
-      this.userService.deleteUser(this.usuarioSeleccionado.correo).subscribe({
+  inactivarUsuario() {
+    if (this.usuarioSeleccionado && confirm('¿Seguro que deseas inactivar este usuario?')) {
+      // Assuming the service is updated to handle inactivation
+      this.userService.inactivateUser(this.usuarioSeleccionado.correo).subscribe({
         next: () => {
-          alert('Usuario eliminado');
+          alert('Usuario inactivado');
           this.cargarUsuarios();
           this.usuarioSeleccionado = null;
         },
         error: () => {
-          alert('Error al eliminar usuario');
+          alert('Error al inactivar usuario');
         }
       });
+    }
+  }
+
+  abrirModalAsignarCurso() {
+    if (this.usuarioSeleccionado) {
+      this.cursosAdminService.getCursos().subscribe(cursos => {
+        this.cursos = cursos;
+        this.mostrarModalAsignarCurso = true;
+      });
+    }
+  }
+
+  cerrarModalAsignarCurso() {
+    this.mostrarModalAsignarCurso = false;
+  }
+
+  asignarCurso() {
+    if (this.selectedCursoId && this.usuarioSeleccionado) {
+      this.cursosAdminService.assignStudentToCurso(this.selectedCursoId, this.usuarioSeleccionado.idUsuarios).subscribe({
+        next: () => {
+          alert('Estudiante asignado al curso correctamente.');
+          this.cerrarModalAsignarCurso();
+        },
+        error: (err) => {
+          alert('Error al asignar el curso: ' + err.error.message);
+        }
+      });
+    } else {
+      alert('Por favor, selecciona un curso.');
+    }
+  }
+
+  abrirModalAsignarMateria() {
+    if (this.usuarioSeleccionado) {
+      this.cursosAdminService.getCursos().subscribe(cursos => {
+        this.cursos = cursos;
+        this.materiasAdminService.getMaterias().subscribe(materias => {
+          this.materias = materias;
+          this.mostrarModalAsignarMateria = true;
+        });
+      });
+    }
+  }
+
+  cerrarModalAsignarMateria() {
+    this.mostrarModalAsignarMateria = false;
+  }
+
+  asignarMateria() {
+    if (this.selectedCursoId && this.selectedMateriaId && this.usuarioSeleccionado) {
+      this.cursosAdminService.assignProfesorToCurso(this.selectedCursoId, this.usuarioSeleccionado.idUsuarios, this.selectedMateriaId).subscribe({
+        next: () => {
+          alert('Profesor asignado a la materia correctamente.');
+          this.cerrarModalAsignarMateria();
+        },
+        error: (err) => {
+          alert('Error al asignar la materia: ' + err.error.message);
+        }
+      });
+    } else {
+      alert('Por favor, selecciona un curso y una materia.');
     }
   }
 

@@ -6,49 +6,23 @@ import { EstudiantesGuard } from './estudiantes/guards/estudiante.guard';
 
 export const routes: Routes = [
     {
-        path: 'gestion-usuarios',
-        loadComponent: () => import('./users/components/list-user/list-user').then(m => m.ListUser),
-        canActivate: [AdminGuard]
-    },
-    {
-        path: 'create-user',
-        loadComponent: () => import('./users/components/create-edit-user/create-edit-user').then(m => m.CreateEditUser),
-        canActivate: [AdminGuard]
-    },
-    {
-        path: 'edit-user/:correo',
-        loadComponent: () => import('./users/components/create-edit-user/create-edit-user').then(m => m.CreateEditUser),
-        canActivate: [AdminGuard]
-    },
-    {
-        path: 'inicio-admin',
-        loadComponent: () => import('./admin/inicio-admin.component').then(m => m.InicioAdminComponent),
-        canActivate: [AdminGuard]
-    },
-    {
-        path: 'config-cursos',
-        loadComponent: () => import('./admin/configurar-cursos.component').then(m => m.ConfigurarCursosComponent),
-        canActivate: [AdminGuard]
-    },
-    {
-        path: 'reportes',
-        loadComponent: () => import('./admin/reportes.component').then(m => m.ReportesComponent),
-        canActivate: [AdminGuard]
-    },
-    {
-        path: 'estadisticas',
-        loadComponent: () => import('./admin/estadisticas.component').then(m => m.EstadisticasComponent),
-        canActivate: [AdminGuard]
-    },
-    {
-        path: 'comunicacion',
-        loadComponent: () => import('./admin/comunicacion.component').then(m => m.ComunicacionComponent),
-        canActivate: [AdminGuard]
-    },
-    {
-        path: 'anuncios-boletines',
-        loadComponent: () => import('./admin/anuncios.component').then(m => m.AnunciosComponent),
-        canActivate: [AdminGuard]
+        path: 'admin',
+        loadComponent: () => import('./admin/layout/admin-layout.component').then(m => m.AdminLayoutComponent),
+        canActivate: [AdminGuard],
+        children: [
+            { path: 'inicio', loadComponent: () => import('./admin/inicio-admin.component').then(m => m.InicioAdminComponent) },
+            { path: 'gestion-usuarios', loadComponent: () => import('./users/components/list-user/list-user').then(m => m.ListUser) },
+            { path: 'gestion-estudiantes', loadComponent: () => import('./users/components/list-user/list-user').then(m => m.ListUser) },
+            { path: 'gestion-profesores', loadComponent: () => import('./users/components/list-user/list-user').then(m => m.ListUser) },
+            { path: 'gestion-admins', loadComponent: () => import('./users/components/list-user/list-user').then(m => m.ListUser) },
+            { path: 'create-user', loadComponent: () => import('./users/components/create-edit-user/create-edit-user').then(m => m.CreateEditUser) },
+            { path: 'edit-user/:correo', loadComponent: () => import('./users/components/create-edit-user/create-edit-user').then(m => m.CreateEditUser) },
+            { path: 'config-cursos', loadComponent: () => import('./admin/configurar-cursos.component').then(m => m.ConfigurarCursosComponent) },
+            { path: 'reportes', loadComponent: () => import('./admin/reportes.component').then(m => m.ReportesComponent) },
+            { path: 'estadisticas', loadComponent: () => import('./admin/estadisticas.component').then(m => m.EstadisticasComponent) },
+            { path: 'comunicacion', loadComponent: () => import('./admin/comunicacion.component').then(m => m.ComunicacionComponent) },
+            { path: 'anuncios-boletines', loadComponent: () => import('./admin/anuncios.component').then(m => m.AnunciosComponent) },
+        ]
     },
     {
         path: 'forgot-password',

@@ -18,6 +18,8 @@ CREATE TABLE usuarios (
   parentezco VARCHAR(20),
   cargo_admin VARCHAR(20),
   idRol INT NOT NULL,
+  is_rector BOOLEAN DEFAULT FALSE,
+  is_active BOOLEAN DEFAULT TRUE,
   PRIMARY KEY (`idUsuarios`),
   UNIQUE INDEX `correo_UNIQUE` (`correo` ASC));
   
@@ -223,3 +225,18 @@ CREATE TABLE padre_estudiante (
   FOREIGN KEY (idPadre) REFERENCES usuarios(idUsuarios),
   FOREIGN KEY (idEstudiante) REFERENCES usuarios(idUsuarios)
 );
+
+-- Tabla de Log del Sistema
+CREATE TABLE system_log (
+  idLog INT NOT NULL AUTO_INCREMENT,
+  idUsuario INT,
+  accion VARCHAR(255) NOT NULL,
+  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  detalles JSON,
+  PRIMARY KEY (idLog),
+  FOREIGN KEY (idUsuario) REFERENCES usuarios(idUsuarios)
+);
+
+-- Insert Rector User
+INSERT INTO usuarios (nombres, apellidos, correo, documento, telefono, direccion, password, idRol, is_rector, is_active)
+VALUES ('Admin', 'Principal', 'rector@edunet.com', 99999, '00000', 'Dirección', '$2b$10$Etzep9VXgpzGbgEo.d7ua.9ASrTPx5RZF4ySqNuAxRHQ5xnKlr8Py', 4, 1, 1);

@@ -33,9 +33,21 @@ export class GestionClase implements OnInit {
     this.loadCursos();
   }
 
+  private getUserIdFromToken(): number | null {
+    const token = this.authState.snapshot.token;
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.id;
+    } catch (e) {
+      console.error('Error decoding token', e);
+      return null;
+    }
+  }
+
   loadCursos() {
     this.loading = true;
-    const userId = this.authState.currentUserValue?.id; // Assuming id is available
+    const userId = this.getUserIdFromToken();
     if (!userId) {
        console.error("No user ID found");
        this.loading = false;
