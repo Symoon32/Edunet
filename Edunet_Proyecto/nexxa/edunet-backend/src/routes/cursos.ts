@@ -9,8 +9,7 @@ import {
     addEstudianteCurso,
     updateEstadoCursoEstudiante,
     removeEstudianteCurso,
-    assignProfesorToCurso,
-    assignStudentToCurso
+    assignProfesorToCurso
 } from '../controllers/cursosController';
 import { authMiddleware } from '../middleware/auth';
 import { authorizeRoles } from '../middleware/authorize';

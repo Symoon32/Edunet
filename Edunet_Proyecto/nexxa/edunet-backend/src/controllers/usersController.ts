@@ -149,7 +149,7 @@ export async function updateUser(req: Request, res: Response) {
           // Authorization logic
           const isUpdatingSelf = loggedInUser.correo === userToUpdate.correo;
           const isRector = loggedInUser.is_rector;
-          const isAdmin = loggedInUser.idRol === 4;
+          const isAdmin = loggedInUser.rol === 4;
           const isTargetAdmin = userToUpdate.idRol === 4;
 
           // A non-admin cannot update other users
