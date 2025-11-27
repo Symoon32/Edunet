@@ -40,8 +40,8 @@ export async function getEventos(req: Request, res: Response) {
             const params = [];
 
             // Admins see all events. Other roles see 'todos' and events for their role.
-            if (loggedInUser.idRol !== 4) {
-                const userRoleString = roleMap[loggedInUser.idRol];
+            if (loggedInUser.rol !== 4) {
+                const userRoleString = roleMap[loggedInUser.rol];
                 query += ' WHERE destinatarios = ? OR destinatarios = ?';
                 params.push('todos', userRoleString);
             }

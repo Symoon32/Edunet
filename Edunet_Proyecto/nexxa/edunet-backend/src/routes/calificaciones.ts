@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { CalificacionesController } from '../controllers/calificacionesController';
 import { authMiddleware } from '../middleware/auth';
-import { authorizeRoles } from '../middleware/authorize';
+import { authorizeRoles, authorize } from '../middleware/authorize';
 
 const router = Router();
 const calificacionesController = new CalificacionesController();

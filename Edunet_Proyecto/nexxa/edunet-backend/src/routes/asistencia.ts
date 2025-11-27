@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AsistenciaController } from '../controllers/asistenciaController';
 import { authMiddleware } from '../middleware/auth';
-import { authorizeRoles } from '../middleware/authorize';
+import { authorizeRoles, authorize } from '../middleware/authorize';
 
 const router = Router();
 const asistenciaController = new AsistenciaController();
