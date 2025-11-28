@@ -1,4 +1,4 @@
-﻿import { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { connection } from '../db/connection';
 
 interface Asistencia {
@@ -222,7 +222,7 @@ export class AsistenciaController {
         }
       } else if (usuarioSolicitante?.rol === 3) { // Acudiente
         // Verificar relación padre-estudiante
-        const [relacion]: any = await conn.execute(
+        const [relacion]: any = await connection.execute(
           'SELECT * FROM padre_estudiante WHERE idPadre = ? AND idEstudiante = ?',
           [usuarioSolicitante.id, idEstudiante]
         );
