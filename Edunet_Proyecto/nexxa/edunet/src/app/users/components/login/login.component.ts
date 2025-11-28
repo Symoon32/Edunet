@@ -50,7 +50,7 @@ export class LoginComponent {
             break;
           case 4:
             rolNombre = 'Administrador';
-            ruta = '/inicio-admin';
+            ruta = '/admin/inicio';
             break;
         }
         alert(`Bienvenido ${rolNombre}`);
