@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { connection } from '../db/connection';
+import { connectDB } from '../db/connection';
 
 export class ReportesController {
   // Generar reporte de rendimiento
@@ -7,12 +7,13 @@ export class ReportesController {
     try {
       const { idCurso } = req.params;
       const { periodo } = req.body;
-
-  const [datos]: any = await connection.execute(
-        `SELECT 
+      const conn = await connectDB();
+      try {
+        const [datos]: any = await conn.execute(
+          `SELECT
            u.idUsuarios,
-           u.nombre,
-           u.apellido,
+           u.nombres as nombre,
+           u.apellidos as apellido,
            COUNT(DISTINCT cal.idCalificacion) as total_evaluaciones,
            ROUND(AVG(cal.valor), 2) as promedio,
            MIN(cal.valor) as nota_minima,
@@ -22,32 +23,35 @@ export class ReportesController {
          INNER JOIN curso_estudiante ce ON u.idUsuarios = ce.idEstudiante
          LEFT JOIN calificaciones cal ON ce.idEstudiante = cal.idEstudiante 
            AND ce.idCurso = cal.idCurso
-         WHERE ce.idCurso = ? AND ce.estado = 'activo'
+         WHERE ce.idCurso = ?
          GROUP BY u.idUsuarios
          ORDER BY promedio DESC`,
-        [idCurso]
-      );
+          [idCurso]
+        );
 
-      const reporte = {
-        tipo: 'rendimiento',
-        fecha_generacion: new Date(),
-        periodo,
-        contenido: datos
-      };
+        const reporte = {
+          tipo: 'rendimiento',
+          fecha_generacion: new Date(),
+          periodo,
+          contenido: datos
+        };
 
-      // req.user viene del middleware de autenticación y contiene { id, correo, rol }
-      const idProfesor = req.user?.id;
-  const [result]: any = await connection.execute(
-        `INSERT INTO reportes (idProfesor, idCurso, tipo, fecha_generacion, periodo, contenido)
+        // req.user viene del middleware de autenticación y contiene { id, correo, rol }
+        const idProfesor = req.user?.id;
+        const [result]: any = await conn.execute(
+          `INSERT INTO reportes (idProfesor, idCurso, tipo, fecha_generacion, periodo, contenido)
          VALUES (?, ?, ?, ?, ?, ?)`,
-        [idProfesor, idCurso, 'rendimiento', reporte.fecha_generacion, periodo, JSON.stringify(reporte.contenido)]
-      );
+          [idProfesor, idCurso, 'rendimiento', reporte.fecha_generacion, periodo, JSON.stringify(reporte.contenido)]
+        );
 
-      res.json({
-        message: 'Reporte generado correctamente',
-        idReporte: result.insertId,
-        reporte
-      });
+        res.json({
+          message: 'Reporte generado correctamente',
+          idReporte: result.insertId,
+          reporte
+        });
+      } finally {
+        try { conn.release(); } catch (e) { /* ignore */ }
+      }
     } catch (error) {
       console.error('Error en generarReporteRendimiento:', error);
       res.status(500).json({ message: 'Error interno del servidor' });
@@ -58,18 +62,23 @@ export class ReportesController {
   async getReporte(req: Request, res: Response) {
     try {
       const { idReporte } = req.params;
-  const [rows]: any = await connection.execute(
-        `SELECT *
+      const conn = await connectDB();
+      try {
+        const [rows]: any = await conn.execute(
+          `SELECT *
          FROM reportes
          WHERE idReporte = ?`,
-        [idReporte]
-      );
+          [idReporte]
+        );
 
-      if (!rows[0]) {
-        return res.status(404).json({ message: 'Reporte no encontrado' });
+        if (!rows[0]) {
+          return res.status(404).json({ message: 'Reporte no encontrado' });
+        }
+
+        res.json(rows[0]);
+      } finally {
+        try { conn.release(); } catch (e) { /* ignore */ }
       }
-
-      res.json(rows[0]);
     } catch (error) {
       console.error('Error en getReporte:', error);
       res.status(500).json({ message: 'Error interno del servidor' });
@@ -80,14 +89,19 @@ export class ReportesController {
   async getReportesCurso(req: Request, res: Response) {
     try {
       const { idCurso } = req.params;
-  const [rows]: any = await connection.execute(
-        `SELECT *
+      const conn = await connectDB();
+      try {
+        const [rows]: any = await conn.execute(
+          `SELECT *
          FROM reportes
          WHERE idCurso = ?
          ORDER BY fecha_generacion DESC`,
-        [idCurso]
-      );
-      res.json(rows);
+          [idCurso]
+        );
+        res.json(rows);
+      } finally {
+        try { conn.release(); } catch (e) { /* ignore */ }
+      }
     } catch (error) {
       console.error('Error en getReportesCurso:', error);
       res.status(500).json({ message: 'Error interno del servidor' });
@@ -98,13 +112,17 @@ export class ReportesController {
   async deleteReporte(req: Request, res: Response) {
     try {
       const { idReporte } = req.params;
+      const conn = await connectDB();
+      try {
+        await conn.execute(
+          'DELETE FROM reportes WHERE idReporte = ?',
+          [idReporte]
+        );
 
-      await connection.execute(
-        'DELETE FROM reportes WHERE idReporte = ?',
-        [idReporte]
-      );
-
-      res.json({ message: 'Reporte eliminado correctamente' });
+        res.json({ message: 'Reporte eliminado correctamente' });
+      } finally {
+        try { conn.release(); } catch (e) { /* ignore */ }
+      }
     } catch (error) {
       console.error('Error en deleteReporte:', error);
       res.status(500).json({ message: 'Error interno del servidor' });
