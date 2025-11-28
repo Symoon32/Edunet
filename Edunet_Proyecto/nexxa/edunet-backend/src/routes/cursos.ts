@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
     createCurso,
+    getAllCursos,
     getCursos,
     getCurso,
     updateCurso,
@@ -23,6 +24,7 @@ router.use(authMiddleware);
 // Routes for admins and professors
 const generalRoles = [2, 4];
 router.post('/', authorizeRoles(...generalRoles), createCurso);
+router.get('/', authorizeRoles(4), getAllCursos);
 router.get('/profesor/:idProfesor', authorizeRoles(...generalRoles), getCursos);
 router.get('/:idCurso', authorizeRoles(...generalRoles), getCurso);
 router.put('/:idCurso', authorizeRoles(...generalRoles), updateCurso);

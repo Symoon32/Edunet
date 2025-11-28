@@ -4,29 +4,86 @@
       <h2 class="mb-3">Anuncios y Boletines Informativos</h2>
       <p class="text-muted">Publica información relevante para toda la comunidad educativa.</p>
 
-      <div class="mb-3">
-        <input type="text" class="form-control" placeholder="Título del anuncio o boletín">
-      </div>
+      <form [formGroup]="anuncioForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <input type="text" class="form-control" formControlName="titulo" placeholder="Título del anuncio o boletín">
+        </div>
 
-      <div class="mb-3">
-        <textarea class="form-control" rows="4" placeholder="Contenido del anuncio o boletín..."></textarea>
-      </div>
+        <div class="mb-3">
+          <textarea class="form-control" rows="4" formControlName="descripcion" placeholder="Contenido del anuncio o boletín..."></textarea>
+        </div>
 
-      <div class="row g-2 mb-4">
-        <div class="col-md-4">
-          <button class="btn btn-success w-100">Publicar</button>
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Fecha Inicio</label>
+            <input type="datetime-local" class="form-control" formControlName="fecha_inicio">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Fecha Fin</label>
+            <input type="datetime-local" class="form-control" formControlName="fecha_fin">
+          </div>
         </div>
-        <div class="col-md-4">
-          <button class="btn btn-warning w-100">Editar</button>
+
+        <div class="row g-2 mb-3">
+          <div class="col-md-4">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" formControlName="tipo">
+              <option value="anuncio">Anuncio</option>
+              <option value="evento">Evento</option>
+              <option value="noticia">Noticia</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Destinatarios</label>
+            <select class="form-select" formControlName="destinatarios">
+              <option value="todos">Todos</option>
+              <option value="estudiantes">Estudiantes</option>
+              <option value="profesores">Profesores</option>
+              <option value="padres">Padres</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Ubicación</label>
+            <input type="text" class="form-control" formControlName="ubicacion" placeholder="Ej: Auditorio">
+          </div>
         </div>
-        <div class="col-md-4">
-          <button class="btn btn-danger w-100">Eliminar</button>
+
+        <div class="row g-2 mb-4">
+          <div class="col-md-6">
+            <button type="submit" class="btn w-100" [ngClass]="isEditing ? 'btn-warning' : 'btn-success'">
+              {{ isEditing ? 'Actualizar' : 'Publicar' }}
+            </button>
+          </div>
+          <div class="col-md-6" *ngIf="isEditing">
+            <button type="button" class="btn btn-secondary w-100" (click)="resetForm()">Cancelar</button>
+          </div>
         </div>
-      </div>
+      </form>
 
       <h6 class="fw-bold mb-2">Últimos boletines</h6>
       <ul class="list-group">
-        <!-- Aquí puedes agregar dinámicamente los boletines si lo deseas -->
+        <li class="list-group-item" *ngFor="let anuncio of anuncios">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ anuncio.titulo }}</strong> <span class="badge bg-secondary ms-2">{{ anuncio.tipo }}</span>
+              <p class="mb-1">{{ anuncio.descripcion }}</p>
+              <small class="text-muted">
+                {{ anuncio.fecha_inicio | date:'short' }} - {{ anuncio.destinatarios }}
+              </small>
+            </div>
+            <div>
+              <button class="btn btn-sm btn-info me-1" (click)="editAnuncio(anuncio)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="deleteAnuncio(anuncio.idEvento)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item text-center" *ngIf="anuncios.length === 0">
+          No hay anuncios publicados.
+        </li>
       </ul>
     </div>
   </div>

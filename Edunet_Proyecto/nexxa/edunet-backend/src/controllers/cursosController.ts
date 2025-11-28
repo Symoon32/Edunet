@@ -80,6 +80,29 @@ export async function createCurso(req: Request, res: Response) {
   }
 }
 
+// Obtener todos los cursos (admin) o de un profesor
+export async function getAllCursos(req: Request, res: Response) {
+  const conn = await connectDB();
+  try {
+    const [rows]: any = await conn.execute(
+      `SELECT c.*, m.nombre as materia, m.codigo,
+              u.nombres as nombreProfesor, u.apellidos as apellidoProfesor,
+              COUNT(DISTINCT ce.idEstudiante) as totalEstudiantes
+       FROM cursos c
+       INNER JOIN materias m ON c.idMateria = m.idMateria
+       INNER JOIN usuarios u ON c.idProfesor = u.idUsuarios
+       LEFT JOIN curso_estudiante ce ON c.idCurso = ce.idCurso
+       GROUP BY c.idCurso`
+    );
+    res.json(rows);
+  } catch (error) {
+    console.error('Error en getAllCursos:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  } finally {
+    conn.release();
+  }
+}
+
 // Obtener todos los cursos de un profesor
 export async function getCursos(req: Request, res: Response) {
   const conn = await connectDB();
