@@ -22,7 +22,7 @@ export function authorizeRoles(...roles: (number | string)[]) {
         user: req.user
       });
 
-      const user = req.user as any;
+      const user = req.user;
 
       if (!user) {
         console.error('authorize: req.user is undefined. Headers:', req.headers);
@@ -55,7 +55,7 @@ export function authorizeRoles(...roles: (number | string)[]) {
         allowedRoles: allowed
       });
 
-      (req as any).user = { ...user, rol: userRol };
+      req.user = { ...user, rol: userRol };
       next();
     } catch (error) {
       console.error('authorize: unexpected error:', error);

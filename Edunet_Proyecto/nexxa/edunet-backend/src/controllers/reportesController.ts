@@ -36,7 +36,7 @@ export class ReportesController {
       };
 
       // req.user viene del middleware de autenticación y contiene { id, correo, rol }
-      const idProfesor = (req.user as any)?.id;
+      const idProfesor = req.user?.id;
   const [result]: any = await connection.execute(
         `INSERT INTO reportes (idProfesor, idCurso, tipo, fecha_generacion, periodo, contenido)
          VALUES (?, ?, ?, ?, ?, ?)`,
