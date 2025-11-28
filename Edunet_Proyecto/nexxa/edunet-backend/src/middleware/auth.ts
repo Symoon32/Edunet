@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { TokenPayload, verifyToken } from '../utils/jwt';
 
+// Extender la interfaz Request para incluir el usuario
+export interface AuthRequest extends Request {
+  user?: TokenPayload;
+}
+
 export function authenticateToken(req: Request, res: Response, next: NextFunction) {
   try {
     console.log('authenticateToken: checking token in request headers');
@@ -16,7 +21,8 @@ export function authenticateToken(req: Request, res: Response, next: NextFunctio
     try {
       const decoded = verifyToken(token);
       console.log('authenticateToken: token verified successfully:', decoded);
-      req.user = decoded;
+      // Cast req to AuthRequest to assign user
+      (req as AuthRequest).user = decoded;
       next();
     } catch (err) {
       console.error('authenticateToken: JWT verification error:', err);
