@@ -1,89 +1,50 @@
-
-
 <main class="container mt-4 text-center">
   <div class="row">
     <div class="col-12">
       <h2 class="text-primary">Progreso Académico del Estudiante</h2>
       <p>Consulta la planilla con los avances académicos individuales de tu hijo/a:</p>
-      <div class="table-responsive">
+
+      <div *ngIf="loading" class="alert alert-info">Cargando datos...</div>
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+      <div class="mb-3" *ngIf="estudiantes.length > 0">
+        <label for="estudianteSelect" class="form-label fw-bold">Seleccionar Estudiante:</label>
+        <select id="estudianteSelect" class="form-select w-50 mx-auto" [(ngModel)]="estudianteSeleccionadoId" (change)="onEstudianteChange()">
+          <option *ngFor="let est of estudiantes" [value]="est.idUsuarios">
+            {{ est.nombres }} {{ est.apellidos }}
+          </option>
+        </select>
+      </div>
+
+      <div class="alert alert-warning" *ngIf="estudiantes.length === 0 && !loading">
+        No tiene estudiantes asignados.
+      </div>
+
+      <div class="table-responsive" *ngIf="calificaciones.length > 0">
         <table class="table table-striped">
           <thead class="table-primary">
             <tr>
-              <th>Materia</th>
-              <th>Periodo 1</th>
-              <th>Periodo 2</th>
-              <th>Periodo 3</th>
-              <th>Periodo 4</th>
-              <th>Promedio Final</th>
+              <th>Materia/Actividad</th>
+              <th>Tipo</th>
+              <th>Valor</th>
+              <th>Peso</th>
+              <th>Comentarios</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Matemáticas</td>
-              <td>4.2</td>
-              <td>4.5</td>
-              <td>4.3</td>
-              <td>4.6</td>
-              <td>4.4</td>
-            </tr>
-            <tr>
-              <td>Lenguaje</td>
-              <td>4.0</td>
-              <td>4.1</td>
-              <td>4.2</td>
-              <td>4.3</td>
-              <td>4.15</td>
-            </tr>
-            <tr>
-              <td>Ingles</td>
-              <td>4.0</td>
-              <td>4.1</td>
-              <td>4.2</td>
-              <td>4.3</td>
-              <td>4.15</td>
-            </tr>
-            <tr>
-              <td>Quimica</td>
-              <td>4.0</td>
-              <td>4.1</td>
-              <td>4.2</td>
-              <td>4.3</td>
-              <td>4.15</td>
-            </tr>
-            <tr>
-              <td>Artes</td>
-              <td>4.0</td>
-              <td>4.1</td>
-              <td>4.2</td>
-              <td>4.3</td>
-              <td>4.15</td>
-            </tr>
-            <tr>
-              <td>ED.Fisica</td>
-              <td>4.0</td>
-              <td>4.1</td>
-              <td>4.2</td>
-              <td>4.3</td>
-              <td>4.15</td>
-            </tr>
-            <tr>
-              <td>Fisica</td>
-              <td>4.0</td>
-              <td>4.1</td>
-              <td>4.2</td>
-              <td>4.3</td>
-              <td>4.15</td>
-            </tr>
-            <tr>
-              <td>Economia</td>
-              <td>4.0</td>
-              <td>4.1</td>
-              <td>4.2</td>
-              <td>4.3</td>
-              <td>4.15</td>
+            <tr *ngFor="let cal of calificaciones">
+              <td>{{ cal.nombre }}</td>
+              <td>{{ cal.tipo }}</td>
+              <td>{{ cal.valor }}</td>
+              <td>{{ cal.peso }}%</td>
+              <td>{{ cal.comentarios || '-' }}</td>
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="alert alert-info" *ngIf="calificaciones.length === 0 && estudianteSeleccionadoId && !loading">
+        No hay calificaciones registradas para este estudiante en el curso seleccionado.
       </div>
     </div>
   </div>

@@ -241,3 +241,30 @@ export async function deleteUser(req: Request, res: Response) { // Now this is s
     res.status(500).json({ error: 'Error al inactivar usuario', details: err });
   }
 }
+
+export async function getMisEstudiantes(req: Request, res: Response) {
+  const loggedInUser = req.user;
+  if (!loggedInUser) return res.status(401).json({ error: 'Usuario no autenticado' });
+
+  if (loggedInUser.rol !== 3) {
+      return res.status(403).json({ error: 'Solo los acudientes pueden consultar sus estudiantes asignados' });
+  }
+
+  try {
+    const conn = await connectDB();
+    try {
+      const sql = `
+        SELECT u.*
+        FROM usuarios u
+        JOIN padre_estudiante pe ON u.idUsuarios = pe.idEstudiante
+        WHERE pe.idPadre = ?
+      `;
+      const [rows] = await conn.execute(sql, [loggedInUser.id]);
+      res.json(rows);
+    } finally {
+      try { conn.release(); } catch (e) { /* ignore */ }
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener estudiantes asignados', details: err });
+  }
+}

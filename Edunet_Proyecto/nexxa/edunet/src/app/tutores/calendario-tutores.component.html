@@ -1,85 +1,36 @@
-
 <main class="container my-5">
   <div class="row justify-content-center">
     <div class="col-lg-10">
       <div class="card shadow-sm mb-4">
         <div class="card-body">
-          <h2 class="card-title text-primary mb-4 text-center">Calendario Escolar - Julio 2025</h2>
-          <div class="table-responsive">
-            <table class="table table-bordered text-center align-middle mb-0">
-              <thead class="table-primary">
-                <tr>
-                  <th>Dom</th>
-                  <th>Lun</th>
-                  <th>Mar</th>
-                  <th>Mié</th>
-                  <th>Jue</th>
-                  <th>Vie</th>
-                  <th>Sáb</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td>1</td>
-                  <td>2</td>
-                  <td>3</td>
-                  <td>4</td>
-                  <td>5</td>
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>9</td>
-                  <td>10</td>
-                  <td>11</td>
-                  <td>12</td>
-                </tr>
-                <tr>
-                  <td>13</td>
-                  <td>14</td>
-                  <td class="table-warning" title="Inicio segundo periodo">15</td>
-                  <td>16</td>
-                  <td class="table-info" title="Entrega de boletines">17</td>
-                  <td>18</td>
-                  <td>19</td>
-                </tr>
-                <tr>
-                  <td>20</td>
-                  <td>21</td>
-                  <td class="table-success" title="Feria de Ciencias">22</td>
-                  <td>23</td>
-                  <td>24</td>
-                  <td class="table-danger" title="Día del Idioma">25</td>
-                  <td>26</td>
-                </tr>
-                <tr>
-                  <td>27</td>
-                  <td>28</td>
-                  <td>29</td>
-                  <td>30</td>
-                  <td>31</td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
+          <h2 class="card-title text-primary mb-4 text-center">Calendario Escolar y Eventos</h2>
+
+          <div *ngIf="loading" class="alert alert-info">Cargando eventos...</div>
+          <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+          <!-- List View of Events -->
+          <div class="row" *ngIf="!loading && eventos.length > 0">
+             <div class="col-12">
+               <div class="list-group">
+                 <div *ngFor="let evento of eventos" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1 text-primary">{{ evento.titulo }}</h5>
+                      <small class="text-muted">{{ evento.fecha | date:'fullDate' }}</small>
+                    </div>
+                    <p class="mb-1">{{ evento.descripcion }}</p>
+                    <small class="text-info" *ngIf="evento.lugar">Lugar: {{ evento.lugar }}</small>
+                 </div>
+               </div>
+             </div>
           </div>
+
+          <div class="alert alert-warning" *ngIf="!loading && eventos.length === 0">
+            No hay eventos escolares programados próximamente.
+          </div>
+
         </div>
       </div>
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h3 class="card-title mb-3">Eventos de Julio:</h3>
-          <ul class="list-group">
-            <li class="list-group-item"><span class="badge bg-warning me-2">&nbsp;</span>15 de julio: Inicio segundo periodo</li>
-            <li class="list-group-item"><span class="badge bg-info me-2">&nbsp;</span>17 de julio: Entrega de boletines</li>
-            <li class="list-group-item"><span class="badge bg-success me-2">&nbsp;</span>22 de julio: Feria de Ciencias</li>
-            <li class="list-group-item"><span class="badge bg-danger me-2">&nbsp;</span>25 de julio: Celebración del Día del Idioma</li>
-          </ul>
-        </div>
-      </div>
+
     </div>
   </div>
 </main>

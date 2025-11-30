@@ -7,7 +7,8 @@ import {
   createUser,
   getUserByEmail,
   updateUser,
-  deleteUser
+  deleteUser,
+  getMisEstudiantes
 } from '../controllers/usersController';
 
 const router = Router();
@@ -32,5 +33,8 @@ router.get('/:correo', authenticateToken, authorizeRoles(1, 2, 3, 4), getUserByE
 router.put('/:correo', authenticateToken, authorizeRoles(1, 2, 3, 4), updateUser);
 // Ruta para eliminar usuario por correo - Solo accesible para el rol 4 (administrador)
 router.delete('/:correo', authenticateToken, authorizeRoles(4), deleteUser);
+
+// Ruta para obtener estudiantes asignados a un padre - Accesible para rol 3 (acudiente)
+router.get('/mis-estudiantes/list', authenticateToken, authorizeRoles(3), getMisEstudiantes);
 
 export default router;

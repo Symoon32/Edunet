@@ -35,4 +35,8 @@ export class CalificacionesService {
   deleteCalificacion(idCalificacion: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${idCalificacion}`);
   }
+
+  getCalificacionesEstudiante(idCurso: number, idEstudiante: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/curso/${idCurso}/estudiante/${idEstudiante}`);
+  }
 }

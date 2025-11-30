@@ -1,0 +1,28 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class MensajesService {
+  private apiUrl = 'http://localhost:3000/api/mensajes';
+
+  constructor(private http: HttpClient) {}
+
+  sendMessage(destinatarioId: number, asunto: string, contenido: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}`, { destinatarioId, asunto, contenido });
+  }
+
+  getRecibidos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/recibidos`);
+  }
+
+  getEnviados(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/enviados`);
+  }
+
+  markAsRead(idMensaje: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${idMensaje}/leer`, {});
+  }
+}

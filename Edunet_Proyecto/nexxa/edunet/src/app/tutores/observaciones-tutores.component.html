@@ -1,22 +1,65 @@
 <main class="container my-5">
   <div class="row justify-content-center">
-    <div class="col-lg-8">
+    <div class="col-lg-10">
       <div class="card shadow-sm">
         <div class="card-body">
-          <h2 class="card-title text-primary mb-4" id="observaciones-titulo">Observaciones del Estudiante</h2>
-          <form class="row g-3 align-items-center mb-4">
+          <h2 class="card-title text-primary mb-4" id="observaciones-titulo">Reporte de Asistencia</h2>
+
+          <div *ngIf="loading" class="alert alert-info">Cargando datos...</div>
+          <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+          <form class="row g-3 align-items-center mb-4" *ngIf="estudiantes.length > 0">
             <div class="col-auto">
               <label for="seleccionar-estudiante" class="col-form-label fw-bold">Seleccionar estudiante:</label>
             </div>
             <div class="col-auto">
-              <select id="seleccionar-estudiante" class="form-select" [(ngModel)]="estudianteSeleccionado" name="estudianteSeleccionado">
-                <option value="">-- Selecciona --</option>
-                <option value="juan">Juan Ruiz</option>
-                <option value="camila">Camila Gómez</option>
+               <select id="seleccionar-estudiante" class="form-select" [(ngModel)]="estudianteSeleccionadoId" name="estudianteSeleccionado" (change)="onEstudianteChange()">
+                <option *ngFor="let est of estudiantes" [value]="est.idUsuarios">
+                  {{ est.nombres }} {{ est.apellidos }}
+                </option>
               </select>
             </div>
           </form>
+
+          <div class="alert alert-warning" *ngIf="estudiantes.length === 0 && !loading">
+            No tiene estudiantes asignados.
+          </div>
           
+          <div class="table-responsive" *ngIf="asistencias.length > 0">
+            <table class="table table-striped table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>Fecha</th>
+                  <th>Tema</th>
+                  <th>Estado</th>
+                  <th>Observaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let asis of asistencias">
+                  <td>{{ asis.fecha | date:'mediumDate' }}</td>
+                  <td>{{ asis.tema || 'Clase Regular' }}</td>
+                  <td>
+                    <span class="badge"
+                      [ngClass]="{
+                        'bg-success': asis.estado === 'presente',
+                        'bg-danger': asis.estado === 'ausente',
+                        'bg-warning': asis.estado === 'tardanza',
+                        'bg-info': asis.estado === 'justificado'
+                      }">
+                      {{ asis.estado | titlecase }}
+                    </span>
+                  </td>
+                  <td>{{ asis.observaciones || '-' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="alert alert-info" *ngIf="asistencias.length === 0 && estudianteSeleccionadoId && !loading">
+             No hay registros de asistencia para este estudiante en el curso actual.
+          </div>
+
         </div>
       </div>
     </div>
