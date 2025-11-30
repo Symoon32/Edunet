@@ -1,0 +1,72 @@
+<div class="mensajes-container mt-4">
+  <h2 class="text-center mb-4">Mensajería</h2>
+
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'inbox'" (click)="setTab('inbox')" href="javascript:void(0)">Bandeja de Entrada</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'sent'" (click)="setTab('sent')" href="javascript:void(0)">Enviados</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'compose'" (click)="setTab('compose')" href="javascript:void(0)">Redactar</a>
+    </li>
+  </ul>
+
+  <!-- INBOX -->
+  <div *ngIf="activeTab === 'inbox'">
+    <div *ngIf="loading" class="text-center"><div class="spinner-border text-primary"></div></div>
+    <div *ngIf="!loading && mensajesRecibidos.length === 0" class="alert alert-info">No tienes mensajes nuevos.</div>
+
+    <div class="list-group" *ngIf="!loading">
+      <div *ngFor="let msj of mensajesRecibidos" class="list-group-item list-group-item-action flex-column align-items-start mensaje-card"
+           [class.mensaje-no-leido]="!msj.leido">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{ msj.asunto }}</h5>
+          <small>{{ msj.fecha_envio | date:'short' }}</small>
+        </div>
+        <p class="mb-1">{{ msj.contenido }}</p>
+        <small>De: {{ msj.nombre_remitente }} {{ msj.apellido_remitente }}</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- SENT -->
+  <div *ngIf="activeTab === 'sent'">
+    <div *ngIf="loading" class="text-center"><div class="spinner-border text-primary"></div></div>
+    <div class="list-group" *ngIf="!loading">
+      <div *ngFor="let msj of mensajesEnviados" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{ msj.asunto }}</h5>
+          <small>{{ msj.fecha_envio | date:'short' }}</small>
+        </div>
+        <p class="mb-1">{{ msj.contenido }}</p>
+        <small>Para: {{ msj.nombre_destinatario }} {{ msj.apellido_destinatario }}</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPOSE -->
+  <div *ngIf="activeTab === 'compose'">
+    <form (ngSubmit)="enviarMensaje()">
+      <div class="mb-3">
+        <label class="form-label">Para:</label>
+        <select class="form-select" [(ngModel)]="nuevoMensaje.destinatario" name="destinatario" required>
+          <option value="">Selecciona un profesor...</option>
+          <option *ngFor="let prof of profesores" [value]="prof.idUsuarios">
+            {{ prof.nombres }} {{ prof.apellidos }} (Profesor)
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Asunto:</label>
+        <input type="text" class="form-control" [(ngModel)]="nuevoMensaje.asunto" name="asunto" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Mensaje:</label>
+        <textarea class="form-control" rows="5" [(ngModel)]="nuevoMensaje.contenido" name="contenido" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+    </form>
+  </div>
+</div>
