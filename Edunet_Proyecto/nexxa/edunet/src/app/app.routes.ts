@@ -134,6 +134,11 @@ export const routes: Routes = [
         path: 'estudiantes/calendario',
         loadComponent: () => import('./estudiantes/calendario-estudiantes.component').then(m => m.CalendarioEstudiantesComponent),
         canActivate: [EstudiantesGuard]
+    },
+    {
+        path: 'estudiantes/mensajes',
+        loadComponent: () => import('./estudiantes/mensajes/mensajes-estudiantes.component').then(m => m.MensajesEstudiantesComponent),
+        canActivate: [EstudiantesGuard]
     }
     
 ];

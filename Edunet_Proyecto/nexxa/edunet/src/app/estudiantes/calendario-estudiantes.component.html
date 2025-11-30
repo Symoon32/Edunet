@@ -1,5 +1,12 @@
-<h2 class="mb-4 text-center">Calendario Escolar</h2>
-<div class="calendario mb-4">
+<h2 class="mb-4 text-center">Calendario Escolar - {{ monthName | titlecase }}</h2>
+
+<div *ngIf="loading" class="text-center">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+</div>
+
+<div class="calendario mb-4" *ngIf="!loading">
   <div class="dia-header">Dom</div>
   <div class="dia-header">Lun</div>
   <div class="dia-header">Mar</div>
@@ -8,45 +15,21 @@
   <div class="dia-header">Vie</div>
   <div class="dia-header">Sáb</div>
 
-  <div class="dia"></div>
-  <div class="dia"></div>
-  <div class="dia">1</div>
-  <div class="dia">2</div>
-  <div class="dia">3</div>
-  <div class="dia">4</div>
-  <div class="dia">5</div>
-
-  <div class="dia">6</div>
-  <div class="dia">7</div>
-  <div class="dia">8</div>
-  <div class="dia">9</div>
-  <div class="dia">10</div>
-  <div class="dia">11</div>
-  <div class="dia">12</div>
-
-  <div class="dia">13</div>
-  <div class="dia">14</div>
-  <div class="dia destacado" title="Inicio segundo periodo">15</div>
-  <div class="dia">16</div>
-  <div class="dia">17</div>
-  <div class="dia">18</div>
-  <div class="dia">19</div>
-
-  <div class="dia">20</div>
-  <div class="dia">21</div>
-  <div class="dia">22</div>
-  <div class="dia">23</div>
-  <div class="dia">24</div>
-  <div class="dia">25</div>
-  <div class="dia">26</div>
-
-  <div class="dia">27</div>
-  <div class="dia">28</div>
-  <div class="dia">29</div>
-  <div class="dia">30</div>
-  <div class="dia">31</div>
-</div>
-<div class="leyenda">
-  <p><span class="cuadro"></span> 15 de abril: Inicio segundo periodo</p>
+  <div *ngFor="let day of daysInMonth" class="dia" [class.destacado]="hasEvent(day)">
+    <span *ngIf="day">{{ day | date:'d' }}</span>
+    <div *ngIf="day && hasEvent(day)" class="event-indicator">
+      <small *ngFor="let ev of getEventsForDay(day)" class="d-block text-truncate" [title]="ev.titulo">
+        {{ ev.titulo }}
+      </small>
+    </div>
+  </div>
 </div>
 
+<div class="leyenda" *ngIf="!loading && eventos.length > 0">
+  <h4>Próximos Eventos</h4>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let ev of eventos">
+      <strong>{{ ev.fecha_inicio | date:'mediumDate' }}:</strong> {{ ev.titulo }} - {{ ev.descripcion }}
+    </li>
+  </ul>
+</div>

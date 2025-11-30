@@ -91,11 +91,11 @@ export class CargarNotas implements OnInit {
     };
 
     this.calificacionesService.createCalificacion(payload).subscribe({
-        next: (res) => {
+        next: (res: any) => {
             this.showFeedback(`Nota ${this.nota} guardada para ${this.selectedStudent.nombres}`, 'success');
             // Optionally clear selection or reset form
         },
-        error: (err) => {
+        error: (err: any) => {
             console.error('Error saving grade', err);
             this.showFeedback('Error al guardar la nota. Intente nuevamente.', 'error');
         }

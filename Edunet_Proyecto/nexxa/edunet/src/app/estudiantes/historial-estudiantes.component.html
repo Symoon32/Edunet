@@ -1,34 +1,43 @@
 <h2 class="mb-4 text-center">Mi Historial Académico</h2>
-<div class="table-responsive">
+
+<div *ngIf="loading" class="text-center">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+</div>
+
+<div *ngIf="!loading && materias.length === 0" class="alert alert-info text-center">
+  No tienes cursos asignados o calificaciones registradas.
+</div>
+
+<div class="table-responsive" *ngIf="!loading && materias.length > 0">
   <table class="table table-bordered table-hover text-center align-middle tabla-historial">
     <thead class="table-light">
       <tr>
         <th>Asignatura</th>
-        <th>Periodo 1</th>
-        <th>Periodo 2</th>
-        <th>Periodo 3</th>
-        <th>Periodo 4</th>
-        <th>Promedio</th>
+        <th>Notas</th>
+        <th>Promedio Acumulado</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Matemáticas</td>
-        <td>4.2</td>
-        <td>4.5</td>
-        <td>4.0</td>
-        <td>4.3</td>
-        <td>4.25</td>
-      </tr>
-      <tr>
-        <td>Español</td>
-        <td>4.5</td>
-        <td>4.7</td>
-        <td>4.6</td>
-        <td>4.8</td>
-        <td>4.65</td>
+      <tr *ngFor="let materia of materias">
+        <td class="fw-bold">{{ materia.nombre }}</td>
+        <td>
+          <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <span *ngFor="let nota of materia.calificaciones"
+                  class="badge bg-light text-dark border"
+                  [title]="nota.nombre + ' (' + nota.peso + '%)'">
+              {{ nota.valor }}
+            </span>
+            <span *ngIf="materia.calificaciones.length === 0" class="text-muted">Sin notas</span>
+          </div>
+        </td>
+        <td [class.text-danger]="materia.promedio < 3.0"
+            [class.text-success]="materia.promedio >= 3.0"
+            class="fw-bold fs-5">
+          {{ materia.promedio }}
+        </td>
       </tr>
     </tbody>
   </table>
 </div>
-
