@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CursosService } from '../../services/cursos.service';
+import { CalificacionesService } from '../../services/calificaciones.service';
 
 @Component({
   selector: 'app-cargar-notas',
@@ -17,24 +18,28 @@ export class CargarNotas implements OnInit {
   loading = false;
   cursoInfo: any = null;
 
-  // Grading model (simplified for now, could be per student)
+  // Grading model
   selectedStudent: any = null;
   nota: number | null = null;
   observacion: string = '';
+  // New fields for grading details
+  tipo: string = 'tarea'; // tarea, examen, proyecto, etc.
+  peso: number = 100;
+  nombreActividad: string = 'Actividad';
+
   feedbackMessage: string = '';
   feedbackType: 'success' | 'error' = 'success';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private cursosService: CursosService
+    private cursosService: CursosService,
+    private calificacionesService: CalificacionesService
   ) {}
 
   ngOnInit() {
-    // Check if we have a course ID in params (matrix params or query params)
-    // The router.navigate passed { cursoId: ... } which usually goes to matrix params
     this.route.paramMap.subscribe(params => {
-      const id = params.get('cursoId') || this.route.snapshot.paramMap.get('id'); // flexible
+      const id = params.get('cursoId') || this.route.snapshot.paramMap.get('id');
       if (id) {
         this.cursoId = +id;
         this.loadCourseData();
@@ -46,12 +51,10 @@ export class CargarNotas implements OnInit {
     if (!this.cursoId) return;
     this.loading = true;
 
-    // Load course info
     this.cursosService.getCurso(this.cursoId).subscribe(data => {
         this.cursoInfo = data;
     });
 
-    // Load students
     this.cursosService.getEstudiantesCurso(this.cursoId).subscribe({
       next: (data) => {
         this.estudiantes = data;
@@ -66,25 +69,37 @@ export class CargarNotas implements OnInit {
 
   selectStudent(estudiante: any) {
     this.selectedStudent = estudiante;
-    this.nota = null; // Reset or load existing grade if API supported it
+    this.nota = null;
     this.observacion = '';
     this.feedbackMessage = '';
   }
 
   guardarNota() {
-    if (!this.selectedStudent || this.nota === null) {
+    if (!this.selectedStudent || this.nota === null || !this.cursoId) {
         this.showFeedback('Selecciona un estudiante e ingresa una nota válida', 'error');
         return;
     }
 
-    // Here we would call an API to save the grade.
-    // e.g., CalificacionesService.save(this.cursoId, this.selectedStudent.idUsuarios, this.nota, this.observacion)
+    const payload = {
+        idCurso: this.cursoId,
+        idEstudiante: this.selectedStudent.idUsuarios,
+        tipo: this.tipo,
+        nombre: this.nombreActividad,
+        valor: this.nota,
+        peso: this.peso,
+        comentarios: this.observacion
+    };
 
-    // Simulating success
-    this.showFeedback(`Nota ${this.nota} guardada para ${this.selectedStudent.nombres}`, 'success');
-
-    // Optional: clear selection
-    // this.selectedStudent = null;
+    this.calificacionesService.createCalificacion(payload).subscribe({
+        next: (res) => {
+            this.showFeedback(`Nota ${this.nota} guardada para ${this.selectedStudent.nombres}`, 'success');
+            // Optionally clear selection or reset form
+        },
+        error: (err) => {
+            console.error('Error saving grade', err);
+            this.showFeedback('Error al guardar la nota. Intente nuevamente.', 'error');
+        }
+    });
   }
 
   showFeedback(msg: string, type: 'success' | 'error') {

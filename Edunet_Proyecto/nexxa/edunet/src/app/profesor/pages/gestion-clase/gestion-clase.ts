@@ -120,8 +120,6 @@ export class GestionClase implements OnInit {
             this.router.navigate(['/profesor/cargar-notas', { cursoId: this.selectedCurso.idCurso }]);
             break;
         case 'asistencia':
-             // Asistencia usually needs a class ID (specific session) or course ID to create one?
-             // Usually attendance is by class instance.
              if (type === 'clase') {
                  this.router.navigate(['/profesor/asistencia', id]);
              }
@@ -130,9 +128,16 @@ export class GestionClase implements OnInit {
              this.router.navigate(['/profesor/reportes', { cursoId: this.selectedCurso.idCurso }]);
              break;
         case 'estudiantes':
-             // We can show students in a modal or separate page.
-             // The API `getEstudiantesCurso` exists.
+             // Navigate to generic student list or materials if no specific student page
+             // Or maybe we can link to materials/tareas here as "Gestion de Curso" action
              break;
     }
+  }
+
+  // Helper to open materials
+  openMaterials() {
+      if (this.selectedCurso) {
+          this.router.navigate(['/profesor/materiales', this.selectedCurso.idCurso]);
+      }
   }
 }
