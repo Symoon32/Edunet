@@ -18,6 +18,7 @@ export class InicioAdminComponent implements OnInit {
   };
   recentActivity: any[] = [];
   currentUser: any = null;
+  today: Date = new Date();
 
   constructor(
     private reportesService: ReportesAdminService,

@@ -1,4 +1,9 @@
-<div class="app-wrapper d-flex flex-column min-vh-100">
+
+<ng-container *ngIf="isAdminRoute()">
+  <router-outlet></router-outlet>
+</ng-container>
+
+<div *ngIf="!isAdminRoute()" class="app-wrapper d-flex flex-column min-vh-100">
   <app-navbar *ngIf="!esLogin()"></app-navbar>
 
   <main class="container my-5 flex-grow-1">

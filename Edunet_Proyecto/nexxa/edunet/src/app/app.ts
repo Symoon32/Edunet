@@ -23,4 +23,8 @@ export class App {
   esLogin(): boolean {
     return this.router.url === '/';
   }
+
+  isAdminRoute(): boolean {
+    return this.router.url.startsWith('/admin');
+  }
 }

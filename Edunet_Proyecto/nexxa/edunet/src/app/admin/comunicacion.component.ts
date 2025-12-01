@@ -1,9 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MensajesService } from '../../shared/services/mensajes.service';
-import { UserService } from '../../users/services/user.service';
-import { TokenPayload } from '../../users/utils/jwt';
+import { MensajesService } from '../shared/services/mensajes.service';
+import { UserService } from '../users/services/user-service';
+import { TokenPayload } from '../users/utils/jwt';
 import { jwtDecode } from 'jwt-decode';
 
 @Component({
@@ -14,8 +14,8 @@ import { jwtDecode } from 'jwt-decode';
   styleUrls: ['./comunicacion.component.css']
 })
 export class ComunicacionComponent implements OnInit {
-  mensajesService = inject(MensajesService);
-  userService = inject(UserService);
+  mensajesService: any = inject(MensajesService);
+  userService: any = inject(UserService);
   fb = inject(FormBuilder);
 
   activeTab: 'inbox' | 'sent' | 'compose' = 'inbox';
@@ -52,17 +52,15 @@ export class ComunicacionComponent implements OnInit {
   }
 
   loadInbox() {
-    this.mensajesService.getRecibidos().subscribe(data => this.mensajesRecibidos = data);
+    this.mensajesService.getRecibidos().subscribe((data: any) => this.mensajesRecibidos = data);
   }
 
   loadSent() {
-    this.mensajesService.getEnviados().subscribe(data => this.mensajesEnviados = data);
+    this.mensajesService.getEnviados().subscribe((data: any) => this.mensajesEnviados = data);
   }
 
   loadUsers() {
-    // Only admins should see all users ideally, or we filter.
-    // Assuming userService.getUsers() exists and returns a list.
-    this.userService.getUsers().subscribe(data => this.usuarios = data);
+    this.userService.getUsers().subscribe((data: any) => this.usuarios = data);
   }
 
   switchTab(tab: 'inbox' | 'sent' | 'compose') {
@@ -92,7 +90,7 @@ export class ComunicacionComponent implements OnInit {
         this.composeForm.reset();
         this.switchTab('sent');
       },
-      error: (err) => alert('Error al enviar mensaje')
+      error: (err: any) => alert('Error al enviar mensaje')
     });
   }
 }

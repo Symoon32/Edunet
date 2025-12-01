@@ -1,34 +1,120 @@
-<div class="admin-container">
+<div class="admin-wrapper" [class.sidebar-collapsed]="!sidebarOpen">
+  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-header">
-      <h2>Admin Panel</h2>
+      <div class="logo-area">
+        <i class="bi bi-mortarboard-fill logo-icon"></i>
+        <span class="logo-text">EduNet</span>
+      </div>
+      <!-- Toggle button inside sidebar header for mobile/desktop toggle -->
+       <!-- Optional: Put toggle here or in content. Putting it here might look cleaner if aligned right -->
     </div>
+
     <nav class="sidebar-nav">
       <ul>
-        <li><a routerLink="/admin/inicio" routerLinkActive="active">Inicio</a></li>
+        <li>
+          <a routerLink="/admin/inicio" routerLinkActive="active" title="Inicio">
+            <i class="bi bi-speedometer2"></i>
+            <span class="link-text">Dashboard</span>
+          </a>
+        </li>
+
+        <li class="section-title">
+          <span>GESTIÓN</span>
+        </li>
+
         <li class="has-submenu">
-          <a>Gestión de Usuarios</a>
+          <a class="submenu-toggle" title="Usuarios">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-people-fill"></i>
+              <span class="link-text">Usuarios</span>
+            </div>
+            <i class="bi bi-chevron-down arrow"></i>
+          </a>
           <ul class="submenu">
             <li><a routerLink="/admin/gestion-estudiantes" routerLinkActive="active">Estudiantes</a></li>
             <li><a routerLink="/admin/gestion-profesores" routerLinkActive="active">Profesores</a></li>
             <li><a routerLink="/admin/gestion-admins" routerLinkActive="active">Administradores</a></li>
           </ul>
         </li>
+
         <li class="has-submenu">
-          <a>Gestión Académica</a>
+          <a class="submenu-toggle" title="Académico">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-book-fill"></i>
+              <span class="link-text">Académico</span>
+            </div>
+            <i class="bi bi-chevron-down arrow"></i>
+          </a>
           <ul class="submenu">
-            <li><a routerLink="/admin/config-cursos" routerLinkActive="active">Configurar Cursos</a></li>
-            <li><a routerLink="/admin/gestion-materias" routerLinkActive="active">Gestión de Materias</a></li>
+            <li><a routerLink="/admin/config-cursos" routerLinkActive="active">Cursos</a></li>
+            <li><a routerLink="/admin/gestion-materias" routerLinkActive="active">Materias</a></li>
           </ul>
         </li>
-        <li><a routerLink="/admin/anuncios-boletines" routerLinkActive="active">Calendario y Avisos</a></li>
-        <li><a routerLink="/admin/comunicacion" routerLinkActive="active">Comunicación</a></li>
-        <li><a routerLink="/admin/estadisticas" routerLinkActive="active">Estadísticas</a></li>
-        <li><a routerLink="/admin/reportes" routerLinkActive="active">Reportes</a></li>
+
+        <li class="section-title">
+          <span>COMUNICACIÓN</span>
+        </li>
+
+        <li>
+          <a routerLink="/admin/anuncios-boletines" routerLinkActive="active" title="Anuncios">
+            <i class="bi bi-megaphone-fill"></i>
+            <span class="link-text">Anuncios</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/admin/comunicacion" routerLinkActive="active" title="Mensajes">
+            <i class="bi bi-envelope-fill"></i>
+            <span class="link-text">Mensajería</span>
+          </a>
+        </li>
+
+        <li class="section-title">
+          <span>ANÁLISIS</span>
+        </li>
+
+        <li>
+          <a routerLink="/admin/estadisticas" routerLinkActive="active" title="Estadísticas">
+            <i class="bi bi-graph-up"></i>
+            <span class="link-text">Estadísticas</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/admin/reportes" routerLinkActive="active" title="Reportes">
+            <i class="bi bi-file-earmark-text-fill"></i>
+            <span class="link-text">Reportes</span>
+          </a>
+        </li>
       </ul>
     </nav>
+
+    <!-- Sidebar Footer (User Profile) -->
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <img [src]="currentUser?.fotoPerfil || 'assets/default-avatar.png'" alt="User">
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ currentUser?.nombres || 'Admin' }}</span>
+          <span class="user-role">Administrador</span>
+        </div>
+        <button class="logout-btn" (click)="logout()" title="Cerrar Sesión">
+          <i class="bi bi-box-arrow-right"></i>
+        </button>
+      </div>
+    </div>
   </aside>
-  <main class="main-content">
-    <router-outlet></router-outlet>
-  </main>
+
+  <!-- Main Content Area -->
+  <div class="content-wrapper">
+    <!-- Floating Toggle Button for Mobile/Desktop -->
+    <button class="floating-toggle" (click)="toggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Page Content -->
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>
