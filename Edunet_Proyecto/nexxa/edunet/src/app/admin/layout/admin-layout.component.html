@@ -5,25 +5,23 @@
     </div>
     <nav class="sidebar-nav">
       <ul>
-        <li><a routerLink="/inicio-admin">Inicio</a></li>
+        <li><a routerLink="/admin/inicio" routerLinkActive="active">Inicio</a></li>
         <li class="has-submenu">
           <a>Gestión de Usuarios</a>
           <ul class="submenu">
-            <li><a routerLink="/admin/gestion-estudiantes">Estudiantes</a></li>
-            <li><a routerLink="/admin/gestion-profesores">Profesores</a></li>
-            <li><a routerLink="/admin/gestion-admins">Administradores</a></li>
+            <li><a routerLink="/admin/gestion-estudiantes" routerLinkActive="active">Estudiantes</a></li>
+            <li><a routerLink="/admin/gestion-profesores" routerLinkActive="active">Profesores</a></li>
+            <li><a routerLink="/admin/gestion-admins" routerLinkActive="active">Administradores</a></li>
           </ul>
         </li>
         <li class="has-submenu">
           <a>Gestión Académica</a>
           <ul class="submenu">
-            <li><a routerLink="/admin/gestion-cursos">Cursos</a></li>
-            <li><a routerLink="/admin/gestion-materias">Materias</a></li>
-            <li><a routerLink="/admin/gestion-clases">Clases</a></li>
+            <li><a routerLink="/admin/config-cursos" routerLinkActive="active">Configurar Cursos</a></li>
           </ul>
         </li>
-        <li><a routerLink="/admin/calendario">Calendario y Avisos</a></li>
-        <li><a routerLink="/admin/reportes">Reportes</a></li>
+        <li><a routerLink="/admin/anuncios-boletines" routerLinkActive="active">Calendario y Avisos</a></li>
+        <li><a routerLink="/admin/reportes" routerLinkActive="active">Reportes</a></li>
       </ul>
     </nav>
   </aside>
