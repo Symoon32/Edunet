@@ -15,7 +15,16 @@ const roleMap: { [key: number]: string } = {
 
 export async function createEvento(req: Request, res: Response) {
     try {
+        // Map frontend fields (if necessary) to backend expectations.
+        // Frontend 'anuncios.component.ts' sends 'fecha_inicio' which matches backend.
+        // However, we ensure that if fields are missing they are handled or defaults provided if logical.
         const { titulo, descripcion, fecha_inicio, fecha_fin, ubicacion, tipo, destinatarios } = req.body;
+
+        // Validation for SQLite 'NOT NULL' constraint on fecha_inicio
+        if (!fecha_inicio) {
+             return res.status(400).json({ message: 'La fecha de inicio es obligatoria' });
+        }
+
         const connection = await connectDB();
         try {
             const [result]: any = await connection.execute(
