@@ -1,0 +1,8 @@
+
+> edunet-backend@1.0.0 dev
+> ts-node src/app.ts
+
+ADVERTENCIA: usando secret de desarrollo local
+[dotenv@17.2.2] injecting env (7) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+Servidor corriendo en http://localhost:3000
