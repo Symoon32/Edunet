@@ -1,97 +1,153 @@
-<div class="admin-view-container">
-  <div class="header">
-    <h2>{{ tituloVista }}</h2>
-    <button class="btn btn-primary" (click)="crearUsuario()">Crear Nuevo</button>
-  </div>
-
-  <div class="search-bar">
-    <input type="text" placeholder="Buscar por nombre o correo..." [(ngModel)]="busqueda" (input)="buscarUsuario()">
-  </div>
-
-  <div class="user-list">
-    <div class="user-list-header">
-      <span>Nombre</span>
-      <span>Correo</span>
-      <span>Estado</span>
-      <span>Acciones</span>
-    </div>
-    @for (user of usuariosFiltrados; track user.correo) {
-      <div class="user-list-item" [class.inactive]="!user.is_active" (click)="seleccionarUsuario(user)" [class.selected]="user === usuarioSeleccionado">
-        <span>
-          {{ user.nombres }} {{ user.apellidos }}
-          @if (user.is_rector) {
-            <span class="rector-badge">👑 Rector</span>
-          }
-        </span>
-        <span>{{ user.correo }}</span>
-        <span>
-          <span class="status" [class.status-active]="user.is_active" [class.status-inactive]="!user.is_active">
-            {{ user.is_active ? 'Activo' : 'Inactivo' }}
-          </span>
-        </span>
-        <span class="actions">
-          <button class="btn btn-sm btn-warning" (click)="modificarUsuario()">Editar</button>
-          <button class="btn btn-sm btn-danger" (click)="inactivarUsuario()">Inactivar</button>
-          @if (rolFiltrado === 1) {
-            <button class="btn btn-sm btn-info" (click)="abrirModalAsignarCurso()">Asignar Curso</button>
-          }
-          @if (rolFiltrado === 2) {
-            <button class="btn btn-sm btn-info" (click)="abrirModalAsignarMateria()">Asignar Materias</button>
-          }
-        </span>
+<div class="row justify-content-center">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <div>
+          <h4 class="mb-0 fw-bold text-dark">{{ tituloVista }}</h4>
+          <p class="text-muted small mb-0">Gestión completa de usuarios</p>
+        </div>
+        <button class="btn btn-primary d-flex align-items-center gap-2" (click)="crearUsuario()">
+          <i class="bi bi-person-plus-fill"></i> Crear Nuevo
+        </button>
       </div>
-    }
+
+      <div class="card-body p-4">
+        <!-- Search Bar -->
+        <div class="input-group mb-4 shadow-sm" style="max-width: 500px;">
+          <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+          <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar por nombre o correo..."
+                 [(ngModel)]="busqueda" (input)="buscarUsuario()">
+        </div>
+
+        <!-- User Table -->
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th scope="col" class="py-3">Usuario</th>
+                <th scope="col" class="py-3">Correo</th>
+                <th scope="col" class="py-3">Estado</th>
+                <th scope="col" class="py-3 text-end">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of usuariosFiltrados; track user.correo) {
+                <tr [class.table-active]="user === usuarioSeleccionado" (click)="seleccionarUsuario(user)">
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar-circle me-3">
+                        {{ user.nombres.charAt(0) }}{{ user.apellidos.charAt(0) }}
+                      </div>
+                      <div>
+                        <div class="fw-bold text-dark">
+                          {{ user.nombres }} {{ user.apellidos }}
+                          @if (user.is_rector) {
+                            <i class="bi bi-patch-check-fill text-warning ms-1" title="Rector"></i>
+                          }
+                        </div>
+                        <small class="text-muted">ID: {{ user.idUsuarios }}</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-muted">{{ user.correo }}</td>
+                  <td>
+                    <span class="badge rounded-pill"
+                          [class.bg-success-subtle]="user.is_active" [class.text-success]="user.is_active"
+                          [class.bg-danger-subtle]="!user.is_active" [class.text-danger]="!user.is_active">
+                      {{ user.is_active ? 'Activo' : 'Inactivo' }}
+                    </span>
+                  </td>
+                  <td class="text-end">
+                    <button class="btn btn-sm btn-light text-primary me-2" (click)="modificarUsuario()" title="Editar">
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button class="btn btn-sm btn-light text-danger me-2" (click)="inactivarUsuario()" title="Cambiar Estado">
+                      <i class="bi bi-power"></i>
+                    </button>
+
+                    @if (rolFiltrado === 1) {
+                      <button class="btn btn-sm btn-outline-info" (click)="abrirModalAsignarCurso()" title="Asignar Curso">
+                        <i class="bi bi-backpack2"></i> Curso
+                      </button>
+                    }
+                    @if (rolFiltrado === 2) {
+                      <button class="btn btn-sm btn-outline-info" (click)="abrirModalAsignarMateria()" title="Asignar Materias">
+                        <i class="bi bi-book"></i> Materias
+                      </button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          @if (usuariosFiltrados.length === 0) {
+            <div class="text-center py-5">
+              <i class="bi bi-person-x fs-1 text-muted mb-3 d-block"></i>
+              <p class="text-muted">No se encontraron usuarios.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- Modal para Asignar Curso -->
 @if (mostrarModalAsignarCurso) {
-  <div class="modal-backdrop">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4>Asignar Curso a {{ usuarioSeleccionado?.nombres }}</h4>
-        <button class="btn-close" (click)="cerrarModalAsignarCurso()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="cursoSelect">Selecciona un curso:</label>
-          <select class="form-control" id="cursoSelect" [(ngModel)]="selectedCursoId">
-            <option [ngValue]="null" disabled>-- Elige un curso --</option>
-            @for (curso of cursos; track curso.idCurso) {
-              <option [value]="curso.idCurso">{{ curso.grado }} {{ curso.seccion }} - {{ curso.anio }}</option>
-            }
-          </select>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="cerrarModalAsignarCurso()">Cancelar</button>
-        <button class="btn btn-primary" (click)="asignarCurso()">Guardar Asignación</button>
-      </div>
-    </div>
-  </div>
-}
-
-<!-- Modal para Asignar Materias a Profesor -->
-@if (mostrarModalAsignarMateria) {
-    <div class="modal-backdrop">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4>Asignar Materias a {{ usuarioSeleccionado?.nombres }}</h4>
-          <button class="btn-close" (click)="cerrarModalAsignarMateria()">&times;</button>
+  <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold">Asignar Curso</h5>
+          <button type="button" class="btn-close" (click)="cerrarModalAsignarCurso()"></button>
         </div>
         <div class="modal-body">
-          <div class="form-group mb-3">
-            <label for="cursoMateriaSelect">Selecciona un curso:</label>
-            <select class="form-control" id="cursoMateriaSelect" [(ngModel)]="selectedCursoId">
+          <p class="text-muted mb-3">Estudiante: <strong>{{ usuarioSeleccionado?.nombres }}</strong></p>
+          <div class="form-group">
+            <label class="form-label text-muted small">Selecciona un curso</label>
+            <select class="form-select form-select-lg" [(ngModel)]="selectedCursoId">
               <option [ngValue]="null" disabled>-- Elige un curso --</option>
               @for (curso of cursos; track curso.idCurso) {
                 <option [value]="curso.idCurso">{{ curso.grado }} {{ curso.seccion }} - {{ curso.anio }}</option>
               }
             </select>
           </div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button class="btn btn-light text-muted" (click)="cerrarModalAsignarCurso()">Cancelar</button>
+          <button class="btn btn-primary px-4" (click)="asignarCurso()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Modal para Asignar Materias -->
+@if (mostrarModalAsignarMateria) {
+  <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold">Asignar Materias</h5>
+          <button type="button" class="btn-close" (click)="cerrarModalAsignarMateria()"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted mb-3">Profesor: <strong>{{ usuarioSeleccionado?.nombres }}</strong></p>
+
+          <div class="form-group mb-3">
+            <label class="form-label text-muted small">Curso</label>
+            <select class="form-select" [(ngModel)]="selectedCursoId">
+              <option [ngValue]="null" disabled>-- Elige un curso --</option>
+              @for (curso of cursos; track curso.idCurso) {
+                <option [value]="curso.idCurso">{{ curso.grado }} {{ curso.seccion }} - {{ curso.anio }}</option>
+              }
+            </select>
+          </div>
+
           <div class="form-group">
-            <label for="materiaSelect">Selecciona una materia:</label>
-            <select class="form-control" id="materiaSelect" [(ngModel)]="selectedMateriaId">
+            <label class="form-label text-muted small">Materia</label>
+            <select class="form-select" [(ngModel)]="selectedMateriaId">
               <option [ngValue]="null" disabled>-- Elige una materia --</option>
               @for (materia of materias; track materia.idMateria) {
                 <option [value]="materia.idMateria">{{ materia.nombre }}</option>
@@ -99,10 +155,11 @@
             </select>
           </div>
         </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" (click)="cerrarModalAsignarMateria()">Cancelar</button>
-          <button class="btn btn-primary" (click)="asignarMateria()">Guardar Asignación</button>
+        <div class="modal-footer border-0 pt-0">
+          <button class="btn btn-light text-muted" (click)="cerrarModalAsignarMateria()">Cancelar</button>
+          <button class="btn btn-primary px-4" (click)="asignarMateria()">Guardar</button>
         </div>
       </div>
     </div>
-  }
+  </div>
+}

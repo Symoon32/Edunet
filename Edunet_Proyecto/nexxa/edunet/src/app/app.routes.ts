@@ -18,6 +18,7 @@ export const routes: Routes = [
             { path: 'create-user', loadComponent: () => import('./users/components/create-edit-user/create-edit-user').then(m => m.CreateEditUser) },
             { path: 'edit-user/:correo', loadComponent: () => import('./users/components/create-edit-user/create-edit-user').then(m => m.CreateEditUser) },
             { path: 'config-cursos', loadComponent: () => import('./admin/configurar-cursos.component').then(m => m.ConfigurarCursosComponent) },
+            { path: 'gestion-materias', loadComponent: () => import('./admin/gestion-materias.component').then(m => m.GestionMateriasComponent) },
             { path: 'reportes', loadComponent: () => import('./admin/reportes.component').then(m => m.ReportesComponent) },
             { path: 'estadisticas', loadComponent: () => import('./admin/estadisticas.component').then(m => m.EstadisticasComponent) },
             { path: 'comunicacion', loadComponent: () => import('./admin/comunicacion.component').then(m => m.ComunicacionComponent) },
@@ -142,5 +143,3 @@ export const routes: Routes = [
     }
     
 ];
-
-

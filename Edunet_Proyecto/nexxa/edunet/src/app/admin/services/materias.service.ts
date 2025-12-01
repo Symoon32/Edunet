@@ -12,4 +12,16 @@ export class MateriasAdminService {
   getMaterias(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
+
+  createMateria(materia: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, materia);
+  }
+
+  updateMateria(id: number, materia: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, materia);
+  }
+
+  deleteMateria(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 }

@@ -1,141 +1,153 @@
 <div class="row justify-content-center">
-  <div class="col-lg-10 col-xl-10">
-    <div class="card p-4 shadow-sm">
-      <h2 class="mb-3">Generación de Reportes</h2>
-      <p class="text-muted">Selecciona el tipo de reporte que deseas generar.</p>
-
-      <div class="row mb-4">
-        <div class="col-md-4">
-          <label class="form-label">Tipo de Reporte</label>
-          <select class="form-select" [(ngModel)]="reportType" (change)="onReportTypeChange()">
-            <option value="">Seleccionar...</option>
-            <option value="usuarios">Lista de Usuarios</option>
-            <option value="asignaciones">Carga Académica Docente</option>
-            <option value="calificaciones">Reporte de Calificaciones</option>
-            <option value="log">Registro de Actividad (Log)</option>
-          </select>
-        </div>
-
-        <!-- Dynamic Filters -->
-        <div class="col-md-4" *ngIf="reportType === 'usuarios'">
-          <label class="form-label">Rol</label>
-          <select class="form-select" [(ngModel)]="selectedRoleId">
-            <option [value]="1">Estudiantes</option>
-            <option [value]="2">Profesores</option>
-            <option [value]="3">Padres</option>
-            <option [value]="4">Administradores</option>
-          </select>
-        </div>
-
-        <div class="col-md-4" *ngIf="reportType === 'asignaciones'">
-          <label class="form-label">Profesor</label>
-          <select class="form-select" [(ngModel)]="selectedProfesorId">
-            <option *ngFor="let p of profesores" [value]="p.idUsuarios">
-              {{ p.nombres }} {{ p.apellidos }}
-            </option>
-          </select>
-        </div>
-
-        <div class="col-md-4" *ngIf="reportType === 'calificaciones'">
-          <label class="form-label">Curso</label>
-          <select class="form-select" [(ngModel)]="selectedCursoId">
-            <option *ngFor="let c of cursos" [value]="c.idCurso">
-              {{ c.grado }}-{{ c.seccion }} ({{ c.materia }})
-            </option>
-          </select>
-        </div>
-
-        <div class="col-md-4 d-flex align-items-end">
-          <button class="btn btn-primary w-100" (click)="generateReport()" [disabled]="!reportType">
-            Generar
-          </button>
-        </div>
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-white py-3">
+        <h4 class="mb-0 fw-bold text-dark">Generación de Reportes</h4>
+        <p class="text-muted small mb-0">Selecciona el tipo de reporte que deseas generar.</p>
       </div>
 
-      <!-- Report Results Table -->
-      <div *ngIf="reportData.length > 0" class="mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="fw-bold">Resultados</h5>
-          <button class="btn btn-outline-secondary btn-sm" (click)="exportReport()">
-            <i class="bi bi-download"></i> Exportar
-          </button>
+      <div class="card-body p-4">
+        <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Tipo de Reporte</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light"><i class="bi bi-file-earmark-text"></i></span>
+              <select class="form-select" [(ngModel)]="reportType" (change)="onReportTypeChange()">
+                <option value="">Seleccionar...</option>
+                <option value="usuarios">Lista de Usuarios</option>
+                <option value="asignaciones">Carga Académica Docente</option>
+                <option value="calificaciones">Reporte de Calificaciones</option>
+                <option value="log">Registro de Actividad (Log)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Dynamic Filters -->
+          <div class="col-md-3" *ngIf="reportType === 'usuarios'">
+            <label class="form-label fw-bold">Filtrar por Rol</label>
+            <select class="form-select" [(ngModel)]="selectedRoleId">
+              <option [value]="1">Estudiantes</option>
+              <option [value]="2">Profesores</option>
+              <option [value]="3">Padres</option>
+              <option [value]="4">Administradores</option>
+            </select>
+          </div>
+
+          <div class="col-md-3" *ngIf="reportType === 'asignaciones'">
+            <label class="form-label fw-bold">Seleccionar Profesor</label>
+            <select class="form-select" [(ngModel)]="selectedProfesorId">
+              <option *ngFor="let p of profesores" [value]="p.idUsuarios">
+                {{ p.nombres }} {{ p.apellidos }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-3" *ngIf="reportType === 'calificaciones'">
+            <label class="form-label fw-bold">Seleccionar Curso</label>
+            <select class="form-select" [(ngModel)]="selectedCursoId">
+              <option *ngFor="let c of cursos" [value]="c.idCurso">
+                {{ c.grado }}-{{ c.seccion }} ({{ c.materia }})
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-primary w-100" (click)="generateReport()" [disabled]="!reportType">
+              <i class="bi bi-lightning-charge"></i> Generar
+            </button>
+          </div>
         </div>
 
-        <div class="table-responsive">
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr *ngIf="reportType === 'usuarios'">
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Correo</th>
-                <th>Documento</th>
-                <th>Estado</th>
-              </tr>
-              <tr *ngIf="reportType === 'asignaciones'">
-                <th>Curso ID</th>
-                <th>Materia</th>
-                <th>Grado</th>
-                <th>Sección</th>
-              </tr>
-              <tr *ngIf="reportType === 'calificaciones'">
-                <th>Estudiante</th>
-                <th>Tipo</th>
-                <th>Actividad</th>
-                <th>Nota</th>
-              </tr>
-              <tr *ngIf="reportType === 'log'">
-                <th>ID</th>
-                <th>Usuario</th>
-                <th>Acción</th>
-                <th>Detalles</th>
-                <th>Fecha</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let row of reportData">
-                <!-- Usuarios -->
-                <ng-container *ngIf="reportType === 'usuarios'">
-                  <td>{{ row.nombres }}</td>
-                  <td>{{ row.apellidos }}</td>
-                  <td>{{ row.correo }}</td>
-                  <td>{{ row.documento }}</td>
-                  <td>{{ row.is_active ? 'Activo' : 'Inactivo' }}</td>
-                </ng-container>
+        <!-- Report Results Table -->
+        <div *ngIf="reportData.length > 0" class="mt-5">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">Resultados del Reporte</h5>
+            <button class="btn btn-outline-success btn-sm" (click)="exportReport()">
+              <i class="bi bi-file-earmark-excel"></i> Exportar CSV
+            </button>
+          </div>
 
-                <!-- Asignaciones -->
-                <ng-container *ngIf="reportType === 'asignaciones'">
-                  <td>{{ row.idCurso }}</td>
-                  <td>{{ row.nombreMateria }}</td>
-                  <td>{{ row.grado }}</td>
-                  <td>{{ row.seccion }}</td>
-                </ng-container>
+          <div class="table-responsive rounded border">
+            <table class="table table-hover table-striped mb-0 align-middle">
+              <thead class="table-light">
+                <tr *ngIf="reportType === 'usuarios'">
+                  <th>Nombre Completo</th>
+                  <th>Correo Electrónico</th>
+                  <th>Documento</th>
+                  <th>Estado</th>
+                </tr>
+                <tr *ngIf="reportType === 'asignaciones'">
+                  <th>ID Curso</th>
+                  <th>Materia</th>
+                  <th>Grado</th>
+                  <th>Sección</th>
+                </tr>
+                <tr *ngIf="reportType === 'calificaciones'">
+                  <th>Estudiante</th>
+                  <th>Tipo Evaluación</th>
+                  <th>Actividad</th>
+                  <th>Nota</th>
+                </tr>
+                <tr *ngIf="reportType === 'log'">
+                  <th>ID</th>
+                  <th>Usuario</th>
+                  <th>Acción</th>
+                  <th>Detalles</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of reportData">
+                  <!-- Usuarios -->
+                  <ng-container *ngIf="reportType === 'usuarios'">
+                    <td class="fw-bold">{{ row.nombres }} {{ row.apellidos }}</td>
+                    <td class="text-muted">{{ row.correo }}</td>
+                    <td>{{ row.documento }}</td>
+                    <td>
+                      <span class="badge rounded-pill" [ngClass]="row.is_active ? 'bg-success' : 'bg-danger'">
+                        {{ row.is_active ? 'Activo' : 'Inactivo' }}
+                      </span>
+                    </td>
+                  </ng-container>
 
-                <!-- Calificaciones -->
-                <ng-container *ngIf="reportType === 'calificaciones'">
-                  <td>{{ row.nombres }} {{ row.apellidos }}</td>
-                  <td>{{ row.tipo }}</td>
-                  <td>{{ row.nombre }}</td>
-                  <td>{{ row.valor }}</td>
-                </ng-container>
+                  <!-- Asignaciones -->
+                  <ng-container *ngIf="reportType === 'asignaciones'">
+                    <td>{{ row.idCurso }}</td>
+                    <td class="fw-bold">{{ row.nombreMateria }}</td>
+                    <td>{{ row.grado }}</td>
+                    <td>{{ row.seccion }}</td>
+                  </ng-container>
 
-                <!-- Log -->
-                <ng-container *ngIf="reportType === 'log'">
-                  <td>{{ row.idLog }}</td>
-                  <td>{{ row.idUsuario }}</td>
-                  <td>{{ row.accion }}</td>
-                  <td>{{ row.detalles | json }}</td>
-                  <td>{{ row.fecha | date:'medium' }}</td>
-                </ng-container>
-              </tr>
-            </tbody>
-          </table>
+                  <!-- Calificaciones -->
+                  <ng-container *ngIf="reportType === 'calificaciones'">
+                    <td>{{ row.nombres }} {{ row.apellidos }}</td>
+                    <td><span class="badge bg-secondary">{{ row.tipo }}</span></td>
+                    <td>{{ row.nombre }}</td>
+                    <td class="fw-bold">{{ row.valor }}</td>
+                  </ng-container>
+
+                  <!-- Log -->
+                  <ng-container *ngIf="reportType === 'log'">
+                    <td class="text-muted small">#{{ row.idLog }}</td>
+                    <td>{{ row.idUsuario }}</td>
+                    <td class="text-primary">{{ row.accion }}</td>
+                    <td class="text-muted small text-truncate" style="max-width: 200px;" title="{{ row.detalles | json }}">
+                      {{ row.detalles | json }}
+                    </td>
+                    <td class="text-muted small">{{ row.fecha | date:'medium' }}</td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-      <div *ngIf="reportData.length === 0 && reportType" class="mt-4 text-center text-muted">
-        <p>No se encontraron datos para los criterios seleccionados.</p>
-      </div>
+        <div *ngIf="reportData.length === 0 && reportType" class="mt-5 text-center py-5 bg-light rounded">
+          <i class="bi bi-search fs-1 text-muted mb-3 d-block"></i>
+          <p class="text-muted mb-0">No se encontraron datos para los criterios seleccionados.</p>
+        </div>
 
+      </div>
     </div>
   </div>
 </div>

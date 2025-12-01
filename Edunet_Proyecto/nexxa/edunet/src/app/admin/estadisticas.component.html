@@ -1,48 +1,103 @@
 <div class="row justify-content-center">
-  <div class="col-lg-10 col-xl-8">
-    <div class="card p-4 shadow-sm">
-      <h2 class="mb-3">Informes y Estadísticas</h2>
-      <p class="text-muted">Consulta las planillas de notas y el rendimiento académico por materia o curso.</p>
-
-      <div class="row g-2 mb-3">
-        <div class="col-md-6">
-          <select class="form-select">
-            <option value="">Seleccionar curso</option>
-            <option value="1">6°A</option>
-            <option value="2">7°B</option>
-            <option value="3">8°A</option>
-          </select>
-        </div>
-        <div class="col-md-6">
-          <select class="form-select">
-            <option value="">Seleccionar materia</option>
-            <option value="mat">Matemáticas</option>
-            <option value="his">Historia</option>
-            <option value="inf">Informática</option>
-          </select>
-        </div>
+  <div class="col-lg-10 col-xl-9">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-white py-3">
+        <h4 class="mb-0 fw-bold text-dark"><i class="bi bi-bar-chart-line me-2"></i>Informes de Rendimiento</h4>
+        <p class="text-muted small mb-0">Análisis académico y planillas de evaluación</p>
       </div>
 
-      <div class="row g-2 mb-4">
-        <div class="col-md-6">
-          <button class="btn btn-success w-100">Ver Planilla de Notas</button>
+      <div class="card-body p-4">
+        <!-- Filter Controls -->
+        <div class="row g-3 mb-4 bg-light p-3 rounded">
+          <div class="col-md-8">
+            <label class="form-label small fw-bold text-uppercase text-muted">Seleccionar Curso</label>
+            <select class="form-select border-0 shadow-sm" [(ngModel)]="selectedCursoId">
+              <option [ngValue]="null">-- Selecciona un curso --</option>
+              <option *ngFor="let c of cursos" [value]="c.idCurso">
+                {{ c.grado }} {{ c.seccion }} - {{ c.materia }} (Prof. {{ c.nombreProfesor }})
+              </option>
+            </select>
+          </div>
+          <div class="col-md-4 d-flex align-items-end">
+             <button class="btn btn-primary w-100 shadow-sm" (click)="generarInforme()" [disabled]="!selectedCursoId || loading">
+               <i class="bi bi-search me-2"></i> Generar Informe
+             </button>
+          </div>
         </div>
-        <div class="col-md-6">
-          <button class="btn btn-warning w-100 text-white">Ver Informe de Rendimiento</button>
-        </div>
-      </div>
 
-      <h6 class="fw-bold mb-2">Últimos Informes Generados</h6>
-      <ul class="list-group">
-        <li class="list-group-item">
-          Curso: 6°A – Materia: Matemáticas<br>
-          Promedio general: 3.9 – Última actualización: 10/06/2025
-        </li>
-        <li class="list-group-item">
-          Curso: 7°B – Materia: Historia<br>
-          Promedio general: 4.2 – Última actualización: 08/06/2025
-        </li>
-      </ul>
+        <div *ngIf="loading" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="mt-2 text-muted">Calculando estadísticas...</p>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div *ngIf="estadisticas && !loading" class="animate-fade-in">
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <div class="card bg-primary text-white h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                  <h6 class="text-white-50 uppercase small">Promedio General</h6>
+                  <h2 class="display-4 fw-bold">{{ promedioGeneral }}</h2>
+                  <div class="progress" style="height: 5px; background: rgba(255,255,255,0.2)">
+                    <div class="progress-bar bg-white" [style.width.%]="(promedioGeneral/5)*100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card bg-success text-white h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                  <h6 class="text-white-50 uppercase small">Mejor Estudiante</h6>
+                  <h3 class="fw-bold mt-2">{{ estadisticas.mejorPromedio.nombre }}</h3>
+                  <span class="badge bg-white text-success fs-6">{{ estadisticas.mejorPromedio.promedio }}</span>
+                </div>
+              </div>
+            </div>
+             <div class="col-md-4">
+              <div class="card bg-light text-dark h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                  <h6 class="text-muted uppercase small">Total Evaluados</h6>
+                  <h2 class="display-4 fw-bold text-secondary">{{ estadisticas.totalEstudiantes }}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Students Table -->
+          <h5 class="fw-bold mb-3">Detalle por Estudiante</h5>
+          <div class="table-responsive rounded border">
+             <table class="table table-hover align-middle mb-0">
+               <thead class="table-light">
+                 <tr>
+                   <th>Estudiante</th>
+                   <th class="text-center">Evaluaciones</th>
+                   <th class="text-center">Promedio</th>
+                   <th class="text-center">Estado</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 <tr *ngFor="let est of estadisticas.estudiantes">
+                   <td class="fw-bold">{{ est.nombre }}</td>
+                   <td class="text-center">{{ est.cantidadEvaluaciones }}</td>
+                   <td class="text-center fw-bold">{{ est.promedio }}</td>
+                   <td class="text-center">
+                     <span class="badge rounded-pill"
+                           [ngClass]="est.promedio >= 3.0 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'">
+                       {{ est.promedio >= 3.0 ? 'Aprobado' : 'Reprobado' }}
+                     </span>
+                   </td>
+                 </tr>
+               </tbody>
+             </table>
+          </div>
+        </div>
+
+        <div *ngIf="!estadisticas && !loading" class="text-center py-5 text-muted">
+          <i class="bi bi-bar-chart-steps fs-1 mb-3 d-block"></i>
+          Selecciona un curso para ver el análisis de rendimiento.
+        </div>
+
+      </div>
     </div>
   </div>
 </div>
