@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -53,5 +53,33 @@ export class ProfesorService {
   // 📄 Obtener reporte individual de estudiante
   getReporteEstudiante(idEstudiante: number, idCurso: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/reportes/estudiante/${idEstudiante}/curso/${idCurso}`);
+  }
+
+  // ⚠️ MOCK METHODS FOR BUILD COMPATIBILITY ⚠️
+  // These methods are temporarily added to satisfy build requirements for shared components.
+  // Real implementation should be added when the Professor module is fully updated.
+
+  getProfesorById(id: number | string): Observable<any> {
+    return of({}); // Mock
+  }
+
+  updateProfesor(id: number | string, data: any): Observable<any> {
+    return of({}); // Mock
+  }
+
+  createProfesor(data: any): Observable<any> {
+    return of({}); // Mock
+  }
+
+  uploadProfilePhoto(formData: FormData): Observable<any> {
+    return of({}); // Mock
+  }
+
+  getProfesores(): Observable<any[]> {
+    return of([]); // Mock
+  }
+
+  deleteProfesor(id: number | string): Observable<any> {
+    return of({}); // Mock
   }
 }

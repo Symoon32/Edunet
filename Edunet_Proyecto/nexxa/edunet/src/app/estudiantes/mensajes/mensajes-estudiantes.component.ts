@@ -102,29 +102,27 @@ export class MensajesEstudiantesComponent implements OnInit {
     });
   }
 
-  // Load teachers for the "To" dropdown.
-  // We can get teachers from the student's courses.
   loadProfesores() {
     this.http.get<any[]>(`${this.apiUrl}/estudiantes/cursos`).subscribe({
       next: (cursos) => {
-        // Extract unique professors
         const profs = new Map();
         cursos.forEach(c => {
-            // The API returns nombreProfesor, apellidosProfesor but not ID explicitly in the join?
-            // Wait, CursosEstudianteController join returns `u.nombres` but ID?
-            // `INNER JOIN usuarios u ON c.idProfesor = u.idUsuarios`
-            // But the select is `c.*, m.nombre..., u.nombres...`
-            // It might not be selecting `u.idUsuarios` explicitly if `c.*` doesn't cover it (it covers curso fields).
-            // Actually `c.idProfesor` exists in `cursos`. So we can use that.
-            if (!profs.has(c.idProfesor)) {
+            // Check if idProfesor exists and is valid
+            if (c.idProfesor && !profs.has(c.idProfesor)) {
                 profs.set(c.idProfesor, {
                     idUsuarios: c.idProfesor,
-                    nombres: c.nombreProfesor,
-                    apellidos: c.apellidosProfesor
+                    nombres: c.nombreProfesor || 'Profesor',
+                    apellidos: c.apellidosProfesor || 'Desconocido'
                 });
             }
         });
         this.profesores = Array.from(profs.values());
+
+        // If no professors found from courses (maybe system admin?), add a default Admin option?
+        // For now, let's just leave it empty.
+      },
+      error: (err) => {
+          console.error("Error loading courses for professors list", err);
       }
     });
   }
