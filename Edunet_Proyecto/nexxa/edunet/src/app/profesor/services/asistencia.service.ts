@@ -13,4 +13,12 @@ export class AsistenciaService {
   getAsistenciaEstudianteCurso(idEstudiante: number, idCurso: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/estudiante/${idEstudiante}/curso/${idCurso}`);
   }
+
+  getAsistenciaClase(idClase: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/clase/${idClase}`);
+  }
+
+  saveAsistencia(records: any[]): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}`, { asistencia: records });
+  }
 }

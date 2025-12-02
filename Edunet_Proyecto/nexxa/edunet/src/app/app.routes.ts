@@ -33,7 +33,7 @@ export const routes: Routes = [
         path: 'reset-password',
         loadComponent: () => import('./users/components/reset-password/reset-password').then(m => m.ResetPasswordComponent)
     },
-    //Rutas para profesores
+    //Rutas para profesores (Admin views)
     {
         path: 'gestion-profesores',
         loadComponent: () => import('./profesor/components/list-profesor/list-profesor').then(m => m.ListProfesor)
@@ -46,35 +46,46 @@ export const routes: Routes = [
         path: 'edit-profesor/:id',
         loadComponent: () => import('./profesor/components/create-edit-profesor/create-edit-profesor').then(m => m.CreateEditProfesor)
     },
+    // Main Professor Layout
     {
         path: 'profesor',
-        loadComponent: () => import('./profesor/pages/profesor-home/profesor-home').then(m => m.ProfesorHome),
-        canActivate: [ProfesorGuard]
-    },
-    {
-        path: 'profesor/calificar',
-        loadComponent: () => import('./profesor/pages/calificar-materias/calificar-materias').then(m => m.CalificarMaterias),
-        canActivate: [ProfesorGuard]
-    },
-    {
-        path: 'profesor/cargar-notas',
-        loadComponent: () => import('./profesor/pages/cargar-notas/cargar-notas').then(m => m.CargarNotas),
-        canActivate: [ProfesorGuard]
-    },
-    {
-        path: 'profesor/estadisticas',
-        loadComponent: () => import('./profesor/pages/estadisticas/estadisticas-profesor').then(m => m.EstadisticasProfesor),
-        canActivate: [ProfesorGuard]
-    },
-    {
-        path: 'profesor/reportes',
-        loadComponent: () => import('./profesor/pages/reportes/reportes').then(m => m.Reportes),
-        canActivate: [ProfesorGuard]
-    },
-    {
-        path: 'profesor/gestion-clase',
-        loadComponent: () => import('./profesor/pages/gestion-clase/gestion-clase').then(m => m.GestionClase),
-        canActivate: [ProfesorGuard]
+        loadComponent: () => import('./profesor/layout/profesor-layout.component').then(m => m.ProfesorLayoutComponent),
+        canActivate: [ProfesorGuard],
+        children: [
+            { path: '', redirectTo: 'gestion-clase', pathMatch: 'full' },
+            {
+                path: 'gestion-clase',
+                loadComponent: () => import('./profesor/pages/gestion-clase/gestion-clase').then(m => m.GestionClase)
+            },
+            {
+                path: 'calificar',
+                loadComponent: () => import('./profesor/pages/calificar-materias/calificar-materias').then(m => m.CalificarMaterias)
+            },
+            {
+                path: 'cargar-notas',
+                loadComponent: () => import('./profesor/pages/cargar-notas/cargar-notas').then(m => m.CargarNotas)
+            },
+            {
+                path: 'estadisticas',
+                loadComponent: () => import('./profesor/pages/estadisticas/estadisticas-profesor').then(m => m.EstadisticasProfesor)
+            },
+            {
+                path: 'reportes',
+                loadComponent: () => import('./profesor/pages/reportes/reportes').then(m => m.Reportes)
+            },
+            {
+                path: 'materiales/:idCurso',
+                loadComponent: () => import('./profesor/pages/materiales/materiales.component').then(m => m.MaterialesComponent)
+            },
+            {
+                path: 'comunicacion',
+                loadComponent: () => import('./profesor/pages/comunicacion/comunicacion.component').then(m => m.ComunicacionProfesorComponent)
+            },
+            {
+                path: 'asistencia/:idClase',
+                loadComponent: () => import('./profesor/pages/asistencia/asistencia.component').then(m => m.AsistenciaComponent)
+            }
+        ]
     },
     {
       path: '',

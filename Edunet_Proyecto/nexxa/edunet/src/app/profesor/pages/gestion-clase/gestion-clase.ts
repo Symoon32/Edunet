@@ -127,6 +127,9 @@ export class GestionClase implements OnInit {
         case 'reportes':
              this.router.navigate(['/profesor/reportes', { cursoId: this.selectedCurso.idCurso }]);
              break;
+        case 'materiales':
+             this.router.navigate(['/profesor/materiales', id]);
+             break;
         case 'estudiantes':
              // Navigate to generic student list or materials if no specific student page
              // Or maybe we can link to materials/tareas here as "Gestion de Curso" action

@@ -5,11 +5,25 @@ export class MensajesController {
   // Enviar mensaje
   async sendMessage(req: Request, res: Response) {
     try {
-      const { idDestinatario, asunto, contenido } = req.body;
+      let { idDestinatario, destinatario_email, asunto, contenido } = req.body;
       const idRemitente = req.user?.id; // From authMiddleware
 
       if (!idRemitente) {
         return res.status(401).json({ message: 'Usuario no autenticado' });
+      }
+
+      // Resolve email to ID if needed
+      if (!idDestinatario && destinatario_email) {
+          const [users]: any = await connection.execute('SELECT idUsuarios FROM usuarios WHERE correo = ?', [destinatario_email]);
+          if (users.length > 0) {
+              idDestinatario = users[0].idUsuarios;
+          } else {
+              return res.status(404).json({ message: 'Destinatario no encontrado con ese correo' });
+          }
+      }
+
+      if (!idDestinatario) {
+          return res.status(400).json({ message: 'Debe especificar destinatario (id o email)' });
       }
 
       const [result]: any = await connection.execute(

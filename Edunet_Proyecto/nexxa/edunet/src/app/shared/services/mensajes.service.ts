@@ -10,15 +10,20 @@ export class MensajesService {
 
   constructor(private http: HttpClient) {}
 
-  sendMessage(destinatarioId: number, asunto: string, contenido: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}`, { destinatarioId, asunto, contenido });
+  enviarMensaje(payload: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}`, payload);
   }
 
-  getRecibidos(): Observable<any[]> {
+  // Backward compatibility for existing components
+  sendMessage(destinatarioId: number, asunto: string, contenido: string): Observable<any> {
+    return this.enviarMensaje({ idDestinatario: destinatarioId, asunto, contenido });
+  }
+
+  getRecibidos(userId?: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/recibidos`);
   }
 
-  getEnviados(): Observable<any[]> {
+  getEnviados(userId?: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/enviados`);
   }
 

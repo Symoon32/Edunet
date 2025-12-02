@@ -1,0 +1,86 @@
+<div class="profesor-wrapper" [class.sidebar-collapsed]="!sidebarOpen">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-area">
+        <i class="bi bi-mortarboard-fill logo-icon"></i>
+        <span class="logo-text">EduNet Docente</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li class="section-title">
+          <span>ACADÉMICO</span>
+        </li>
+        <li>
+          <a routerLink="/profesor/gestion-clase" routerLinkActive="active" title="Mis Cursos">
+            <i class="bi bi-journal-bookmark-fill"></i>
+            <span class="link-text">Mis Cursos</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/profesor/cargar-notas" routerLinkActive="active" title="Calificaciones">
+            <i class="bi bi-pencil-square"></i>
+            <span class="link-text">Calificaciones</span>
+          </a>
+        </li>
+
+        <li class="section-title">
+          <span>GESTIÓN</span>
+        </li>
+        <li>
+          <a routerLink="/profesor/reportes" routerLinkActive="active" title="Reportes">
+            <i class="bi bi-file-earmark-bar-graph-fill"></i>
+            <span class="link-text">Reportes</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/profesor/estadisticas" routerLinkActive="active" title="Estadísticas">
+            <i class="bi bi-graph-up"></i>
+            <span class="link-text">Estadísticas</span>
+          </a>
+        </li>
+
+        <li class="section-title">
+          <span>COMUNICACIÓN</span>
+        </li>
+        <li>
+          <a routerLink="/profesor/comunicacion" routerLinkActive="active" title="Mensajería">
+            <i class="bi bi-envelope-fill"></i>
+            <span class="link-text">Mensajería</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Sidebar Footer (User Profile) -->
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <img [src]="currentUser?.fotoPerfil || 'assets/default-avatar.png'" alt="User">
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ currentUser?.nombres || 'Profesor' }}</span>
+          <span class="user-role">Docente</span>
+        </div>
+        <button class="logout-btn" (click)="logout()" title="Cerrar Sesión">
+          <i class="bi bi-box-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="content-wrapper">
+    <!-- Floating Toggle Button -->
+    <button class="floating-toggle" (click)="toggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Page Content -->
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
