@@ -394,3 +394,95 @@ chunk-L3C5FX5X.js   | cargar-notas | 35.09 kB |
 Application bundle generation complete. [0.786 seconds] - 2025-12-02T01:28:36.197Z
 
 Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names                          |  Raw size
+styles.css          | styles                         | 279.23 kB |
+main.js             | main                           |  45.03 kB |
+chunk-EI6D73B2.js   | -                              |   2.04 kB |
+chunk-CZJLB7T5.js   | -                              |   1.08 kB |
+polyfills.js        | polyfills                      | 128 bytes |
+
+                    | Initial total                  | 327.51 kB
+
+Lazy chunk files    | Names                          |  Raw size
+chunk-5RV4VZFO.js   | list-user                      |  36.29 kB |
+chunk-L3C5FX5X.js   | cargar-notas                   |  35.09 kB |
+chunk-E27PNUIW.js   | reportes-component             |  32.89 kB |
+chunk-LF3BLUEA.js   | gestion-clase                  |  30.25 kB |
+chunk-QB2SRTCC.js   | login-component                |  29.32 kB |
+chunk-K6FGEA56.js   | create-edit-user               |  29.16 kB |
+chunk-EI7GT7QG.js   | admin-layout-component         |  29.15 kB |
+chunk-YURVFLBF.js   | materiales-component           |  28.89 kB |
+chunk-L243KVGF.js   | comunicacion-tutores-component |  24.67 kB |
+chunk-FG3ZC3E2.js   | comunicacion-component         |  24.53 kB |
+chunk-RZPTM25Z.js   | configurar-cursos-component    |  24.19 kB |
+chunk-FPWHQ3IU.js   | estadisticas-profesor          |  24.12 kB |
+chunk-FLBGGOET.js   | anuncios-component             |  23.94 kB |
+chunk-LFVEG5ZW.js   | mensajes-estudiantes-component |  22.33 kB |
+chunk-QFPSN2ML.js   | profesor-layout-component      |  21.52 kB |
+...and 34 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [5.361 seconds] - 2025-12-02T01:41:25.515Z
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names                          |  Raw size
+styles.css          | styles                         | 279.23 kB |
+main.js             | main                           |  45.03 kB |
+chunk-EI6D73B2.js   | -                              |   2.04 kB |
+chunk-CZJLB7T5.js   | -                              |   1.08 kB |
+polyfills.js        | polyfills                      | 128 bytes |
+
+                    | Initial total                  | 327.51 kB
+
+Lazy chunk files    | Names                          |  Raw size
+chunk-5RV4VZFO.js   | list-user                      |  36.29 kB |
+chunk-L3C5FX5X.js   | cargar-notas                   |  35.09 kB |
+chunk-E27PNUIW.js   | reportes-component             |  32.89 kB |
+chunk-LF3BLUEA.js   | gestion-clase                  |  30.25 kB |
+chunk-QB2SRTCC.js   | login-component                |  29.32 kB |
+chunk-K6FGEA56.js   | create-edit-user               |  29.16 kB |
+chunk-EI7GT7QG.js   | admin-layout-component         |  29.15 kB |
+chunk-YURVFLBF.js   | materiales-component           |  28.89 kB |
+chunk-L243KVGF.js   | comunicacion-tutores-component |  24.67 kB |
+chunk-FG3ZC3E2.js   | comunicacion-component         |  24.53 kB |
+chunk-RZPTM25Z.js   | configurar-cursos-component    |  24.19 kB |
+chunk-FPWHQ3IU.js   | estadisticas-profesor          |  24.12 kB |
+chunk-FLBGGOET.js   | anuncios-component             |  23.94 kB |
+chunk-LFVEG5ZW.js   | mensajes-estudiantes-component |  22.33 kB |
+chunk-QFPSN2ML.js   | profesor-layout-component      |  21.52 kB |
+...and 34 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [0.028 seconds] - 2025-12-02T01:41:25.635Z
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names                          |  Raw size
+styles.css          | styles                         | 279.23 kB |
+main.js             | main                           |  45.03 kB |
+chunk-EI6D73B2.js   | -                              |   2.04 kB |
+chunk-CZJLB7T5.js   | -                              |   1.08 kB |
+polyfills.js        | polyfills                      | 128 bytes |
+
+                    | Initial total                  | 327.51 kB
+
+Lazy chunk files    | Names                          |  Raw size
+chunk-5RV4VZFO.js   | list-user                      |  36.29 kB |
+chunk-L3C5FX5X.js   | cargar-notas                   |  35.09 kB |
+chunk-E27PNUIW.js   | reportes-component             |  32.89 kB |
+chunk-LF3BLUEA.js   | gestion-clase                  |  30.25 kB |
+chunk-QB2SRTCC.js   | login-component                |  29.32 kB |
+chunk-K6FGEA56.js   | create-edit-user               |  29.16 kB |
+chunk-EI7GT7QG.js   | admin-layout-component         |  29.15 kB |
+chunk-YURVFLBF.js   | materiales-component           |  28.89 kB |
+chunk-L243KVGF.js   | comunicacion-tutores-component |  24.67 kB |
+chunk-FG3ZC3E2.js   | comunicacion-component         |  24.53 kB |
+chunk-RZPTM25Z.js   | configurar-cursos-component    |  24.19 kB |
+chunk-FPWHQ3IU.js   | estadisticas-profesor          |  24.12 kB |
+chunk-FLBGGOET.js   | anuncios-component             |  23.94 kB |
+chunk-LFVEG5ZW.js   | mensajes-estudiantes-component |  22.33 kB |
+chunk-QFPSN2ML.js   | profesor-layout-component      |  21.52 kB |
+...and 34 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [0.486 seconds] - 2025-12-02T01:41:28.664Z
