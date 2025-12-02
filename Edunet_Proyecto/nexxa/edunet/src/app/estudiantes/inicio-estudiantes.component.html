@@ -1,14 +1,86 @@
-<section class="bienvenida">
-  <img src="logo-sin-fondo.png" alt="Escudo del colegio" width="250" height="250" />
-  <h2>Gestión Escolar Inteligente</h2>
-  <p>EduNet es una plataforma diseñada para mejorar la comunicación entre estudiantes, profesores, padres y administración.</p>
+<section class="bienvenida text-center my-4">
+  <img src="logo-sin-fondo.png" alt="Escudo del colegio" width="150" height="150" class="mb-3" />
+  <h2>Bienvenido al Panel de Estudiante</h2>
+  <p class="text-muted">Gestiona tus actividades académicas, calificaciones y comunícate con tus profesores.</p>
 </section>
 
-<section class="galeria">
-  <h2>Galería Institucional</h2>
-  <div class="galeria-container">
-    <img src="grados.jpg" alt="Grados" class="foto" />
-    <img src="niños-cancha.jpg" alt="Espacios recreativos" class="foto" />
-    <img src="colegio-arriba.jpg" alt="Instalaciones del colegio" class="foto" />
+<div class="container mb-5">
+  <div class="row g-4">
+
+    <!-- Calificaciones -->
+    <div class="col-md-4 col-sm-6">
+      <div class="card h-100 shadow-sm border-0 text-center p-3 hover-card" [routerLink]="['/estudiantes/historial']" style="cursor: pointer;">
+        <div class="card-body">
+          <i class="bi bi-award-fill text-primary display-4 mb-3"></i>
+          <h5 class="card-title">Calificaciones</h5>
+          <p class="card-text text-muted">Consulta tu historial académico y notas actuales.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tareas -->
+    <div class="col-md-4 col-sm-6">
+      <div class="card h-100 shadow-sm border-0 text-center p-3 hover-card" [routerLink]="['/estudiantes/tareas']" style="cursor: pointer;">
+        <div class="card-body">
+          <i class="bi bi-list-check text-success display-4 mb-3"></i>
+          <h5 class="card-title">Tareas Asignadas</h5>
+          <p class="card-text text-muted">Revisa las tareas pendientes y entregas próximas.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Materiales -->
+    <div class="col-md-4 col-sm-6">
+      <div class="card h-100 shadow-sm border-0 text-center p-3 hover-card" [routerLink]="['/estudiantes/material']" style="cursor: pointer;">
+        <div class="card-body">
+          <i class="bi bi-journal-bookmark-fill text-warning display-4 mb-3"></i>
+          <h5 class="card-title">Materiales de Estudio</h5>
+          <p class="card-text text-muted">Accede a guías, documentos y recursos de tus clases.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendario -->
+    <div class="col-md-4 col-sm-6">
+      <div class="card h-100 shadow-sm border-0 text-center p-3 hover-card" [routerLink]="['/estudiantes/calendario']" style="cursor: pointer;">
+        <div class="card-body">
+          <i class="bi bi-calendar-event text-info display-4 mb-3"></i>
+          <h5 class="card-title">Calendario Académico</h5>
+          <p class="card-text text-muted">Eventos, exámenes y fechas importantes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensajería -->
+    <div class="col-md-4 col-sm-6">
+      <div class="card h-100 shadow-sm border-0 text-center p-3 hover-card" [routerLink]="['/estudiantes/mensajes']" style="cursor: pointer;">
+        <div class="card-body">
+          <i class="bi bi-envelope-fill text-danger display-4 mb-3"></i>
+          <h5 class="card-title">Mensajería</h5>
+          <p class="card-text text-muted">Comunícate con docentes y administración.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Perfil -->
+    <div class="col-md-4 col-sm-6">
+      <div class="card h-100 shadow-sm border-0 text-center p-3 hover-card" [routerLink]="['/estudiantes/perfil']" style="cursor: pointer;">
+        <div class="card-body">
+          <i class="bi bi-person-circle text-secondary display-4 mb-3"></i>
+          <h5 class="card-title">Mi Perfil</h5>
+          <p class="card-text text-muted">Actualiza tus datos y foto de perfil.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<section class="galeria mt-5">
+  <h3 class="text-center mb-4">Galería Institucional</h3>
+  <div class="galeria-container d-flex justify-content-center gap-3 flex-wrap">
+    <img src="grados.jpg" alt="Grados" class="rounded shadow-sm" style="width: 300px; height: 200px; object-fit: cover;" />
+    <img src="niños-cancha.jpg" alt="Espacios recreativos" class="rounded shadow-sm" style="width: 300px; height: 200px; object-fit: cover;" />
+    <img src="colegio-arriba.jpg" alt="Instalaciones del colegio" class="rounded shadow-sm" style="width: 300px; height: 200px; object-fit: cover;" />
   </div>
 </section>

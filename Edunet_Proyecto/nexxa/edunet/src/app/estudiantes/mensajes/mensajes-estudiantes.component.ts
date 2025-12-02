@@ -81,7 +81,7 @@ export class MensajesEstudiantesComponent implements OnInit {
         this.mensajesRecibidos = data;
         this.loading = false;
       },
-      error: (e) => {
+      error: (e: any) => {
         console.error(e);
         this.loading = false;
       }
@@ -95,7 +95,7 @@ export class MensajesEstudiantesComponent implements OnInit {
         this.mensajesEnviados = data;
         this.loading = false;
       },
-      error: (e) => {
+      error: (e: any) => {
         console.error(e);
         this.loading = false;
       }
@@ -142,7 +142,7 @@ export class MensajesEstudiantesComponent implements OnInit {
         this.nuevoMensaje = { destinatario: '', asunto: '', contenido: '' };
         this.setTab('sent');
       },
-      error: (e) => alert('Error al enviar mensaje')
+      error: (e: any) => alert('Error al enviar mensaje')
     });
   }
 }
