@@ -49,12 +49,12 @@ export class AsistenciaComponent implements OnInit {
 
       // 1. Get class info
       this.clasesService.getClase(this.idClase).subscribe({
-          next: (clase) => {
+          next: (clase: any) => {
               this.claseInfo = clase;
               // 2. Get students for the course of this class
               this.loadEstudiantes(clase.idCurso);
           },
-          error: (err) => {
+          error: (err: any) => {
               console.error('Error loading class', err);
               this.loading = false;
           }
@@ -63,16 +63,16 @@ export class AsistenciaComponent implements OnInit {
 
   loadEstudiantes(idCurso: number) {
       this.cursosService.getEstudiantesCurso(idCurso).subscribe({
-          next: (data) => {
+          next: (data: any[]) => {
               this.estudiantes = data;
               // Initialize default attendance (Presente)
-              this.estudiantes.forEach(est => {
+              this.estudiantes.forEach((est: any) => {
                   this.asistencia[est.idUsuarios] = 'presente';
               });
               // Check if attendance already taken
               this.checkExistingAttendance();
           },
-          error: (err) => {
+          error: (err: any) => {
               console.error('Error loading students', err);
               this.loading = false;
           }
@@ -82,7 +82,7 @@ export class AsistenciaComponent implements OnInit {
   checkExistingAttendance() {
       if (!this.idClase) return;
       this.asistenciaService.getAsistenciaClase(this.idClase).subscribe({
-          next: (data) => {
+          next: (data: any[]) => {
               if (data && data.length > 0) {
                   data.forEach((record: any) => {
                       this.asistencia[record.idEstudiante] = record.estado;
@@ -90,7 +90,7 @@ export class AsistenciaComponent implements OnInit {
               }
               this.loading = false;
           },
-          error: (err) => {
+          error: (err: any) => {
               console.error(err);
               this.loading = false;
           }
@@ -112,7 +112,7 @@ export class AsistenciaComponent implements OnInit {
               this.feedbackType = 'success';
               setTimeout(() => this.feedbackMessage = '', 3000);
           },
-          error: (err) => {
+          error: (err: any) => {
               console.error('Error saving attendance', err);
               this.feedbackMessage = 'Error al guardar asistencia.';
               this.feedbackType = 'error';

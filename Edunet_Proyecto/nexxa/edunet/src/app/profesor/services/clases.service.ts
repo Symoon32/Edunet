@@ -10,4 +10,8 @@ export class ClasesService {
   getClasesCurso(idCurso: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/curso/${idCurso}`);
   }
+
+  getClase(idClase: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${idClase}`);
+  }
 }

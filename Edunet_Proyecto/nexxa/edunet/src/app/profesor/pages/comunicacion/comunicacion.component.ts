@@ -50,15 +50,15 @@ export class ComunicacionProfesorComponent implements OnInit {
 
     // Determine which endpoint to call based on tab
     const fetch$ = this.activeTab === 'sent'
-       ? this.mensajesService.getEnviados(this.currentUser.id)
-       : this.mensajesService.getRecibidos(this.currentUser.id);
+       ? this.mensajesService.getEnviados()
+       : this.mensajesService.getRecibidos();
 
     fetch$.subscribe({
-        next: (data) => {
+        next: (data: any[]) => {
             this.messages = data;
             this.loading = false;
         },
-        error: (err) => {
+        error: (err: any) => {
             console.error('Error loading messages', err);
             this.loading = false;
         }
@@ -92,7 +92,7 @@ export class ComunicacionProfesorComponent implements OnInit {
                   this.switchTab('sent');
               }, 1500);
           },
-          error: (err) => {
+          error: (err: any) => {
               console.error(err);
               this.feedback = 'Error al enviar mensaje. Verifique el correo del destinatario.';
           }
