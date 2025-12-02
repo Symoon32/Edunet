@@ -353,17 +353,16 @@ export async function addEstudianteCurso(req: Request, res: Response) {
       return res.status(404).json({ message: 'Curso no encontrado' });
     }
 
-    // Verificar que el estudiante existe y tiene rol estudiante
+    // Verificar que el estudiante existe y tiene rol estudiante (idRol = 1)
     const [estudiante]: any = await conn.execute(
       `SELECT u.idUsuarios FROM usuarios u
-       INNER JOIN roles r ON u.idRol = r.idRol
-       WHERE u.idUsuarios = ? AND r.nombreRol = 'estudiante'`,
+       WHERE u.idUsuarios = ? AND u.idRol = 1`,
       [idEstudiante]
     );
 
     if (!estudiante[0]) {
       await conn.rollback();
-      return res.status(404).json({ message: 'Estudiante no encontrado' });
+      return res.status(404).json({ message: 'Estudiante no encontrado o no tiene el rol de estudiante' });
     }
 
     // Agregar estudiante al curso

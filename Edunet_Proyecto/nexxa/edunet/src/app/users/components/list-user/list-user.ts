@@ -89,9 +89,10 @@ export class ListUser {
     
   }
 
-  modificarUsuario() {
-    if (this.usuarioSeleccionado) {
-      this.router.navigate(['/edit-user', this.usuarioSeleccionado.correo]);
+  modificarUsuario(user: any = null) {
+    const usuario = user || this.usuarioSeleccionado;
+    if (usuario) {
+      this.router.navigate(['/edit-user', usuario.correo]);
     }
   }
 

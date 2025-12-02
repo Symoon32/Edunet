@@ -71,7 +71,7 @@ export class CreateEditUser {
       this.userService.updateUser(this.usuario.correo, usuarioEdit).subscribe({
         next: () => {
           alert('Usuario actualizado correctamente');
-          this.router.navigate(['/']);
+          this.navigateBack(this.usuario.rol);
         },
         error: (err) => {
           alert('Error al actualizar usuario: ' + (err.error?.error || 'Error desconocido'));
@@ -81,7 +81,9 @@ export class CreateEditUser {
       this.userService.createUser(this.usuario).subscribe({
         next: () => {
           alert('Usuario registrado correctamente');
+          const rol = this.usuario.rol;
           this.resetUsuario(); // método para limpiar el objeto
+          this.navigateBack(rol);
         },
         error: (err) => {
           alert('Error al registrar usuario: ' + (err.error?.error || 'Error desconocido'));
@@ -127,6 +129,24 @@ private resetUsuario() {
     cargo: ''
   };
 }
+
+  private navigateBack(rol: string | number) {
+    const rolNum = Number(rol);
+    switch (rolNum) {
+      case 1:
+        this.router.navigate(['/admin/gestion-estudiantes']);
+        break;
+      case 2:
+        this.router.navigate(['/admin/gestion-profesores']);
+        break;
+      case 4:
+        this.router.navigate(['/admin/gestion-admins']);
+        break;
+      default:
+        this.router.navigate(['/admin/gestion-usuarios']);
+        break;
+    }
+  }
 
   onRolChange() {
     // Limpiar campos específicos al cambiar de rol si es necesario
