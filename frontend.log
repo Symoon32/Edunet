@@ -364,3 +364,33 @@ chunk-QFPSN2ML.js   | profesor-layout-component | 21.52 kB |
 Application bundle generation complete. [5.778 seconds] - 2025-12-02T01:16:14.198Z
 
 Page reload sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names | Raw size
+main.js             | main  | 45.03 kB |
+
+Application bundle generation complete. [3.965 seconds] - 2025-12-02T01:27:44.255Z
+
+Page reload sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names        | Raw size
+main.js             | main         | 45.03 kB |
+
+Lazy chunk files    | Names        | Raw size
+chunk-JWMTV2QM.js   | cargar-notas | 27.27 kB |
+
+Application bundle generation complete. [2.881 seconds] - 2025-12-02T01:28:14.366Z
+
+Page reload sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names        | Raw size
+main.js             | main         | 45.03 kB |
+
+Lazy chunk files    | Names        | Raw size
+chunk-L3C5FX5X.js   | cargar-notas | 35.09 kB |
+
+Application bundle generation complete. [0.786 seconds] - 2025-12-02T01:28:36.197Z
+
+Component update sent to client(s).

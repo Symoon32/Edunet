@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CursosService } from '../../services/cursos.service';
 import { CalificacionesService } from '../../services/calificaciones.service';
+import { AuthStateService } from '../../../users/services/auth-state.service';
 
 @Component({
   selector: 'app-cargar-notas',
@@ -17,6 +18,10 @@ export class CargarNotas implements OnInit {
   estudiantes: any[] = [];
   loading = false;
   cursoInfo: any = null;
+
+  // For course selection if no ID passed
+  myCourses: any[] = [];
+  showCourseSelector = false;
 
   // Grading model
   selectedStudent: any = null;
@@ -34,7 +39,8 @@ export class CargarNotas implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private cursosService: CursosService,
-    private calificacionesService: CalificacionesService
+    private calificacionesService: CalificacionesService,
+    private authState: AuthStateService
   ) {}
 
   ngOnInit() {
@@ -43,8 +49,41 @@ export class CargarNotas implements OnInit {
       if (id) {
         this.cursoId = +id;
         this.loadCourseData();
+      } else {
+        // No ID, show list of courses
+        this.showCourseSelector = true;
+        this.loadMyCourses();
       }
     });
+  }
+
+  loadMyCourses() {
+      this.loading = true;
+      const token = this.authState.snapshot.token;
+      let userId = 0;
+      if(token) {
+          try {
+             userId = JSON.parse(atob(token.split('.')[1])).id;
+          } catch(e) {}
+      }
+      if(userId) {
+          this.cursosService.getCursosProfesor(userId).subscribe({
+              next: (data) => {
+                  this.myCourses = data;
+                  this.loading = false;
+              },
+              error: (err) => {
+                  console.error(err);
+                  this.loading = false;
+              }
+          });
+      }
+  }
+
+  selectCourse(id: number) {
+      this.cursoId = id;
+      this.showCourseSelector = false;
+      this.loadCourseData();
   }
 
   loadCourseData() {
@@ -109,6 +148,15 @@ export class CargarNotas implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/profesor/gestion-clase']);
+    if (this.showCourseSelector) {
+        this.router.navigate(['/profesor/gestion-clase']);
+    } else {
+        // Go back to selector
+        this.showCourseSelector = true;
+        this.cursoId = null;
+        this.cursoInfo = null;
+        this.estudiantes = [];
+        if (this.myCourses.length === 0) this.loadMyCourses();
+    }
   }
 }
