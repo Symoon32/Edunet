@@ -1,21 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Rendimiento {
-  nombre: string;
-  curso: string;
-  materia: string;
-  promedio: number;
-  estado: string;
-}
-
-interface Asistencia {
-  nombre: string;
-  curso: string;
-  asistidos: number;
-  ausentes: number;
-}
+import { ProfesorService } from '../../services/profesor-service';
 
 @Component({
   selector: 'app-estadisticas-profesor',
@@ -24,56 +10,61 @@ interface Asistencia {
   templateUrl: './estadisticas-profesor.html',
   styleUrls: ['./estadisticas-profesor.css']
 })
-export class EstadisticasProfesor {
-  // 🧠 Campos de búsqueda
-  busqueda: string = '';
+export class EstadisticasProfesor implements OnInit {
+  cursos: any[] = [];
+  selectedCursoId: number | null = null;
+  estadisticas: any = null;
+  loading: boolean = false;
+  error: string = '';
 
-  // 📊 Datos de rendimiento y asistencia
-  rendimientos: Rendimiento[] = [
-    { nombre: 'Ana Rodríguez', curso: '6°A', materia: 'Matemáticas', promedio: 4.2, estado: 'Aprobado' },
-    { nombre: 'Juan Pérez', curso: '6°A', materia: 'Ciencias', promedio: 2.9, estado: 'Reprobado' }
-  ];
+  constructor(private profesorService: ProfesorService) {}
 
-  asistencias: Asistencia[] = [
-    { nombre: 'Ana Rodríguez', curso: '6°A', asistidos: 28, ausentes: 2 },
-    { nombre: 'Juan Pérez', curso: '6°A', asistidos: 25, ausentes: 5 }
-  ];
-
-  // ✏️ Nuevos datos
-  nuevoRendimiento: Rendimiento = { nombre: '', curso: '', materia: '', promedio: 0, estado: 'Aprobado' };
-  nuevaAsistencia: Asistencia = { nombre: '', curso: '', asistidos: 0, ausentes: 0 };
-
-  // 📍 Buscar estudiantes
-  get rendimientosFiltrados() {
-    return this.rendimientos.filter(r =>
-      r.nombre.toLowerCase().includes(this.busqueda.toLowerCase()) ||
-      r.curso.toLowerCase().includes(this.busqueda.toLowerCase())
-    );
+  ngOnInit() {
+    this.cargarCursos();
   }
 
-  // ➕ Agregar rendimiento
-  agregarRendimiento() {
-    if (this.nuevoRendimiento.nombre && this.nuevoRendimiento.materia) {
-      this.rendimientos.push({ ...this.nuevoRendimiento });
-      this.nuevoRendimiento = { nombre: '', curso: '', materia: '', promedio: 0, estado: 'Aprobado' };
+  cargarCursos() {
+    this.profesorService.getCursos().subscribe({
+      next: (data) => {
+        this.cursos = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar cursos', err);
+        this.error = 'No se pudieron cargar los cursos.';
+      }
+    });
+  }
+
+  onCursoChange() {
+    if (this.selectedCursoId) {
+      this.cargarEstadisticas();
+    } else {
+      this.estadisticas = null;
     }
   }
 
-  // ➕ Agregar asistencia
-  agregarAsistencia() {
-    if (this.nuevaAsistencia.nombre && this.nuevaAsistencia.curso) {
-      this.asistencias.push({ ...this.nuevaAsistencia });
-      this.nuevaAsistencia = { nombre: '', curso: '', asistidos: 0, ausentes: 0 };
-    }
+  cargarEstadisticas() {
+    if (!this.selectedCursoId) return;
+
+    this.loading = true;
+    this.error = '';
+
+    this.profesorService.getEstadisticasCurso(this.selectedCursoId).subscribe({
+      next: (data) => {
+        this.estadisticas = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar estadísticas', err);
+        this.error = 'Error al cargar estadísticas del curso.';
+        this.loading = false;
+      }
+    });
   }
 
-  // 🗑️ Eliminar fila
-  eliminarRendimiento(index: number) {
-    this.rendimientos.splice(index, 1);
-  }
-
-  eliminarAsistencia(index: number) {
-    this.asistencias.splice(index, 1);
+  getPromedioClass(promedio: number): string {
+    if (promedio >= 4.0) return 'text-green-600 font-bold';
+    if (promedio >= 3.0) return 'text-yellow-600 font-bold';
+    return 'text-red-600 font-bold';
   }
 }
-

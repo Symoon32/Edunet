@@ -1,17 +1,57 @@
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class ProfesorService {
-  
-  private apiUrl = 'http://localhost:3000/api/users';
-  private http = inject(HttpClient);
+  private apiUrl = 'http://localhost:3000/api/profesor'; // URL base del backend
 
-  getProfesores(): Observable<any> { return this.http.get(this.apiUrl); }
-  getProfesorById(id: string): Observable<any> { return this.http.get(`${this.apiUrl}/${id}`); }
-  createProfesor(profesor: any): Observable<any> { return this.http.post(this.apiUrl, profesor); }
-  updateProfesor(id: string, profesor: any): Observable<any> { return this.http.put(`${this.apiUrl}/${id}`, profesor); }
-  deleteProfesor(id: string): Observable<any> { return this.http.delete(`${this.apiUrl}/${id}`); }
-  uploadProfilePhoto(formData: FormData) { return this.http.post<any>(`${this.apiUrl}/upload-profile`, formData); }
+  constructor(private http: HttpClient) {}
+
+  // 📊 Obtener datos del Dashboard
+  getDashboard(idProfesor: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/dashboard/${idProfesor}`);
+  }
+
+  // 🧑‍🏫 Obtener perfil del profesor
+  getPerfil(idProfesor: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/perfil/${idProfesor}`);
+  }
+
+  // ✏️ Actualizar perfil
+  updatePerfil(idProfesor: number, datos: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/perfil/${idProfesor}`, datos);
+  }
+
+  // 📅 Obtener horario de clases
+  getHorario(idProfesor: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/horario/${idProfesor}`);
+  }
+
+  // 📚 Obtener cursos del profesor
+  getCursos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/cursos`);
+  }
+
+  // 👥 Obtener estudiantes de un curso
+  getEstudiantes(idCurso: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/cursos/${idCurso}/estudiantes`);
+  }
+
+  // 📊 Obtener estadísticas de un curso
+  getEstadisticasCurso(idCurso: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/estadisticas/curso/${idCurso}`);
+  }
+
+  // 📄 Obtener reporte detallado de un curso
+  getReporteCurso(idCurso: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/reportes/curso/${idCurso}`);
+  }
+
+  // 📄 Obtener reporte individual de estudiante
+  getReporteEstudiante(idEstudiante: number, idCurso: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/reportes/estudiante/${idEstudiante}/curso/${idCurso}`);
+  }
 }
