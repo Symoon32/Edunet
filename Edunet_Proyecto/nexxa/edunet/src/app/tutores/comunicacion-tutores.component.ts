@@ -50,7 +50,7 @@ export class ComunicacionTutoresComponent implements OnInit {
                 this.mensajeForm.patchValue({ estudianteId: this.estudiantes[0].idUsuarios });
             }
         },
-        error: (err) => console.error('Error cargando estudiantes', err)
+        error: (err: any) => console.error('Error cargando estudiantes', err)
     });
 
     // Cargar destinatarios (Profesores y Admins)
@@ -71,14 +71,14 @@ export class ComunicacionTutoresComponent implements OnInit {
                      this.destinatarios = [...adminsFormatted, ...profesFormatted];
                      this.loading = false;
                  },
-                 error: (err) => {
+                 error: (err: any) => {
                      console.error('Error cargando profesores', err);
                      this.destinatarios = admins.map((u: any) => ({ ...u, label: `Admin: ${u.nombres} ${u.apellidos}` })); // Al menos mostramos admins
                      this.loading = false;
                  }
              });
         },
-        error: (err) => {
+        error: (err: any) => {
              console.error('Error cargando admins', err);
              this.loading = false;
         }
@@ -112,7 +112,7 @@ export class ComunicacionTutoresComponent implements OnInit {
         }
         this.loading = false;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error enviando mensaje', err);
         this.errorMessage = 'Hubo un error al enviar el mensaje. Intente nuevamente.';
         this.loading = false;
