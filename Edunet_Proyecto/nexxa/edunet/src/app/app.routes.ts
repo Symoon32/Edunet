@@ -77,6 +77,21 @@ export const routes: Routes = [
         canActivate: [ProfesorGuard]
     },
     {
+        path: 'profesor/materiales/:idCurso',
+        loadComponent: () => import('./profesor/pages/materiales/materiales.component').then(m => m.MaterialesComponent),
+        canActivate: [ProfesorGuard]
+    },
+    {
+        path: 'profesor/comunicacion',
+        loadComponent: () => import('./profesor/pages/comunicacion/comunicacion.component').then(m => m.ComunicacionProfesorComponent),
+        canActivate: [ProfesorGuard]
+    },
+    {
+        path: 'profesor/asistencia/:idClase',
+        loadComponent: () => import('./profesor/pages/asistencia/asistencia.component').then(m => m.AsistenciaComponent),
+        canActivate: [ProfesorGuard]
+    },
+    {
       path: '',
       loadComponent: () => import('./users/components/login/login.component').then(m => m.LoginComponent)
     },

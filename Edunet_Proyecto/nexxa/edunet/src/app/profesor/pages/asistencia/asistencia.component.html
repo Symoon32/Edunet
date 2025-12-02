@@ -1,0 +1,64 @@
+<div class="container py-5">
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <div *ngIf="!loading && claseInfo">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <button class="btn btn-outline-secondary btn-sm mb-2" (click)="goBack()">
+                    <i class="bi bi-arrow-left me-1"></i> Volver
+                </button>
+                <h2 class="fw-bold mb-0">Control de Asistencia</h2>
+                <p class="text-muted mb-0">{{ claseInfo.tema }} | {{ claseInfo.fecha | date:'mediumDate' }}</p>
+            </div>
+            <button class="btn btn-success" (click)="guardarAsistencia()">
+                <i class="bi bi-save me-2"></i> Guardar Cambios
+            </button>
+        </div>
+
+        <div *ngIf="feedbackMessage" class="alert" [class.alert-success]="feedbackType === 'success'" [class.alert-danger]="feedbackType === 'error'">
+            {{ feedbackMessage }}
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-white py-3">
+                <div class="row fw-bold text-muted">
+                    <div class="col-md-6">Estudiante</div>
+                    <div class="col-md-6 text-center">Estado</div>
+                </div>
+            </div>
+            <div class="list-group list-group-flush">
+                <div *ngFor="let est of estudiantes" class="list-group-item py-3">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h6 class="mb-0 fw-bold">{{ est.apellidos }}, {{ est.nombres }}</h6>
+                            <small class="text-muted">{{ est.documento }}</small>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-center gap-2">
+                                <input type="radio" class="btn-check" [name]="'status-' + est.idUsuarios" [id]="'p-' + est.idUsuarios"
+                                       [value]="'presente'" [(ngModel)]="asistencia[est.idUsuarios]">
+                                <label class="btn btn-outline-success btn-sm" [for]="'p-' + est.idUsuarios">Presente</label>
+
+                                <input type="radio" class="btn-check" [name]="'status-' + est.idUsuarios" [id]="'t-' + est.idUsuarios"
+                                       [value]="'tardanza'" [(ngModel)]="asistencia[est.idUsuarios]">
+                                <label class="btn btn-outline-warning btn-sm" [for]="'t-' + est.idUsuarios">Tardanza</label>
+
+                                <input type="radio" class="btn-check" [name]="'status-' + est.idUsuarios" [id]="'a-' + est.idUsuarios"
+                                       [value]="'ausente'" [(ngModel)]="asistencia[est.idUsuarios]">
+                                <label class="btn btn-outline-danger btn-sm" [for]="'a-' + est.idUsuarios">Ausente</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="estudiantes.length === 0" class="text-center py-5 text-muted">
+                    <p>No hay estudiantes inscritos en este curso.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
