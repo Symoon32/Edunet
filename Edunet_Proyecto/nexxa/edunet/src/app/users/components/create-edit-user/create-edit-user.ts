@@ -1,6 +1,6 @@
 
-import { Component } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user-service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,6 +12,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './create-edit-user.css'
 })
 export class CreateEditUser {
+  @ViewChild('userForm') userForm!: NgForm;
+
   usuario: any = {
     nombres: '',
     apellidos: '',
@@ -61,53 +63,64 @@ export class CreateEditUser {
   }
 
   onSubmit() {
-  const guardarUsuario = () => {
-    if (this.editMode) {
-      // No enviar campo correo en el body, solo los editables
-      const usuarioEdit = { ...this.usuario };
-      delete usuarioEdit.correo;
-      if (!usuarioEdit.password) delete usuarioEdit.password;
+    // Explicitly check validity in case browser validation is bypassed or subtle
+    if (this.userForm && this.userForm.invalid) {
+      Object.values(this.userForm.controls).forEach(control => {
+        control.markAsTouched();
+      });
+      alert('Por favor complete todos los campos obligatorios.');
+      return;
+    }
 
-      this.userService.updateUser(this.usuario.correo, usuarioEdit).subscribe({
-        next: () => {
-          alert('Usuario actualizado correctamente');
-          this.navigateBack(this.usuario.rol);
+    const guardarUsuario = () => {
+      if (this.editMode) {
+        // No enviar campo correo en el body, solo los editables
+        const usuarioEdit = { ...this.usuario };
+        delete usuarioEdit.correo;
+        if (!usuarioEdit.password) delete usuarioEdit.password;
+
+        this.userService.updateUser(this.usuario.correo, usuarioEdit).subscribe({
+          next: () => {
+            alert('Usuario actualizado correctamente');
+            this.navigateBack(this.usuario.rol);
+          },
+          error: (err) => {
+            alert('Error al actualizar usuario: ' + (err.error?.error || 'Error desconocido'));
+          }
+        });
+      } else {
+        this.userService.createUser(this.usuario).subscribe({
+          next: () => {
+            alert('Usuario registrado correctamente');
+            const rol = this.usuario.rol;
+            this.resetUsuario(); // método para limpiar el objeto
+            this.navigateBack(rol);
+          },
+          error: (err) => {
+            console.error('Error creating user:', err);
+            alert('Error al registrar usuario: ' + (err.error?.error || 'Error desconocido'));
+          }
+        });
+      }
+    };
+
+    if (this.selectedFile) {
+      const formData = new FormData();
+      formData.append('fotoPerfil', this.selectedFile);
+      this.userService.uploadProfilePhoto(formData).subscribe({
+        next: (res: any) => {
+          this.usuario.fotoPerfil = res.url;
+          guardarUsuario();
         },
         error: (err) => {
-          alert('Error al actualizar usuario: ' + (err.error?.error || 'Error desconocido'));
+          console.error('Error uploading photo:', err);
+          alert('Error al subir la foto de perfil');
         }
       });
     } else {
-      this.userService.createUser(this.usuario).subscribe({
-        next: () => {
-          alert('Usuario registrado correctamente');
-          const rol = this.usuario.rol;
-          this.resetUsuario(); // método para limpiar el objeto
-          this.navigateBack(rol);
-        },
-        error: (err) => {
-          alert('Error al registrar usuario: ' + (err.error?.error || 'Error desconocido'));
-        }
-      });
+      guardarUsuario();
     }
-  };
-
-  if (this.selectedFile) {
-    const formData = new FormData();
-    formData.append('fotoPerfil', this.selectedFile);
-    this.userService.uploadProfilePhoto(formData).subscribe({
-      next: (res: any) => {
-        this.usuario.fotoPerfil = res.url;
-        guardarUsuario();
-      },
-      error: () => {
-        alert('Error al subir la foto de perfil');
-      }
-    });
-  } else {
-    guardarUsuario();
   }
-}
 
 private resetUsuario() {
   this.usuario = {

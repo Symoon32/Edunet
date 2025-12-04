@@ -25,8 +25,8 @@ router.post('/upload-profile', authenticateToken, upload.single('fotoPerfil'), (
 
 // Ruta para obtener usuarios - Solo accesible para los roles 4
 router.get('/', authenticateToken, authorizeRoles(4), getUsers);
-// Ruta para crear usuarios - Accesible para roles 1, 2, 3, 4
-router.post('/', authenticateToken, authorizeRoles(1, 2, 3, 4), createUser);
+// Ruta para crear usuarios - Solo accesible para el rol 4 (administrador)
+router.post('/', authenticateToken, authorizeRoles(4), createUser);
 // Ruta para obtener usuario por correo - Accesible para roles 1, 2, 3, 4
 router.get('/:correo', authenticateToken, authorizeRoles(1, 2, 3, 4), getUserByEmail);
 // Ruta para actualizar usuario por correo - Accesible para roles 1, 2, 3, 4
