@@ -8,15 +8,16 @@ const asistenciaController = new AsistenciaController();
 
 // Middleware de autenticación y autorización
 router.use(authMiddleware);
-router.use(authorize('profesor', 'administrador'));
 
 // Rutas
-router.post('/clase/:idClase', (req, res) => asistenciaController.registrarAsistencia(req, res));
-router.get('/clase/:idClase', (req, res) => asistenciaController.getAsistenciaClase(req, res));
-router.get('/estudiante/:idEstudiante/curso/:idCurso', (req, res) => asistenciaController.getAsistenciaEstudianteCurso(req, res));
-router.get('/curso/:idCurso/reporte', (req, res) => asistenciaController.getReporteAsistenciaCurso(req, res));
-// Alias para compatibilidad: /resumen -> /reporte
-router.get('/curso/:idCurso/resumen', (req, res) => asistenciaController.getReporteAsistenciaCurso(req, res));
-router.put('/:idAsistencia', (req, res) => asistenciaController.updateAsistencia(req, res));
+// Profesor / Admin
+router.post('/clase/:idClase', authorize('profesor', 'administrador'), (req, res) => asistenciaController.registrarAsistencia(req, res));
+router.get('/clase/:idClase', authorize('profesor', 'administrador'), (req, res) => asistenciaController.getAsistenciaClase(req, res));
+router.get('/curso/:idCurso/reporte', authorize('profesor', 'administrador'), (req, res) => asistenciaController.getReporteAsistenciaCurso(req, res));
+router.get('/curso/:idCurso/resumen', authorize('profesor', 'administrador'), (req, res) => asistenciaController.getReporteAsistenciaCurso(req, res));
+router.put('/:idAsistencia', authorize('profesor', 'administrador'), (req, res) => asistenciaController.updateAsistencia(req, res));
+
+// Estudiante / Acudiente / Profesor / Admin
+router.get('/estudiante/:idEstudiante/curso/:idCurso', authorize('profesor', 'administrador', 'estudiante', 'acudiente'), (req, res) => asistenciaController.getAsistenciaEstudianteCurso(req, res));
 
 export default router;
