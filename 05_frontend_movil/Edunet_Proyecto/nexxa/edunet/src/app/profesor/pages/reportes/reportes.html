@@ -1,0 +1,34 @@
+<main class="main-container container my-5">
+  <section class="reportes bg-white p-4 rounded shadow-sm">
+    <h2 class="text-primary mb-4">Generar Reportes de Progreso Académico</h2>
+
+    <form (ngSubmit)="generarReporte()">
+      <div class="mb-3">
+        <label for="estudiante" class="form-label">Estudiante</label>
+        <input [(ngModel)]="estudiante" name="estudiante" type="text" id="estudiante" class="form-control" placeholder="Nombre del estudiante" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="grado" class="form-label">Grado</label>
+        <select [(ngModel)]="grado" name="grado" id="grado" class="form-select" required>
+          <option value="">Seleccione</option>
+          <option value="6">Sexto</option>
+          <option value="7">Séptimo</option>
+          <option value="8">Octavo</option>
+          <option value="9">Noveno</option>
+          <option value="10">Décimo</option>
+          <option value="11">Undécimo</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="detalle" class="form-label">Observaciones</label>
+        <textarea [(ngModel)]="detalle" name="detalle" id="detalle" class="form-control" rows="5" placeholder="Notas u observaciones del desempeño..."></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Generar reporte</button>
+    </form>
+
+    <div *ngIf="resultado" id="resultadoReporte" class="reporte-generado alert alert-info mt-4" [innerHTML]="resultado"></div>
+  </section>
+</main>

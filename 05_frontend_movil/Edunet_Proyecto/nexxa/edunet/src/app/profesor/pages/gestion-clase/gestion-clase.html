@@ -1,0 +1,115 @@
+<div class="container-fluid py-4">
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="d-flex justify-content-center align-items-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- VIEW: LISTA DE CURSOS -->
+  <div *ngIf="!loading && viewMode === 'cursos'" class="animate-fade-in">
+    <div class="mb-5">
+      <h1 class="page-title">Mis Cursos Asignados</h1>
+      <p class="text-subtitle mt-2">Selecciona un curso para gestionar sus clases, asistencia y notas.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let curso of cursos">
+        <div class="course-card h-100" (click)="selectCurso(curso)">
+          <div class="card-header-custom">
+            <h3>{{ curso.materia }}</h3>
+            <span class="card-badge">{{ curso.anio }} - {{ curso.periodo }}</span>
+          </div>
+          <div class="card-body-custom">
+            <div class="stat-row">
+              <div class="stat-icon"><i class="bi bi-mortarboard-fill"></i></div>
+              <div>
+                <small class="d-block text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Grado & Sección</small>
+                <span class="fw-bold">{{ curso.grado }} - {{ curso.seccion }}</span>
+              </div>
+            </div>
+            <div class="stat-row">
+              <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+              <div>
+                <small class="d-block text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Estudiantes</small>
+                <span class="fw-bold">{{ curso.totalEstudiantes || 0 }} Inscritos</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer bg-white border-top-0 p-3 pt-0 text-end">
+            <button class="btn btn-sm btn-outline-primary rounded-pill px-3">Ver Clases <i class="bi bi-arrow-right ms-1"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="cursos.length === 0" class="col-12 text-center py-5 text-muted">
+        <i class="bi bi-inbox fs-1 mb-3 d-block"></i>
+        <p>No tienes cursos asignados actualmente.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW: DETALLE CURSO (LISTA DE CLASES & ACCIONES) -->
+  <div *ngIf="!loading && viewMode === 'clases' && selectedCurso" class="animate-fade-in">
+    <div class="d-flex align-items-center mb-4">
+      <button class="btn btn-back me-3" (click)="goBackToCursos()">
+        <i class="bi bi-arrow-left me-1"></i> Volver a Cursos
+      </button>
+      <div>
+        <h2 class="h4 mb-0 fw-bold text-primary">{{ selectedCurso.materia }}</h2>
+        <span class="text-muted small">{{ selectedCurso.grado }} - {{ selectedCurso.seccion }}</span>
+      </div>
+    </div>
+
+    <!-- Course Actions Bar -->
+    <div class="bg-white p-4 rounded-3 shadow-sm mb-4 border">
+        <h5 class="fw-bold mb-3 text-secondary">Gestión del Curso</h5>
+        <div class="d-flex flex-wrap gap-3">
+             <button class="btn btn-outline-primary d-flex align-items-center" (click)="navigateTo('estudiantes', selectedCurso.idCurso, 'curso')">
+                <i class="bi bi-people me-2"></i> Ver Lista de Estudiantes
+             </button>
+             <button class="btn btn-outline-success d-flex align-items-center" (click)="navigateTo('notas', selectedCurso.idCurso, 'curso')">
+                <i class="bi bi-pencil-square me-2"></i> Notas / Calificaciones
+             </button>
+             <button class="btn btn-outline-info d-flex align-items-center" (click)="navigateTo('reportes', selectedCurso.idCurso, 'curso')">
+                <i class="bi bi-file-text me-2"></i> Generar Reportes
+             </button>
+             <button class="btn btn-outline-warning d-flex align-items-center" (click)="navigateTo('materiales', selectedCurso.idCurso, 'curso')">
+                <i class="bi bi-folder2-open me-2"></i> Materiales y Tareas
+             </button>
+             <button class="btn btn-outline-secondary d-flex align-items-center" (click)="navigateTo('horario', selectedCurso.idCurso, 'curso')">
+                <i class="bi bi-calendar3 me-2"></i> Ver Horario
+             </button>
+        </div>
+    </div>
+
+    <!-- Classes List -->
+    <h3 class="h5 mb-3 fw-bold text-secondary border-bottom pb-2">Clases / Sesiones</h3>
+
+    <div class="row g-3">
+        <div class="col-md-6" *ngFor="let clase of clases">
+            <div class="class-card p-3 border h-100 d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="mb-0 fw-bold">{{ clase.tema || 'Clase sin tema' }}</h5>
+                    <span class="badge bg-light text-dark border">{{ clase.fecha | date:'shortDate' }}</span>
+                </div>
+                <p class="text-muted small flex-grow-1">{{ clase.descripcion || 'Sin descripción' }}</p>
+
+                <div class="mt-3 pt-3 border-top">
+                    <button class="btn btn-primary w-100 btn-sm mb-2" (click)="navigateTo('asistencia', clase.idClase, 'clase')">
+                        <i class="bi bi-check-circle me-1"></i> Tomar Asistencia
+                    </button>
+                </div>
+            </div>
+        </div>
+
+         <div *ngIf="clases.length === 0" class="col-12 py-4 text-center text-muted">
+             <p>No hay clases registradas para este curso.</p>
+             <button class="btn btn-primary btn-sm">Crear Nueva Clase</button>
+         </div>
+    </div>
+
+  </div>
+</div>

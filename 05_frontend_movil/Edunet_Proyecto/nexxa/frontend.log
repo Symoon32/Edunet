@@ -1,0 +1,40 @@
+
+> edunet@0.0.0 start
+> ng serve --port 4201
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+❯ Building...
+✔ Building...
+Initial chunk files | Names                          |  Raw size
+styles.css          | styles                         | 279.23 kB |
+main.js             | main                           |  51.06 kB |
+chunk-EI6D73B2.js   | -                              |   2.04 kB |
+chunk-CZJLB7T5.js   | -                              |   1.08 kB |
+polyfills.js        | polyfills                      | 128 bytes |
+
+                    | Initial total                  | 333.54 kB
+
+Lazy chunk files    | Names                          |  Raw size
+chunk-OG2FDXXH.js   | list-user                      |  36.32 kB |
+chunk-SSLRN74X.js   | cargar-notas                   |  35.09 kB |
+chunk-E27PNUIW.js   | reportes-component             |  32.89 kB |
+chunk-QRIEU7KL.js   | create-edit-user               |  30.43 kB |
+chunk-LF3BLUEA.js   | gestion-clase                  |  30.25 kB |
+chunk-QB2SRTCC.js   | login-component                |  29.32 kB |
+chunk-EI7GT7QG.js   | admin-layout-component         |  29.15 kB |
+chunk-HWNFSWRF.js   | materiales-component           |  28.89 kB |
+chunk-BZ274IAF.js   | student-layout-component       |  26.92 kB |
+chunk-OYPVTY3H.js   | comunicacion-tutores-component |  24.67 kB |
+chunk-JQSUNISS.js   | comunicacion-component         |  24.53 kB |
+chunk-RZPTM25Z.js   | configurar-cursos-component    |  24.19 kB |
+chunk-FLBGGOET.js   | anuncios-component             |  23.94 kB |
+chunk-GEK65OXW.js   | mensajes-estudiantes-component |  22.39 kB |
+chunk-I25BGY45.js   | profesor-layout-component      |  21.52 kB |
+...and 35 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [9.308 seconds] - 2025-12-10T22:15:24.142Z
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  ➜  Local:   http://localhost:4201/
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`

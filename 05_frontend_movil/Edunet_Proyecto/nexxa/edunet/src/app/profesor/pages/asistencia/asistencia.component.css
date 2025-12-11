@@ -1,0 +1,13 @@
+/* Simple styles if needed, mostly bootstrap classes used */
+.btn-check:checked + .btn-outline-success {
+    background-color: #198754;
+    color: white;
+}
+.btn-check:checked + .btn-outline-warning {
+    background-color: #ffc107;
+    color: black;
+}
+.btn-check:checked + .btn-outline-danger {
+    background-color: #dc3545;
+    color: white;
+}

@@ -1,0 +1,35 @@
+<h2 class="mb-4 text-center">Calendario Escolar - {{ monthName | titlecase }}</h2>
+
+<div *ngIf="loading" class="text-center">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+</div>
+
+<div class="calendario mb-4" *ngIf="!loading">
+  <div class="dia-header">Dom</div>
+  <div class="dia-header">Lun</div>
+  <div class="dia-header">Mar</div>
+  <div class="dia-header">Mié</div>
+  <div class="dia-header">Jue</div>
+  <div class="dia-header">Vie</div>
+  <div class="dia-header">Sáb</div>
+
+  <div *ngFor="let day of daysInMonth" class="dia" [class.destacado]="hasEvent(day)">
+    <span *ngIf="day">{{ day | date:'d' }}</span>
+    <div *ngIf="day && hasEvent(day)" class="event-indicator">
+      <small *ngFor="let ev of getEventsForDay(day)" class="d-block text-truncate" [title]="ev.titulo">
+        {{ ev.titulo }}
+      </small>
+    </div>
+  </div>
+</div>
+
+<div class="leyenda" *ngIf="!loading && eventos.length > 0">
+  <h4>Próximos Eventos</h4>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let ev of eventos">
+      <strong>{{ ev.fecha_inicio | date:'mediumDate' }}:</strong> {{ ev.titulo }} - {{ ev.descripcion }}
+    </li>
+  </ul>
+</div>

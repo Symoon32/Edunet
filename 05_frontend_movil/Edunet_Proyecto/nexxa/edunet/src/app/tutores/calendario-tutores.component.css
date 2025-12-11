@@ -1,0 +1,172 @@
+:root {
+    --color-rojo: #C1272D;
+    --color-blanco: #FFFFFF;
+    --color-texto: #333333;
+    --color-neutro: #dddddd;
+    --color-destacado: #FFD700;
+    --evento-inicio: #A3D5FF;     
+    --evento-boletines: #FFE8A3;  
+    --evento-ciencias: #C2F0C2;   
+    --evento-idioma: #F5C2C2;     
+  }
+  :root {
+      --bg-primary: #0057A8;
+      --bs-secondary: #f2f2f2;
+      --bs-light: #dddddd;
+      --bs-dark: #003d73;
+    }
+
+.bg-primary {
+      background-color: var(--bg-primary) !important;
+    }
+
+.bg-light {
+      background-color: var(--bs-light) !important;
+    }
+/*  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
+  
+  body {
+    background-color: var(--color-blanco);
+    color: var(--color-texto);
+  }
+  
+  .banner {
+    background-color: var(--color-azul);
+    color: var(--color-blanco);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .logo {
+    width: 50px;
+    height: auto;
+  }
+  
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .navbar a {
+    color: var(--color-blanco);
+    text-decoration: none;
+    font-weight: bold;
+  }
+*/
+main h2 {
+    color: var(--bg-primary);
+    margin-top: 20px;
+    font-size: 2rem;
+  }
+  .calendario-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: var(--color-neutro);
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .calendario-container h2 {
+    margin-bottom: 20px;
+    color: var(--bg-primary);
+  }
+  
+  .calendario {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    background-color: var(--color-blanco);
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  .dia, .dia-header {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .dia-header {
+    background-color: var(--color-azul);
+    color: var(--color-blanco);
+    font-weight: bold;
+  }
+  
+  .dia.destacado {
+    background-color: var(--color-destacado);
+    font-weight: bold;
+    cursor: help;
+  }
+  
+  .dia.evento-inicio {
+    background-color: var(--evento-inicio);
+    font-weight: bold;
+    cursor: help;
+  }
+  
+  .dia.evento-boletines {
+    background-color: var(--evento-boletines);
+    font-weight: bold;
+    cursor: help;
+  }
+  
+  .dia.evento-ciencias {
+    background-color: var(--evento-ciencias);
+    font-weight: bold;
+    cursor: help;
+  }
+  
+  .dia.evento-idioma {
+    background-color: var(--evento-idioma);
+    font-weight: bold;
+    cursor: help;
+  }
+ 
+  .leyenda {
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .cuadro {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-right: 8px;
+    vertical-align: middle;
+    border-radius: 3px;
+  }
+  
+ 
+  .cuadro.evento-inicio { background-color: var(--evento-inicio); }
+  .cuadro.evento-boletines { background-color: var(--evento-boletines); }
+  .cuadro.evento-ciencias { background-color: var(--evento-ciencias); }
+  .cuadro.evento-idioma { background-color: var(--evento-idioma); }
+  
+  footer {
+    background-color: var(--color-neutro);
+    color: var(--color-texto);
+    padding: 10px;
+    text-align: center;
+  }
+  
+  @media (max-width: 600px) {
+    .calendario {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  
+    .navbar ul {
+      flex-direction: column;
+      align-items: center;
+    }
+  }

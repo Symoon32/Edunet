@@ -1,0 +1,6 @@
+.list-profesor { padding: 16px; }
+.list-profesor .actions { display:flex; gap:8px; margin-bottom:12px; }
+.list-profesor ul { list-style:none; padding:0; }
+.list-profesor li { padding:8px; border-bottom:1px solid #eee; cursor:pointer; }
+.list-profesor li.selected { background:#f0f8ff; }
+.list-profesor .controls { margin-top:12px; }

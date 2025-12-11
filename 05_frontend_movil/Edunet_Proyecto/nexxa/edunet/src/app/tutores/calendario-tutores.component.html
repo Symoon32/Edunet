@@ -1,0 +1,36 @@
+<main class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="card-title text-primary mb-4 text-center">Calendario Escolar y Eventos</h2>
+
+          <div *ngIf="loading" class="alert alert-info">Cargando eventos...</div>
+          <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+          <!-- List View of Events -->
+          <div class="row" *ngIf="!loading && eventos.length > 0">
+             <div class="col-12">
+               <div class="list-group">
+                 <div *ngFor="let evento of eventos" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1 text-primary">{{ evento.titulo }}</h5>
+                      <small class="text-muted">{{ evento.fecha | date:'fullDate' }}</small>
+                    </div>
+                    <p class="mb-1">{{ evento.descripcion }}</p>
+                    <small class="text-info" *ngIf="evento.lugar">Lugar: {{ evento.lugar }}</small>
+                 </div>
+               </div>
+             </div>
+          </div>
+
+          <div class="alert alert-warning" *ngIf="!loading && eventos.length === 0">
+            No hay eventos escolares programados próximamente.
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>

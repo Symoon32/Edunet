@@ -1,0 +1,73 @@
+<header [class.bg-primary]="!isProfesor" [class.header-profesor]="isProfesor" class="d-flex align-items-center text-white p-3 justify-content-between transition-header">
+	<div class="d-flex align-items-center">
+		<img src="logo-sin-fondo.png" alt="Logo" class="me-3" style="height:60px;">
+		<h1 class="h4 mb-0" *ngIf="!isProfesor">Edunet</h1>
+		<h1 class="h4 mb-0" *ngIf="isProfesor">Edunet <small class="fs-6 opacity-75">| Portal Docente</small></h1>
+	</div>
+	<a class="profile-img-link" [routerLink]="['/perfil']" title="Ver mi perfil">
+		<img [src]="profileImgUrl || 'public/foto-perfil.avif' || 'public/foto perfil.avif'" alt="Foto de perfil" class="profile-img" />
+	</a>
+</header>
+<nav [class.bg-dark]="!isProfesor" [class.navbar-profesor]="isProfesor" class="navbar-expand-lg">
+	<div class="container">
+			<ul class="nav nav-pills py-2 d-flex align-items-center">
+								<!-- Admin links -->
+								<ng-container *ngIf="isAdmin">
+									<li class="nav-item"><a class="nav-link" routerLink="/inicio-admin" routerLinkActive="active">Inicio</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/gestion-usuarios" routerLinkActive="active">Gestión de Usuarios</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/config-cursos" routerLinkActive="active">Configurar Cursos</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/create-user" routerLinkActive="active">Crear Usuario</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/reportes" routerLinkActive="active">Reportes</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/estadisticas" routerLinkActive="active">Estadísticas</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/comunicacion" routerLinkActive="active">Comunicacion general</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/anuncios-boletines" routerLinkActive="active">Anuncios y Boletines</a></li>
+                  <li class="nav-item"><a class="nav-link" routerLink="/gestion-profesores" routerLinkActive="active">Gestión de Profesores</a></li>
+
+								</ng-container>
+
+								<!-- Profesor links (New Structure) -->
+								<ng-container *ngIf="isProfesor">
+									<li class="nav-item"><a class="nav-link" routerLink="/profesor" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                    <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                  </a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/profesor/gestion-clase" routerLinkActive="active">
+                    <i class="bi bi-journal-bookmark me-1"></i> Mis Cursos
+                  </a></li>
+                  <!-- These might be better accessed THROUGH the course, but kept for direct access if needed, or we hide them and make them sub-features -->
+									<li class="nav-item"><a class="nav-link" routerLink="/profesor/reportes" routerLinkActive="active">
+                    <i class="bi bi-file-earmark-bar-graph me-1"></i> Reportes
+                  </a></li>
+                  <li class="nav-item"><a class="nav-link" routerLink="/profesor/estadisticas" routerLinkActive="active">
+                    <i class="bi bi-graph-up me-1"></i> Estadísticas
+                  </a></li>
+								</ng-container>
+
+								<!-- Tutores links -->
+								<ng-container *ngIf="isAcudiente">
+									<li class="nav-item"><a class="nav-link" routerLink="/tutores" routerLinkActive="active">Inicio Acudiente</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/tutores/comunicacion" routerLinkActive="active">Comunicacion</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/tutores/calendario" routerLinkActive="active">Calendario</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/tutores/notas" routerLinkActive="active">Notas</a></li>
+									<li class="nav-item"><a class="nav-link" routerLink="/tutores/observaciones" routerLinkActive="active">Observaciones</a></li>
+								</ng-container>
+
+								<!-- Estudiante links -->
+								<ng-container *ngIf="isEstudiante">
+									<li class="nav-item"><a class="nav-link" routerLink="/estudiantes" routerLinkActive="active">Inicio</a></li>
+								<li class="nav-item"><a class="nav-link" routerLink="/estudiantes/perfil" routerLinkActive="active">Perfil</a></li>
+								<li class="nav-item"><a class="nav-link" routerLink="/estudiantes/historial" routerLinkActive="active">Mi Historial Academico</a></li>
+								<li class="nav-item"><a class="nav-link" routerLink="/estudiantes/material" routerLinkActive="active">Materiales Academicos</a></li>
+								<li class="nav-item"><a class="nav-link" routerLink="/estudiantes/tareas" routerLinkActive="active">Mis Tareas y proyectos</a></li>
+								<li class="nav-item"><a class="nav-link" routerLink="/estudiantes/calendario" routerLinkActive="active">Calendario Escolar</a></li>
+								</ng-container>
+								
+								<li class="nav-item ms-auto">
+										<!-- Mostrar logout si hay sesión -->
+										<button *ngIf="isAdmin || isProfesor || isEstudiante || isAcudiente" (click)="logout()" class="btn btn-outline-light btn-sm d-flex align-items-center gap-2" [class.btn-danger]="!isProfesor" [class.btn-outline-warning]="isProfesor">
+												Salir <i class="bi bi-box-arrow-right"></i>
+										</button>
+										<a *ngIf="!(isAdmin || isProfesor || isEstudiante || isAcudiente)" routerLink="/login" class="btn btn-primary" routerLinkActive="active">Iniciar sesión</a>
+								</li>
+			</ul>
+	</div>
+</nav>
