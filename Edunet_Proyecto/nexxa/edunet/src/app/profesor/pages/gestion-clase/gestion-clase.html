@@ -9,13 +9,26 @@
 
   <!-- VIEW: LISTA DE CURSOS -->
   <div *ngIf="!loading && viewMode === 'cursos'" class="animate-fade-in">
-    <div class="mb-5">
-      <h1 class="page-title">Mis Cursos Asignados</h1>
-      <p class="text-subtitle mt-2">Selecciona un curso para gestionar sus clases, asistencia y notas.</p>
+    <div class="d-flex justify-content-between align-items-end mb-5">
+      <div>
+         <h1 class="page-title">Mis Cursos Asignados</h1>
+         <p class="text-subtitle mt-2">Selecciona un curso para gestionar sus clases, asistencia y notas.</p>
+      </div>
+
+      <div class="d-flex gap-2">
+           <div class="input-group">
+               <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+               <input type="text" class="form-control" placeholder="Buscar materia o grado..." [(ngModel)]="searchCursos">
+           </div>
+           <select class="form-select w-auto" [(ngModel)]="filterAnio">
+               <option value="todos">Todos los Años</option>
+               <option *ngFor="let a of uniqueAnios" [value]="a">{{ a }}</option>
+           </select>
+      </div>
     </div>
 
     <div class="row g-4">
-      <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let curso of cursos">
+      <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let curso of cursosFiltrados">
         <div class="course-card h-100" (click)="selectCurso(curso)">
           <div class="card-header-custom">
             <h3>{{ curso.materia }}</h3>
@@ -44,9 +57,9 @@
       </div>
 
       <!-- Empty State -->
-      <div *ngIf="cursos.length === 0" class="col-12 text-center py-5 text-muted">
+      <div *ngIf="cursosFiltrados.length === 0" class="col-12 text-center py-5 text-muted">
         <i class="bi bi-inbox fs-1 mb-3 d-block"></i>
-        <p>No tienes cursos asignados actualmente.</p>
+        <p>No se encontraron cursos.</p>
       </div>
     </div>
   </div>
@@ -86,10 +99,30 @@
     </div>
 
     <!-- Classes List -->
-    <h3 class="h5 mb-3 fw-bold text-secondary border-bottom pb-2">Clases / Sesiones</h3>
+    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+       <h3 class="h5 mb-0 fw-bold text-secondary">Clases / Sesiones</h3>
+       <div class="d-flex gap-2">
+           <input type="text" class="form-control form-control-sm" placeholder="Buscar tema..." [(ngModel)]="searchClases" style="width: 200px;">
+           <select class="form-select form-select-sm w-auto" [(ngModel)]="filterMes">
+               <option value="todos">Todos los meses</option>
+               <option value="1">Enero</option>
+               <option value="2">Febrero</option>
+               <option value="3">Marzo</option>
+               <option value="4">Abril</option>
+               <option value="5">Mayo</option>
+               <option value="6">Junio</option>
+               <option value="7">Julio</option>
+               <option value="8">Agosto</option>
+               <option value="9">Septiembre</option>
+               <option value="10">Octubre</option>
+               <option value="11">Noviembre</option>
+               <option value="12">Diciembre</option>
+           </select>
+       </div>
+    </div>
 
     <div class="row g-3">
-        <div class="col-md-6" *ngFor="let clase of clases">
+        <div class="col-md-6" *ngFor="let clase of clasesFiltradas">
             <div class="class-card p-3 border h-100 d-flex flex-column">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <h5 class="mb-0 fw-bold">{{ clase.tema || 'Clase sin tema' }}</h5>

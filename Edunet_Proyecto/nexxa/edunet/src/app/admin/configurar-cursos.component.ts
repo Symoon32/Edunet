@@ -16,6 +16,11 @@ export class ConfigurarCursosComponent implements OnInit {
   cursos: any[] = [];
   materias: any[] = [];
   profesores: any[] = [];
+
+  searchTerm: string = '';
+  filterGrado: string = 'todos';
+  filterAnio: string = 'todos';
+
   cursoForm: FormGroup;
   isEditing = false;
   selectedCursoId: number | null = null;
@@ -38,6 +43,31 @@ export class ConfigurarCursosComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadInitialData();
+  }
+
+  get cursosFiltrados() {
+    const term = this.searchTerm.toLowerCase().trim();
+    return this.cursos.filter(c => {
+      const matchesSearch =
+        (c.grado + '').toLowerCase().includes(term) ||
+        (c.seccion || '').toLowerCase().includes(term) ||
+        (c.materia || '').toLowerCase().includes(term) ||
+        (c.nombreProfesor + ' ' + c.apellidoProfesor).toLowerCase().includes(term);
+
+      const matchesGrado = this.filterGrado === 'todos' || (c.grado + '') === this.filterGrado;
+      const matchesAnio = this.filterAnio === 'todos' || (c.anio + '') === this.filterAnio;
+
+      return matchesSearch && matchesGrado && matchesAnio;
+    });
+  }
+
+  // Extract unique values for filters
+  get uniqueGrados() {
+    return [...new Set(this.cursos.map(c => c.grado))].sort();
+  }
+
+  get uniqueAnios() {
+    return [...new Set(this.cursos.map(c => c.anio))].sort((a,b) => b-a);
   }
 
   loadInitialData() {

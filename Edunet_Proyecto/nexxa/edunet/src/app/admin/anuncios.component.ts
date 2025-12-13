@@ -12,6 +12,9 @@ import { EventosService } from './services/eventos.service';
 })
 export class AnunciosComponent implements OnInit {
   anuncios: any[] = [];
+  searchTerm: string = '';
+  filterTipo: string = 'todos';
+
   anuncioForm: FormGroup;
   isEditing = false;
   selectedAnuncioId: number | null = null;
@@ -33,6 +36,19 @@ export class AnunciosComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAnuncios();
+  }
+
+  get anunciosFiltrados() {
+    const term = this.searchTerm.toLowerCase().trim();
+    return this.anuncios.filter(a => {
+      const matchesSearch =
+        (a.titulo || '').toLowerCase().includes(term) ||
+        (a.descripcion || '').toLowerCase().includes(term);
+
+      const matchesType = this.filterTipo === 'todos' || a.tipo === this.filterTipo;
+
+      return matchesSearch && matchesType;
+    });
   }
 
   loadAnuncios() {

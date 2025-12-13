@@ -1,12 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MateriasAdminService } from './services/materias.service';
 
 @Component({
   selector: 'app-gestion-materias',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './gestion-materias.component.html',
   styleUrls: ['./gestion-materias.component.css']
 })
@@ -15,6 +15,8 @@ export class GestionMateriasComponent implements OnInit {
   fb = inject(FormBuilder);
 
   materias: any[] = [];
+  searchTerm: string = '';
+
   materiaForm: FormGroup;
   isEditing = false;
   editingId: number | null = null;
@@ -33,6 +35,15 @@ export class GestionMateriasComponent implements OnInit {
 
   loadMaterias() {
     this.materiasService.getMaterias().subscribe(data => this.materias = data);
+  }
+
+  get materiasFiltradas() {
+    const term = this.searchTerm.toLowerCase().trim();
+    return this.materias.filter(m =>
+       (m.nombre || '').toLowerCase().includes(term) ||
+       (m.codigo || '').toLowerCase().includes(term) ||
+       (m.descripcion || '').toLowerCase().includes(term)
+    );
   }
 
   onSubmit() {

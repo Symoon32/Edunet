@@ -12,11 +12,22 @@
       </div>
 
       <div class="card-body p-4">
-        <!-- Search Bar -->
-        <div class="input-group mb-4 shadow-sm" style="max-width: 500px;">
-          <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
-          <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar por nombre o correo..."
-                 [(ngModel)]="busqueda" (input)="buscarUsuario()">
+        <!-- Filters -->
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          <div class="input-group shadow-sm" style="max-width: 400px;">
+            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+            <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar por nombre o correo..."
+                   [(ngModel)]="busqueda" (input)="buscarUsuario()">
+          </div>
+
+          <div class="input-group shadow-sm" style="max-width: 250px;">
+             <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-funnel"></i></span>
+             <select class="form-select border-start-0 ps-0" [(ngModel)]="filtroEstado" (change)="aplicarFiltroEstado()">
+               <option value="todos">Todos los Estados</option>
+               <option value="activos">Activos</option>
+               <option value="inactivos">Inactivos</option>
+             </select>
+          </div>
         </div>
 
         <!-- User Table -->

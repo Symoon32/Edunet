@@ -18,6 +18,7 @@ export class ListUser {
   usuarios: any[] = [];
   usuariosFiltrados: any[] = [];
   busqueda: string = '';
+  filtroEstado: string = 'todos';
   usuarioSeleccionado: any = null;
   tituloVista: string = 'Gestión de Usuarios';
   rolFiltrado: number | null = null;
@@ -63,18 +64,32 @@ export class ListUser {
   }
 
   filtrarUsuarios() {
-    const filtro = this.busqueda.trim().toLowerCase();
-    if (!filtro) {
-      this.usuariosFiltrados = this.usuarios;
-    } else {
-      this.usuariosFiltrados = this.usuarios.filter(u =>
-        (u.nombres + ' ' + u.apellidos).toLowerCase().includes(filtro) ||
-        (u.correo || '').toLowerCase().includes(filtro)
-      );
-    }
+    const busquedaLower = this.busqueda.trim().toLowerCase();
+
+    this.usuariosFiltrados = this.usuarios.filter(u => {
+      // 1. Text filter
+      const matchesSearch =
+        (u.nombres + ' ' + u.apellidos).toLowerCase().includes(busquedaLower) ||
+        (u.correo || '').toLowerCase().includes(busquedaLower);
+
+      // 2. Status filter
+      let matchesStatus = true;
+      if (this.filtroEstado === 'activos') {
+        matchesStatus = !!u.is_active;
+      } else if (this.filtroEstado === 'inactivos') {
+        matchesStatus = !u.is_active;
+      }
+
+      return matchesSearch && matchesStatus;
+    });
   }
 
   buscarUsuario() {
+    this.filtrarUsuarios();
+    this.usuarioSeleccionado = null;
+  }
+
+  aplicarFiltroEstado() {
     this.filtrarUsuarios();
     this.usuarioSeleccionado = null;
   }

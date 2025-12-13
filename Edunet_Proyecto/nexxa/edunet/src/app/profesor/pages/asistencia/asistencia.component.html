@@ -25,13 +25,34 @@
 
         <div class="card shadow-sm">
             <div class="card-header bg-white py-3">
+                <!-- Filters -->
+                <div class="row g-2 mb-3">
+                    <div class="col-md-8">
+                       <div class="input-group input-group-sm">
+                           <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                           <input type="text" class="form-control border-start-0" placeholder="Buscar estudiante..." [(ngModel)]="searchTerm">
+                       </div>
+                    </div>
+                    <div class="col-md-4">
+                       <div class="input-group input-group-sm">
+                           <span class="input-group-text bg-light border-end-0"><i class="bi bi-funnel"></i></span>
+                           <select class="form-select border-start-0" [(ngModel)]="filterStatus">
+                               <option value="todos">Todos</option>
+                               <option value="presente">Presentes</option>
+                               <option value="tardanza">Tardanzas</option>
+                               <option value="ausente">Ausentes</option>
+                           </select>
+                       </div>
+                    </div>
+                </div>
+
                 <div class="row fw-bold text-muted">
                     <div class="col-md-6">Estudiante</div>
                     <div class="col-md-6 text-center">Estado</div>
                 </div>
             </div>
             <div class="list-group list-group-flush">
-                <div *ngFor="let est of estudiantes" class="list-group-item py-3">
+                <div *ngFor="let est of estudiantesFiltrados" class="list-group-item py-3">
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <h6 class="mb-0 fw-bold">{{ est.apellidos }}, {{ est.nombres }}</h6>

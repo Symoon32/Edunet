@@ -17,6 +17,8 @@ export class AsistenciaComponent implements OnInit {
   idClase: number | null = null;
   claseInfo: any = null;
   estudiantes: any[] = [];
+  searchTerm: string = '';
+  filterStatus: string = 'todos';
   loading = false;
 
   // Model for attendance: key = studentId, value = status (presente, ausente, tardanza)
@@ -40,6 +42,18 @@ export class AsistenciaComponent implements OnInit {
         this.idClase = +id;
         this.loadClaseInfo();
       }
+    });
+  }
+
+  get estudiantesFiltrados() {
+    const term = this.searchTerm.toLowerCase().trim();
+    return this.estudiantes.filter(est => {
+        const matchesSearch = (est.nombres + ' ' + est.apellidos).toLowerCase().includes(term);
+
+        const currentStatus = this.asistencia[est.idUsuarios] || 'presente';
+        const matchesStatus = this.filterStatus === 'todos' || currentStatus === this.filterStatus;
+
+        return matchesSearch && matchesStatus;
     });
   }
 
