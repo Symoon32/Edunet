@@ -85,7 +85,7 @@ export class ListUser {
 
   crearUsuario() {
     // Aquí podrías navegar a la vista de crear usuario o abrir un modal
-    this.router.navigate(['/create-user'])
+    this.router.navigate(['/admin/create-user'])
     
   }
 

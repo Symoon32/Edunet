@@ -84,13 +84,13 @@ export async function createUser(req: Request, res: Response) {
       await logAction(loggedInUser.id, 'CREATE_USER', { createdUserId: idUsuarioCreado, createdUserEmail: correo });
 
       // Si es un acudiente (rol 3) y se proporcionó el documento del estudiante, crear relación
-      if (Number(rol) === 3 && estudiante_relacionado) {
+      const documentoEstudiante = req.body.documento_estudiante;
+      if (Number(rol) === 3 && (estudiante_relacionado || documentoEstudiante)) {
         // Buscar al estudiante por su documento (asumiendo que estudiante_relacionado contiene el documento o nombre)
         // Si es nombre, es ambiguo. Intentaremos asumir que el frontend enviará el documento en un campo adicional 'documento_estudiante'
         // o que 'estudiante_relacionado' es el documento.
         // Dado el esquema actual, usaremos 'documento_estudiante' del body si existe.
 
-        const documentoEstudiante = req.body.documento_estudiante;
         if (documentoEstudiante) {
           const [estudiantes]: any = await conn.execute('SELECT idUsuarios FROM usuarios WHERE documento = ? AND idRol = 1', [documentoEstudiante]);
           if (estudiantes.length > 0) {

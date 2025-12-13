@@ -68,6 +68,7 @@
 					@if (usuario.rol == '3') {
 						<div class="mb-3">
 							<input placeholder="Nombre del estudiante a cargo" type="text" class="form-control mb-2" name="estudiante_relacionado" [(ngModel)]="usuario.estudiante_relacionado">
+							<input placeholder="Documento de Identidad del Estudiante" type="text" class="form-control mb-2" name="documento_estudiante" [(ngModel)]="usuario.documento_estudiante">
 							<input placeholder="Parentesco" type="text" class="form-control" name="parentesco" [(ngModel)]="usuario.parentesco">
 						</div>
 					}

@@ -29,6 +29,7 @@ export class CreateEditUser {
     telefono_contacto_emergencia: '',
     curso_asignado: '',
     estudiante_relacionado: '',
+    documento_estudiante: '',
     parentesco: '',
     cargo: ''
   };
@@ -138,9 +139,10 @@ private resetUsuario() {
     telefono_contacto_emergencia: '',
     curso_asignado: '',
     estudiante_relacionado: '',
+      documento_estudiante: '',
     parentesco: '',
-    cargo: ''
-  };
+      cargo: ''
+    };
 }
 
   private navigateBack(rol: string | number) {
