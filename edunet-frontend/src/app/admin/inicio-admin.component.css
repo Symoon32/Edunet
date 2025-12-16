@@ -17,7 +17,8 @@
   font-size: 0.9rem;
 }
 
-/* Stat Cards */
+/* ================= STAT CARDS ================= */
+
 .stat-card {
   border: none;
   border-radius: 16px;
@@ -26,6 +27,14 @@
   position: relative;
   overflow: hidden;
   height: 100%;
+
+  /* 🔑 CLAVE */
+  padding: 1.5rem;
+
+  /* 👌 Alineación correcta */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .stat-card:hover {
@@ -45,10 +54,12 @@
   background: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
 }
 
+/* ================= CARD TEXT ================= */
+
 .card-subtitle {
   font-size: 0.9rem;
   opacity: 0.9;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -57,14 +68,17 @@
 .card-value {
   font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 0.2rem;
+  margin: 0;
+  line-height: 1;
 }
 
 .card-desc {
   font-size: 0.85rem;
   opacity: 0.8;
-  margin: 0;
+  margin-top: 0.3rem;
 }
+
+/* ================= ICON ================= */
 
 .icon-circle {
   width: 60px;
@@ -76,41 +90,4 @@
   justify-content: center;
   font-size: 1.5rem;
   backdrop-filter: blur(5px);
-}
-
-/* Modern Card Container */
-.modern-card {
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  background: #fff;
-  transition: all 0.3s ease;
-}
-
-.activity-item {
-  border-bottom: 1px solid #f0f2f5;
-  padding: 1rem 1.5rem;
-  transition: background 0.2s ease;
-}
-
-.activity-item:hover {
-  background-color: #f8f9fa;
-}
-
-.activity-item:last-child {
-  border-bottom: none;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-}
-
-.activity-icon {
-  width: 40px;
-  height: 40px;
-  background: #eef2ff;
-  color: #4361ee;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
 }

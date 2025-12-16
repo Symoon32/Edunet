@@ -25,6 +25,9 @@ export class App {
   }
 
   isAdminRoute(): boolean {
-    return this.router.url.startsWith('/admin') || this.router.url.startsWith('/profesor');
+    return this.router.url.startsWith('/admin') ||
+           this.router.url.startsWith('/profesor') ||
+           this.router.url.startsWith('/tutores') ||
+           this.router.url.startsWith('/estudiantes');
   }
 }

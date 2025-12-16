@@ -119,38 +119,39 @@ export const routes: Routes = [
     },
     {
         path: 'estudiantes',
-        loadComponent: () => import('./estudiantes/inicio-estudiantes.component').then(m => m.InicioEstudiantesComponent),
-        canActivate: [EstudiantesGuard]
-    },
-    {
-        path: 'estudiantes/perfil',
-        loadComponent: () => import('./estudiantes/perfil-estudiante.component').then(m => m.PerfilEstudianteComponent),
-        canActivate: [EstudiantesGuard]
-    },
-    {
-        path: 'estudiantes/historial',
-        loadComponent: () => import('./estudiantes/historial-estudiantes.component').then(m => m.HistorialEstudiantesComponent),
-        canActivate: [EstudiantesGuard]
-    },
-    {
-        path: 'estudiantes/material',
-        loadComponent: () => import('./estudiantes/materiales-estudiantes.component').then(m => m.MaterialesEstudiantesComponent),
-        canActivate: [EstudiantesGuard]
-    },
-    {
-        path: 'estudiantes/tareas',
-        loadComponent: () => import('./estudiantes/tareas-estudiantes.component').then(m => m.TareasEstudiantesComponent),
-        canActivate: [EstudiantesGuard]
-    },
-    {
-        path: 'estudiantes/calendario',
-        loadComponent: () => import('./estudiantes/calendario-estudiantes.component').then(m => m.CalendarioEstudiantesComponent),
-        canActivate: [EstudiantesGuard]
-    },
-    {
-        path: 'estudiantes/mensajes',
-        loadComponent: () => import('./estudiantes/mensajes/mensajes-estudiantes.component').then(m => m.MensajesEstudiantesComponent),
-        canActivate: [EstudiantesGuard]
+        loadComponent: () => import('./estudiantes/layout/student-layout.component').then(m => m.StudentLayoutComponent),
+        canActivate: [EstudiantesGuard],
+        children: [
+            { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+            {
+                path: 'inicio',
+                loadComponent: () => import('./estudiantes/inicio-estudiantes.component').then(m => m.InicioEstudiantesComponent)
+            },
+            {
+                path: 'perfil',
+                loadComponent: () => import('./estudiantes/perfil-estudiante.component').then(m => m.PerfilEstudianteComponent)
+            },
+            {
+                path: 'historial',
+                loadComponent: () => import('./estudiantes/historial-estudiantes.component').then(m => m.HistorialEstudiantesComponent)
+            },
+            {
+                path: 'material',
+                loadComponent: () => import('./estudiantes/materiales-estudiantes.component').then(m => m.MaterialesEstudiantesComponent)
+            },
+            {
+                path: 'tareas',
+                loadComponent: () => import('./estudiantes/tareas-estudiantes.component').then(m => m.TareasEstudiantesComponent)
+            },
+            {
+                path: 'calendario',
+                loadComponent: () => import('./estudiantes/calendario-estudiantes.component').then(m => m.CalendarioEstudiantesComponent)
+            },
+            {
+                path: 'mensajes',
+                loadComponent: () => import('./estudiantes/mensajes/mensajes-estudiantes.component').then(m => m.MensajesEstudiantesComponent)
+            }
+        ]
     }
     
 ];

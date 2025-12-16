@@ -194,3 +194,204 @@ export async function getHorario(req: Request, res: Response) {
     conn.release();
   }
 }
+
+// 📚 Obtener Cursos Asignados al Profesor
+export const getCursosProfesor = async (req: Request, res: Response) => {
+    const conn = await connectDB();
+    try {
+        const profesorId = req.user?.id; // 🆔 ID del profesor autenticado
+
+        if (!profesorId) {
+            return res.status(401).json({ error: "Usuario no autenticado" });
+        }
+
+        const [cursos]: any = await conn.execute(`
+            SELECT c.idCurso, c.nombre, m.nombre as materia
+            FROM cursos c
+            JOIN materias m ON c.idMateria = m.idMateria
+            WHERE c.idProfesor = ?
+        `, [profesorId]);
+
+        res.json(cursos);
+    } catch (error) {
+        console.error("Error al obtener cursos del profesor:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    } finally {
+        conn.release();
+    }
+};
+
+// 👥 Obtener Estudiantes de un Curso (Para el dropdown)
+export const getEstudiantesPorCurso = async (req: Request, res: Response) => {
+    const conn = await connectDB();
+    try {
+        const { idCurso } = req.params;
+        const profesorId = req.user?.id;
+
+        // Verificar permisos: el profesor debe enseñar ese curso
+        const [permiso]: any = await conn.execute(`
+            SELECT idCurso FROM cursos WHERE idCurso = ? AND idProfesor = ?
+        `, [idCurso, profesorId]);
+
+        if (permiso.length === 0) {
+            return res.status(403).json({ error: "No tienes permiso para ver estudiantes de este curso" });
+        }
+
+        // Obtener estudiantes
+        const [estudiantes]: any = await conn.execute(`
+            SELECT u.idUsuarios, u.nombres, u.apellidos
+            FROM usuarios u
+            JOIN curso_estudiante ce ON u.idUsuarios = ce.idEstudiante
+            WHERE ce.idCurso = ? AND ce.estado = 'activo'
+        `, [idCurso]);
+
+        res.json(estudiantes);
+    } catch (error) {
+        console.error("Error al obtener estudiantes:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    } finally {
+        conn.release();
+    }
+};
+
+// 📊 Obtener Estadísticas de un Curso (Para Estadísticas)
+export const getEstadisticasCurso = async (req: Request, res: Response) => {
+    const conn = await connectDB();
+    try {
+        const { idCurso } = req.params;
+        const profesorId = req.user?.id;
+
+        // Verificar permisos
+        const [permiso]: any = await conn.execute(`
+            SELECT idCurso FROM cursos WHERE idCurso = ? AND idProfesor = ?
+        `, [idCurso, profesorId]);
+
+        if (permiso.length === 0) {
+            return res.status(403).json({ error: "No autorizado" });
+        }
+
+        // Promedio general del curso en la materia de este profesor
+        const [promedios]: any = await conn.execute(`
+            SELECT AVG(cal.valor) as promedioCurso
+            FROM calificaciones cal
+            JOIN cursos c ON cal.idCurso = c.idCurso
+            WHERE c.idCurso = ? AND c.idProfesor = ?
+        `, [idCurso, profesorId]);
+
+        // Lista de estudiantes con sus promedios
+        const [estudiantesStats]: any = await conn.execute(`
+            SELECT u.nombres, u.apellidos, AVG(cal.valor) as promedio,
+            CASE
+                WHEN AVG(cal.valor) >= 3.0 THEN 'Aprobado'
+                ELSE 'Reprobado'
+            END as estado
+            FROM usuarios u
+            JOIN calificaciones cal ON u.idUsuarios = cal.idEstudiante
+            JOIN cursos c ON cal.idCurso = c.idCurso
+            WHERE c.idCurso = ? AND c.idProfesor = ?
+            GROUP BY u.idUsuarios
+        `, [idCurso, profesorId]);
+
+        // Asistencia promedio (Simulada si no hay datos complejos)
+        // Ojo: 'asistencia' suele ser por clase.
+        // Asumiendo tabla 'asistencia' con 'idEstudiante', 'idClase', 'asistio' (1/0)
+        // Y 'clases' vinculada al curso.
+
+        // Primero necesitamos saber las clases de este curso/profesor
+        // Pero la tabla 'asistencia' y 'clases' puede variar. Usaré un LEFT JOIN genérico
+
+        const [asistencias]: any = await conn.execute(`
+            SELECT u.nombres, u.apellidos,
+            COUNT(a.idAsistencia) as totalClases,
+            SUM(CASE WHEN a.asistio = 1 THEN 1 ELSE 0 END) as asistencias
+            FROM usuarios u
+            JOIN curso_estudiante ce ON u.idUsuarios = ce.idEstudiante
+            LEFT JOIN asistencia a ON u.idUsuarios = a.idEstudiante
+            LEFT JOIN clases cl ON a.idClase = cl.idClase
+            WHERE ce.idCurso = ? AND cl.idCurso = ? AND cl.idProfesor = ?
+            GROUP BY u.idUsuarios
+        `, [idCurso, idCurso, profesorId]);
+
+        // Si la tabla asistencia no está bien poblada, esto devolverá nulls, manejar en frontend.
+
+        res.json({
+            promedioGeneral: promedios[0]?.promedioCurso || 0,
+            estudiantes: estudiantesStats,
+            asistencias: asistencias
+        });
+
+    } catch (error) {
+        console.error("Error estadísticas curso:", error);
+        res.status(500).json({ error: "Error interno" });
+    } finally {
+        conn.release();
+    }
+};
+
+// 📄 Reporte del Curso (Lista detallada)
+export const getReporteCurso = async (req: Request, res: Response) => {
+    const conn = await connectDB();
+    try {
+        const { idCurso } = req.params;
+        const profesorId = req.user?.id;
+
+        const [permiso]: any = await conn.execute(`SELECT idCurso FROM cursos WHERE idCurso = ? AND idProfesor = ?`, [idCurso, profesorId]);
+        if (!permiso[0]) return res.status(403).json({ error: "No autorizado" });
+
+        // Obtener todas las calificaciones de todos los estudiantes en este curso (para la materia del profesor)
+        const [notas]: any = await conn.execute(`
+            SELECT u.nombres, u.apellidos, cal.nombre_actividad, cal.valor, cal.fecha
+            FROM calificaciones cal
+            JOIN usuarios u ON cal.idEstudiante = u.idUsuarios
+            JOIN cursos c ON cal.idCurso = c.idCurso
+            WHERE c.idCurso = ? AND c.idProfesor = ?
+            ORDER BY u.apellidos, u.nombres, cal.fecha
+        `, [idCurso, profesorId]);
+
+        res.json(notas);
+    } catch (error) {
+        console.error("Error reporte curso:", error);
+        res.status(500).json({ error: "Error interno" });
+    } finally {
+        conn.release();
+    }
+};
+
+// 📄 Reporte Individual Estudiante
+export const getReporteEstudiante = async (req: Request, res: Response) => {
+    const conn = await connectDB();
+    try {
+        const { idEstudiante, idCurso } = req.params;
+        const profesorId = req.user?.id;
+
+        const [permiso]: any = await conn.execute(`SELECT idCurso FROM cursos WHERE idCurso = ? AND idProfesor = ?`, [idCurso, profesorId]);
+        if (!permiso[0]) return res.status(403).json({ error: "No autorizado" });
+
+        // Detalle de notas
+        const [notas]: any = await conn.execute(`
+            SELECT nombre_actividad, valor, fecha, observacion
+            FROM calificaciones
+            WHERE idEstudiante = ? AND idCurso = ?
+            ORDER BY fecha DESC
+        `, [idEstudiante, idCurso]);
+
+        // Detalle de asistencia
+        const [asistencia]: any = await conn.execute(`
+            SELECT cl.fecha, a.asistio, a.observacion
+            FROM asistencia a
+            JOIN clases cl ON a.idClase = cl.idClase
+            WHERE a.idEstudiante = ? AND cl.idCurso = ? AND cl.idProfesor = ?
+            ORDER BY cl.fecha DESC
+        `, [idEstudiante, idCurso, profesorId]);
+
+        res.json({
+            notas,
+            asistencia
+        });
+    } catch (error) {
+        console.error("Error reporte estudiante:", error);
+        res.status(500).json({ error: "Error interno" });
+    } finally {
+        conn.release();
+    }
+};

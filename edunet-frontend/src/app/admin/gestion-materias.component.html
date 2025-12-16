@@ -39,12 +39,19 @@
   <!-- Right Column: List -->
   <div class="col-lg-8">
     <div class="card shadow-sm border-0 h-100">
-      <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-        <div>
-          <h5 class="mb-0 fw-bold text-dark">Catálogo de Materias</h5>
-          <p class="text-muted small mb-0">Asignaturas disponibles para cursos</p>
+      <div class="card-header bg-white py-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+           <div>
+             <h5 class="mb-0 fw-bold text-dark">Catálogo de Materias</h5>
+             <p class="text-muted small mb-0">Asignaturas disponibles para cursos</p>
+           </div>
+           <span class="badge bg-light text-dark border">{{ materiasFiltradas.length }} Materias</span>
         </div>
-        <span class="badge bg-light text-dark border">{{ materias.length }} Materias</span>
+
+        <div class="input-group input-group-sm">
+             <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+             <input type="text" class="form-control border-start-0" placeholder="Buscar por código, nombre o descripción..." [(ngModel)]="searchTerm">
+        </div>
       </div>
 
       <div class="card-body p-0">
@@ -59,7 +66,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let materia of materias">
+              <tr *ngFor="let materia of materiasFiltradas">
                 <td class="ps-4">
                   <span class="badge bg-secondary-subtle text-secondary border">{{ materia.codigo }}</span>
                 </td>
@@ -74,10 +81,10 @@
                   </button>
                 </td>
               </tr>
-              <tr *ngIf="materias.length === 0">
+              <tr *ngIf="materiasFiltradas.length === 0">
                 <td colspan="4" class="text-center py-5 text-muted">
                   <i class="bi bi-journal-plus fs-1 mb-3 d-block"></i>
-                  No hay materias registradas.
+                  No se encontraron materias.
                 </td>
               </tr>
             </tbody>

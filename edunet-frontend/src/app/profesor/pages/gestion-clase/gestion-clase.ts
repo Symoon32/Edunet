@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { CursosService } from '../../services/cursos.service';
 import { ClasesService } from '../../services/clases.service';
@@ -9,7 +10,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-gestion-clase',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './gestion-clase.html',
   styleUrls: ['./gestion-clase.css']
 })
@@ -19,6 +20,15 @@ export class GestionClase implements OnInit {
 
   cursos: any[] = [];
   clases: any[] = [];
+
+  // Filters for Cursos
+  searchCursos: string = '';
+  filterAnio: string = 'todos';
+
+  // Filters for Clases
+  searchClases: string = '';
+  filterMes: string = 'todos';
+
   selectedCurso: any = null;
   loading = false;
 
@@ -43,6 +53,39 @@ export class GestionClase implements OnInit {
       console.error('Error decoding token', e);
       return null;
     }
+  }
+
+  get cursosFiltrados() {
+    const term = this.searchCursos.toLowerCase().trim();
+    return this.cursos.filter(c => {
+      const matchesSearch =
+        (c.materia || '').toLowerCase().includes(term) ||
+        (c.grado + '' + c.seccion).toLowerCase().includes(term);
+
+      const matchesAnio = this.filterAnio === 'todos' || (c.anio + '') === this.filterAnio;
+
+      return matchesSearch && matchesAnio;
+    });
+  }
+
+  get clasesFiltradas() {
+     const term = this.searchClases.toLowerCase().trim();
+     return this.clases.filter(cl => {
+        const matchesSearch = (cl.tema || '').toLowerCase().includes(term) || (cl.descripcion || '').toLowerCase().includes(term);
+
+        let matchesMes = true;
+        if (this.filterMes !== 'todos') {
+            const date = new Date(cl.fecha);
+            const mes = (date.getMonth() + 1).toString();
+            matchesMes = mes === this.filterMes;
+        }
+
+        return matchesSearch && matchesMes;
+     });
+  }
+
+  get uniqueAnios() {
+    return [...new Set(this.cursos.map(c => c.anio))].sort((a,b) => b-a);
   }
 
   loadCursos() {

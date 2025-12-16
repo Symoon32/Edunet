@@ -1,0 +1,106 @@
+<div class="admin-wrapper" [class.sidebar-collapsed]="!sidebarOpen">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-area">
+        <i class="bi bi-mortarboard-fill logo-icon"></i>
+        <span class="logo-text">EduNet</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a routerLink="/estudiantes/inicio" routerLinkActive="active" title="Inicio">
+            <i class="bi bi-speedometer2"></i>
+            <span class="link-text">Dashboard</span>
+          </a>
+        </li>
+
+        <li class="section-title">
+          <span>ACADÉMICO</span>
+        </li>
+
+        <li>
+          <a routerLink="/estudiantes/historial" routerLinkActive="active" title="Calificaciones">
+            <i class="bi bi-award-fill"></i>
+            <span class="link-text">Calificaciones</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/estudiantes/tareas" routerLinkActive="active" title="Tareas">
+            <i class="bi bi-list-check"></i>
+            <span class="link-text">Tareas</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/estudiantes/material" routerLinkActive="active" title="Materiales">
+            <i class="bi bi-journal-bookmark-fill"></i>
+            <span class="link-text">Materiales</span>
+          </a>
+        </li>
+
+        <li class="section-title">
+          <span>ORGANIZACIÓN</span>
+        </li>
+
+        <li>
+          <a routerLink="/estudiantes/calendario" routerLinkActive="active" title="Calendario">
+            <i class="bi bi-calendar-event"></i>
+            <span class="link-text">Calendario</span>
+          </a>
+        </li>
+
+        <li class="section-title">
+          <span>COMUNICACIÓN</span>
+        </li>
+
+        <li>
+          <a routerLink="/estudiantes/mensajes" routerLinkActive="active" title="Mensajes">
+            <i class="bi bi-envelope-fill"></i>
+            <span class="link-text">Mensajería</span>
+          </a>
+        </li>
+
+        <li class="section-title">
+            <span>PERFIL</span>
+        </li>
+
+        <li>
+            <a routerLink="/estudiantes/perfil" routerLinkActive="active" title="Mi Perfil">
+              <i class="bi bi-person-circle"></i>
+              <span class="link-text">Mi Perfil</span>
+            </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <img [src]="currentUser?.fotoPerfil || 'assets/default-avatar.png'" alt="User">
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ currentUser?.nombres || 'Estudiante' }}</span>
+          <span class="user-role">Estudiante</span>
+        </div>
+        <button class="logout-btn" (click)="logout()" title="Cerrar Sesión">
+          <i class="bi bi-box-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="content-wrapper">
+    <button class="floating-toggle" (click)="toggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

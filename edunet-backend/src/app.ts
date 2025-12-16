@@ -1,14 +1,15 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from './config/swagger';
 import usersRoutes from './routes/users';
 import authRoutes from './routes/auth';
 import profesorRoutes from './routes/profesor';
 import cursosRoutes from './routes/cursos';
 import materiasRoutes from './routes/materias';
 import cursosEstudianteRoutes from './routes/cursos-estudiante';
+import swaggerUi from 'swagger-ui-express';
+const YAML = require('yamljs');
+import path from 'path';
 import calificacionesRoutes from './routes/calificaciones';
 import asistenciaRoutes from './routes/asistencia';
 import reportesRoutes from './routes/reportes';
@@ -33,18 +34,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-// Swagger Documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-  customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'Edunet API Documentation'
-}));
-
-// Endpoint para obtener la especificación OpenAPI en formato JSON
-app.get('/api-docs.json', (req: Request, res: Response) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.send(swaggerSpec);
-});
-
 // Rutas
 app.use('/api/users', usersRoutes);
 app.use('/api/auth', authRoutes);
@@ -60,6 +49,10 @@ app.use('/api/clases', clasesRoutes);
 app.use('/api/mensajes', mensajesRoutes);
 app.use('/api/materiales', materialesRoutes);
 app.use('/api/eventos', eventosRoutes);
+
+// Swagger / OpenAPI UI
+const swaggerDocument = YAML.load(path.join(__dirname, 'docs', 'openapi.yaml'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Ruta raíz: información básica de la API
 app.get('/', (req: express.Request, res: express.Response) => {

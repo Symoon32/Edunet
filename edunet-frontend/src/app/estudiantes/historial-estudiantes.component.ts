@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { EstudiantesService, Curso, Calificacion } from './services/estudiantes.service';
 import { AuthStateService } from '../users/services/auth-state.service';
 import { jwtDecode } from 'jwt-decode';
@@ -19,12 +20,16 @@ interface MateriaConNotas {
 @Component({
   selector: 'app-historial-estudiantes',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './historial-estudiantes.component.html',
   styleUrls: ['./historial-estudiantes.component.css']
 })
 export class HistorialEstudiantesComponent implements OnInit {
   materias: MateriaConNotas[] = [];
+
+  searchTerm: string = '';
+  filterEstado: string = 'todos'; // todos, aprobado, reprobado
+
   userId: number | null = null;
   loading: boolean = true;
 
@@ -41,6 +46,22 @@ export class HistorialEstudiantesComponent implements OnInit {
       this.loading = false;
       console.error('Usuario no autenticado');
     }
+  }
+
+  get materiasFiltradas() {
+    const term = this.searchTerm.toLowerCase().trim();
+    return this.materias.filter(m => {
+       const matchesSearch = (m.nombre || '').toLowerCase().includes(term);
+
+       let matchesEstado = true;
+       if (this.filterEstado === 'aprobado') {
+         matchesEstado = m.promedio >= 3.0;
+       } else if (this.filterEstado === 'reprobado') {
+         matchesEstado = m.promedio < 3.0;
+       }
+
+       return matchesSearch && matchesEstado;
+    });
   }
 
   private getUserId(): number | null {

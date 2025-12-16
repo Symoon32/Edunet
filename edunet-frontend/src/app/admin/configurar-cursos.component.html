@@ -68,12 +68,36 @@
   <!-- Right Column: Course List -->
   <div class="col-lg-8">
     <div class="card shadow-sm border-0 h-100">
-      <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-        <div>
-          <h5 class="mb-0 fw-bold text-dark">Cursos Académicos</h5>
-          <p class="text-muted small mb-0">Listado de cursos y asignaciones actuales</p>
+      <div class="card-header bg-white py-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+           <div>
+             <h5 class="mb-0 fw-bold text-dark">Cursos Académicos</h5>
+             <p class="text-muted small mb-0">Listado de cursos y asignaciones actuales</p>
+           </div>
+           <span class="badge bg-light text-dark border">{{ cursosFiltrados.length }} Registros</span>
         </div>
-        <span class="badge bg-light text-dark border">{{ cursos.length }} Registros</span>
+
+        <!-- Filters -->
+        <div class="row g-2">
+           <div class="col-md-6">
+              <div class="input-group input-group-sm">
+                  <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                  <input type="text" class="form-control border-start-0" placeholder="Buscar curso, materia o profesor..." [(ngModel)]="searchTerm">
+              </div>
+           </div>
+           <div class="col-md-3">
+               <select class="form-select form-select-sm" [(ngModel)]="filterGrado">
+                   <option value="todos">Todos los Grados</option>
+                   <option *ngFor="let g of uniqueGrados" [value]="g">{{ g }}°</option>
+               </select>
+           </div>
+           <div class="col-md-3">
+               <select class="form-select form-select-sm" [(ngModel)]="filterAnio">
+                   <option value="todos">Todos los Años</option>
+                   <option *ngFor="let a of uniqueAnios" [value]="a">{{ a }}</option>
+               </select>
+           </div>
+        </div>
       </div>
 
       <div class="card-body p-0">
@@ -88,7 +112,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let curso of cursos">
+              <tr *ngFor="let curso of cursosFiltrados">
                 <td class="ps-4">
                   <div class="fw-bold text-dark">{{ curso.grado }}° "{{ curso.seccion }}"</div>
                   <div class="small text-muted">{{ curso.materia }}</div>
@@ -115,10 +139,10 @@
                   </button>
                 </td>
               </tr>
-              <tr *ngIf="cursos.length === 0">
+              <tr *ngIf="cursosFiltrados.length === 0">
                 <td colspan="4" class="text-center py-5 text-muted">
                   <i class="bi bi-journal-x fs-1 mb-3 d-block"></i>
-                  No hay cursos configurados en el sistema.
+                  No se encontraron cursos con los filtros actuales.
                 </td>
               </tr>
             </tbody>
