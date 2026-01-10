@@ -1,8 +1,7 @@
+# Frontend (Angular)
 Edunet_Proyecto/nexxa/edunet/node_modules/
 Edunet_Proyecto/nexxa/edunet/.angular/
 Edunet_Proyecto/nexxa/edunet/dist/
-Edunet_Proyecto/nexxa/edunet/node_modules/
-Edunet_Proyecto/nexxa/edunet/node_modules
-Edunet_Proyecto/nexxa/edunet/node_modules/
-Edunet_Proyecto/nexxa/edunet/.angular/
-Edunet_Proyecto/nexxa/edunet/dist/
+
+# Backend (Node.js)
+Edunet_Proyecto/nexxa/edunet-backend/node_modules/

@@ -1,78 +1,90 @@
-<main class="container my-5">
-  <section>
-    <h2 class="mb-3">Comunicación con Docentes y Administración</h2>
-    <p class="mb-4">Escribe tus dudas o comentarios respecto al rendimiento académico del estudiante.</p>
-
-    <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-       {{ successMessage }}
-       <button type="button" class="btn-close" (click)="successMessage = null"></button>
-    </div>
-
-    <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
-       {{ errorMessage }}
-       <button type="button" class="btn-close" (click)="errorMessage = null"></button>
-    </div>
-
-    <div class="row justify-content-center">
-      <div class="col-lg-7 mb-4">
-        <form [formGroup]="mensajeForm" (ngSubmit)="onSubmit()" class="p-4 border rounded bg-white shadow-sm">
-
-          <div class="mb-3">
-             <label for="estudianteId" class="form-label">Sobre el estudiante:</label>
-             <select id="estudianteId" formControlName="estudianteId" class="form-select">
-                <option *ngFor="let est of estudiantes" [value]="est.idUsuarios">
-                  {{ est.nombres }} {{ est.apellidos }} ({{ est.curso_asignado || 'Sin Curso' }})
-                </option>
-             </select>
-             <div *ngIf="mensajeForm.get('estudianteId')?.invalid && mensajeForm.get('estudianteId')?.touched" class="text-danger small">
-               Seleccione un estudiante.
-             </div>
-          </div>
-
-          <div class="mb-3">
-             <label for="destinatarioId" class="form-label">Destinatario:</label>
-             <select id="destinatarioId" formControlName="destinatarioId" class="form-select">
-                <option value="">-- Seleccione Destinatario --</option>
-                <option *ngFor="let dest of destinatarios" [value]="dest.idUsuarios">
-                  {{ dest.label }}
-                </option>
-             </select>
-             <div *ngIf="mensajeForm.get('destinatarioId')?.invalid && mensajeForm.get('destinatarioId')?.touched" class="text-danger small">
-               Seleccione un destinatario.
-             </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="asunto" class="form-label">Asunto:</label>
-            <input type="text" id="asunto" formControlName="asunto" class="form-control" placeholder="Ej: Consulta sobre tareas">
-            <div *ngIf="mensajeForm.get('asunto')?.invalid && mensajeForm.get('asunto')?.touched" class="text-danger small">
-               El asunto es requerido (min 5 caracteres).
-             </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="mensaje" class="form-label">Mensaje:</label>
-            <textarea id="mensaje" formControlName="mensaje" rows="5" class="form-control" placeholder="Escriba su mensaje aquí..."></textarea>
-            <div *ngIf="mensajeForm.get('mensaje')?.invalid && mensajeForm.get('mensaje')?.touched" class="text-danger small">
-               El mensaje es requerido (min 10 caracteres).
-             </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary w-100" [disabled]="mensajeForm.invalid || loading">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            {{ loading ? 'Enviando...' : 'Enviar mensaje' }}
-          </button>
-        </form>
+<main class="container my-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="section-title">
+        <h2>Comunicación con Docentes y Administración</h2>
+        <p class="text-muted small">Escribe tus dudas o comentarios respecto al rendimiento académico del estudiante.</p>
       </div>
+    </div>
+  </div>
 
-      <div class="col-lg-4">
-        <div class="bg-light p-4 rounded shadow-sm h-50">
-          <h3 class="mb-3 text-primary">Contáctanos</h3>
-          <p><strong>Correo de contacto:</strong> coljorgeisaacs@hotmail.com</p>
-          <p><strong>Celular:</strong> +57 3173418498</p>
-          <p><strong>Dirección:</strong> CL 6 #3 ESTE - 15 Soacha, Colombia</p>
+  <div class="row">
+    <div class="col-lg-8 mb-4">
+      <div class="card modern-card">
+        <div class="card-body">
+
+          <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+             {{ successMessage }}
+             <button type="button" class="btn-close" (click)="successMessage = null"></button>
+          </div>
+
+          <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+             {{ errorMessage }}
+             <button type="button" class="btn-close" (click)="errorMessage = null"></button>
+          </div>
+
+          <form [formGroup]="mensajeForm" (ngSubmit)="onSubmit()" class="p-3">
+
+            <div class="mb-3">
+               <label for="estudianteId" class="form-label">Sobre el estudiante:</label>
+               <select id="estudianteId" formControlName="estudianteId" class="form-select">
+                  <option *ngFor="let est of estudiantes" [value]="est.idUsuarios">
+                    {{ est.nombres }} {{ est.apellidos }} ({{ est.curso_asignado || 'Sin Curso' }})
+                  </option>
+               </select>
+               <div *ngIf="mensajeForm.get('estudianteId')?.invalid && mensajeForm.get('estudianteId')?.touched" class="text-danger small">
+                 Seleccione un estudiante.
+               </div>
+            </div>
+
+            <div class="mb-3">
+               <label for="destinatarioId" class="form-label">Destinatario:</label>
+               <select id="destinatarioId" formControlName="destinatarioId" class="form-select">
+                  <option value="">-- Seleccione Destinatario --</option>
+                  <option *ngFor="let dest of destinatarios" [value]="dest.idUsuarios">
+                    {{ dest.label }}
+                  </option>
+               </select>
+               <div *ngIf="mensajeForm.get('destinatarioId')?.invalid && mensajeForm.get('destinatarioId')?.touched" class="text-danger small">
+                 Seleccione un destinatario.
+               </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="asunto" class="form-label">Asunto:</label>
+              <input type="text" id="asunto" formControlName="asunto" class="form-control" placeholder="Ej: Consulta sobre tareas">
+              <div *ngIf="mensajeForm.get('asunto')?.invalid && mensajeForm.get('asunto')?.touched" class="text-danger small">
+                 El asunto es requerido (min 5 caracteres).
+               </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="mensaje" class="form-label">Mensaje:</label>
+              <textarea id="mensaje" formControlName="mensaje" rows="5" class="form-control" placeholder="Escriba su mensaje aquí..."></textarea>
+              <div *ngIf="mensajeForm.get('mensaje')?.invalid && mensajeForm.get('mensaje')?.touched" class="text-danger small">
+                 El mensaje es requerido (min 10 caracteres).
+               </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" [disabled]="mensajeForm.invalid || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              {{ loading ? 'Enviando...' : 'Enviar mensaje' }}
+            </button>
+          </form>
+
         </div>
       </div>
     </div>
-  </section>
+
+    <div class="col-lg-4">
+      <div class="card modern-card bg-light h-100">
+        <div class="card-body">
+          <h5 class="text-primary mb-3">Contáctanos</h5>
+          <p class="mb-1"><strong>Correo de contacto:</strong> coljorgeisaacs@hotmail.com</p>
+          <p class="mb-1"><strong>Celular:</strong> +57 3173418498</p>
+          <p class="mb-0"><strong>Dirección:</strong> CL 6 #3 ESTE - 15 Soacha, Colombia</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>

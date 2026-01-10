@@ -1,9 +1,17 @@
-<main class="container my-5">
+<main class="container my-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="section-title">
+        <h2>Reporte de Asistencia</h2>
+        <p class="text-muted small">Consulta las asistencias y observaciones del estudiante.</p>
+      </div>
+    </div>
+  </div>
+
   <div class="row justify-content-center">
     <div class="col-lg-10">
-      <div class="card shadow-sm">
+      <div class="card modern-card shadow-sm">
         <div class="card-body">
-          <h2 class="card-title text-primary mb-4" id="observaciones-titulo">Reporte de Asistencia</h2>
 
           <div *ngIf="loading" class="alert alert-info">Cargando datos...</div>
           <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
