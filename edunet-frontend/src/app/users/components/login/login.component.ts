@@ -53,7 +53,7 @@ export class LoginComponent {
             ruta = '/admin/inicio';
             break;
         }
-        alert(`Bienvenido ${rolNombre}`);
+        
         this.router.navigate([ruta]);
       },
       error: () => {

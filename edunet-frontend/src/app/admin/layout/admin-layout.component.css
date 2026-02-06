@@ -348,3 +348,10 @@
      If user is on mobile, we might want it false.
   */
 }
+
+.logo-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-right: 10px;
+}
