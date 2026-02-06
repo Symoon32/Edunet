@@ -1,0 +1,66 @@
+<div class="calificar-materias container my-5">
+  <div class="row g-4">
+
+    <!-- Sección: Calificar Actividades -->
+    <section class="col-md-6">
+      <div class="card shadow-sm p-4">
+        <h2 class="mb-4 text-primary">Calificar Actividades</h2>
+
+        <form [formGroup]="calificacionForm" (ngSubmit)="guardarCalificacion()">
+
+          <div class="mb-3">
+            <label for="estudiante" class="form-label">Estudiante:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="estudiante"
+              formControlName="estudiante"
+              placeholder="Nombre del estudiante">
+          </div>
+
+          <div class="mb-3">
+            <label for="actividad" class="form-label">Actividad:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="actividad"
+              formControlName="actividad"
+              placeholder="Nombre de la actividad">
+          </div>
+
+          <div class="mb-3">
+            <label for="nota" class="form-label">Nota:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="nota"
+              formControlName="nota"
+              min="0" max="100"
+              placeholder="Calificación">
+          </div>
+
+          <button class="btn btn-calificacion w-100" type="submit" [disabled]="calificacionForm.invalid">
+            Guardar Calificación
+          </button>
+
+        </form>
+      </div>
+    </section>
+
+    <!-- Sección: Historial de Calificaciones -->
+    <section class="col-md-6">
+      <div class="card shadow-sm p-4">
+        <h2 class="mb-4 text-primary">Historial de Calificaciones</h2>
+        <div class="d-flex flex-column gap-3">
+          <div *ngFor="let cal of historialCalificaciones" class="p-3 border rounded">
+            <strong>{{ cal.estudiante }}</strong> - {{ cal.actividad }}:
+            <span class="text-success">{{ cal.nota }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+

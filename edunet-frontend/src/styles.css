@@ -1,0 +1,120 @@
+
+html, body {
+	height: 100%;
+}
+
+.app-wrapper {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+main.container {
+	flex: 1 0 auto;
+}
+
+app-footer, .app-footer, footer {
+	margin-top: auto !important;
+	width: 100%;
+	background-color: #f8f9fa !important;
+    border-top: 1px solid #dee2e6;
+    padding: 1rem 0;
+}
+
+:root {
+	--color-azul: #0057A8;
+    --color-azul-oscuro: #003d7a;
+	--color-rojo: #C1272D;
+	--color-blanco: #FFFFFF;
+	--color-texto: #333333;
+	--color-neutro: #E0E0E0;
+	--color-destacado: #FFD700;
+	--bs-light: #f8f9fa;
+    --shadow-soft: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-hover: 0 10px 15px rgba(0,0,0,0.15);
+}
+
+body {
+	background-color: #f4f6f9;
+	font-family: 'Segoe UI', Roboto, "Helvetica Neue", Arial, sans-serif;
+	color: var(--color-texto);
+	margin: 0;
+}
+
+.bg-primary {
+    background-color: var(--color-azul) !important;
+}
+
+.text-primary {
+    color: var(--color-azul) !important;
+}
+
+.btn-primary {
+    background-color: var(--color-azul);
+    border-color: var(--color-azul);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-azul-oscuro);
+    border-color: var(--color-azul-oscuro);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,87,168,0.3);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+.slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+
+/* Global Components */
+.card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.section-title {
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    color: var(--color-azul);
+    font-weight: 700;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--color-rojo);
+}

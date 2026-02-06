@@ -1,0 +1,96 @@
+<div class="row g-4">
+  <!-- Left Column: Form -->
+  <div class="col-lg-4">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-white py-3">
+        <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-book me-2"></i>Gestión de Materia</h5>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="materiaForm" (ngSubmit)="onSubmit()">
+
+          <div class="mb-3">
+            <label class="form-label small text-muted">Nombre de la Materia</label>
+            <input type="text" class="form-control" formControlName="nombre" placeholder="Ej: Matemáticas">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small text-muted">Código</label>
+            <input type="text" class="form-control" formControlName="codigo" placeholder="Ej: MAT-101">
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label small text-muted">Descripción (Opcional)</label>
+            <textarea class="form-control" rows="3" formControlName="descripcion" placeholder="Breve descripción..."></textarea>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary" [ngClass]="isEditing ? 'btn-warning text-white' : 'btn-primary'">
+              {{ isEditing ? 'Actualizar Materia' : 'Crear Materia' }}
+            </button>
+            <button type="button" class="btn btn-light text-muted" *ngIf="isEditing" (click)="resetForm()">
+              Cancelar Edición
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Column: List -->
+  <div class="col-lg-8">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-white py-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+           <div>
+             <h5 class="mb-0 fw-bold text-dark">Catálogo de Materias</h5>
+             <p class="text-muted small mb-0">Asignaturas disponibles para cursos</p>
+           </div>
+           <span class="badge bg-light text-dark border">{{ materiasFiltradas.length }} Materias</span>
+        </div>
+
+        <div class="input-group input-group-sm">
+             <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+             <input type="text" class="form-control border-start-0" placeholder="Buscar por código, nombre o descripción..." [(ngModel)]="searchTerm">
+        </div>
+      </div>
+
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-4">Código</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th class="text-end pe-4">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let materia of materiasFiltradas">
+                <td class="ps-4">
+                  <span class="badge bg-secondary-subtle text-secondary border">{{ materia.codigo }}</span>
+                </td>
+                <td class="fw-bold text-dark">{{ materia.nombre }}</td>
+                <td class="text-muted small text-truncate" style="max-width: 200px;">{{ materia.descripcion || '-' }}</td>
+                <td class="text-end pe-4">
+                  <button class="btn btn-sm btn-light text-primary me-2" (click)="editarMateria(materia)" title="Editar">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                  <button class="btn btn-sm btn-light text-danger" (click)="eliminarMateria(materia.idMateria)" title="Eliminar">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="materiasFiltradas.length === 0">
+                <td colspan="4" class="text-center py-5 text-muted">
+                  <i class="bi bi-journal-plus fs-1 mb-3 d-block"></i>
+                  No se encontraron materias.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

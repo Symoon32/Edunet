@@ -1,0 +1,40 @@
+main {
+  padding: 20px;
+  text-align: center;
+}
+
+main section {
+  margin-bottom: 40px;
+}
+
+main h2 {
+  color: var(--bg-primary);
+}
+
+.galeria-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.foto {
+  width: 300px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.foto:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+#registrar {
+  background-color: var(--bg-primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -1,0 +1,134 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3">Estadísticas del Curso</h1>
+    <p class="text-muted">Visualiza el rendimiento y asistencia de tus estudiantes.</p>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label">Seleccionar Curso</label>
+          <select
+            class="form-select"
+            [(ngModel)]="selectedCursoId"
+            (change)="onCursoChange()"
+          >
+            <option [ngValue]="null">-- Selecciona un curso --</option>
+            <option *ngFor="let curso of cursos" [ngValue]="curso.idCurso">
+              {{ curso.nombre }} - {{ curso.materia }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading / Error -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 text-primary">Cargando estadísticas...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger mb-4">
+    {{ error }}
+  </div>
+
+  <!-- Contenido de Estadísticas -->
+  <div *ngIf="estadisticas && !loading" class="row g-4">
+
+    <!-- Tarjeta de Resumen General -->
+    <div class="col-12">
+      <div class="card shadow-sm border-left-primary">
+        <div class="card-body">
+          <h5 class="card-title text-muted mb-2">Resumen General</h5>
+          <div class="d-flex align-items-baseline">
+             <div class="me-4">
+               <span class="text-muted d-block">Promedio General</span>
+               <span class="display-4 fw-bold" [ngClass]="getPromedioClass(estadisticas.promedioGeneral)">
+                 {{ estadisticas.promedioGeneral | number:'1.1-2' }}
+               </span>
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de Rendimiento -->
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">Rendimiento por Estudiante</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Estudiante</th>
+                <th>Promedio</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let est of estadisticas.estudiantes">
+                <td>{{ est.nombres }} {{ est.apellidos }}</td>
+                <td [ngClass]="getPromedioClass(est.promedio)">
+                  {{ est.promedio | number:'1.1-1' }}
+                </td>
+                <td>
+                  <span
+                    class="badge"
+                    [ngClass]="est.estado === 'Aprobado' ? 'bg-success' : 'bg-danger'"
+                  >
+                    {{ est.estado }}
+                  </span>
+                </td>
+              </tr>
+              <tr *ngIf="estadisticas.estudiantes?.length === 0">
+                <td colspan="3" class="text-center text-muted p-3">No hay calificaciones registradas.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de Asistencia -->
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">Asistencia</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Estudiante</th>
+                <th>Clases</th>
+                <th>Asistencias</th>
+                <th>%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let asis of estadisticas.asistencias">
+                <td>{{ asis.nombres }} {{ asis.apellidos }}</td>
+                <td>{{ asis.totalClases }}</td>
+                <td>{{ asis.asistencias }}</td>
+                <td class="fw-bold text-primary">
+                  {{ asis.totalClases > 0 ? (asis.asistencias / asis.totalClases | percent) : '0%' }}
+                </td>
+              </tr>
+               <tr *ngIf="estadisticas.asistencias?.length === 0">
+                <td colspan="4" class="text-center text-muted p-3">No hay registros de asistencia.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

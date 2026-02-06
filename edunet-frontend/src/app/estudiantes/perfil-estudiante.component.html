@@ -1,0 +1,27 @@
+<h2 class="mb-4">Mi Información Personal</h2>
+
+<div *ngIf="loading" class="text-center">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+</div>
+
+<div *ngIf="!loading && usuario" class="d-flex flex-column align-items-center">
+  <div class="foto-perfil mb-4">
+    <img [src]="usuario.fotoPerfil || 'assets/default-avatar.png'" alt="Foto de perfil" class="rounded-circle shadow" width="150" height="150" style="object-fit: cover;">
+  </div>
+
+  <div class="card p-4 shadow-sm" style="max-width: 500px; width: 100%;">
+    <p><strong>Nombres:</strong> {{ usuario.nombres }}</p>
+    <p><strong>Apellidos:</strong> {{ usuario.apellidos }}</p>
+    <p><strong>Correo:</strong> {{ usuario.correo }}</p>
+    <p><strong>Documento:</strong> {{ usuario.documento || 'No registrado' }}</p>
+    <p><strong>Teléfono:</strong> {{ usuario.telefono || 'No registrado' }}</p>
+    <p><strong>Dirección:</strong> {{ usuario.direccion || 'No registrado' }}</p>
+    <p><strong>Rol:</strong> Estudiante</p>
+  </div>
+</div>
+
+<div *ngIf="!loading && !usuario" class="alert alert-warning text-center">
+  No se pudo cargar la información del perfil.
+</div>

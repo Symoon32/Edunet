@@ -1,0 +1,7 @@
+# Frontend
+node_modules/
+dist/
+.vscode/
+*.log
+src/**/*.js
+src/**/*.js.map

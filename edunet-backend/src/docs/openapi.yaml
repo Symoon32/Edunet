@@ -1,0 +1,1355 @@
+openapi: 3.0.3
+info:
+  title: Edunet API
+  version: 1.0.0
+  description: API de Edunet - documentación generada manualmente
+  contact:
+    name: Edunet Team
+    email: support@edunet.com
+servers:
+  - url: http://localhost:3000
+    description: Servidor local
+  - url: https://api.edunet.com
+    description: Servidor de producción
+tags:
+  - name: Autenticación
+    description: Endpoints para autenticación y registro de usuarios
+  - name: Usuarios
+    description: Gestión de usuarios del sistema
+  - name: Profesor
+    description: Endpoints específicos para profesores
+  - name: Cursos
+    description: Gestión de cursos
+  - name: Materias
+    description: Gestión de materias
+  - name: Calificaciones
+    description: Gestión de calificaciones
+  - name: Asistencia
+    description: Registro y consulta de asistencia
+  - name: Clases
+    description: Gestión de clases
+  - name: Materiales
+    description: Gestión de materiales educativos
+  - name: Mensajes
+    description: Sistema de mensajería
+  - name: Eventos
+    description: Gestión de eventos académicos
+  - name: Reportes
+    description: Reportes para estudiantes y administradores
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        details:
+          type: string
+    Usuario:
+      type: object
+      properties:
+        idPersona:
+          type: integer
+        nombre:
+          type: string
+        correo:
+          type: string
+          format: email
+        contraseña:
+          type: string
+          format: password
+        telefono:
+          type: string
+        direccion:
+          type: string
+        fechaNacimiento:
+          type: string
+          format: date
+        fotoPerfil:
+          type: string
+        idRol:
+          type: integer
+      required: [nombre, correo, contraseña, idRol]
+    LoginRequest:
+      type: object
+      properties:
+        correo:
+          type: string
+          format: email
+        contraseña:
+          type: string
+          format: password
+      required: [correo, contraseña]
+    LoginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        token:
+          type: string
+        user:
+          type: object
+          properties:
+            idPersona: { type: integer }
+            correo: { type: string }
+            nombre: { type: string }
+            idRol: { type: integer }
+    RegisterRequest:
+      type: object
+      properties:
+        nombre: { type: string }
+        correo: { type: string, format: email }
+        contraseña: { type: string, format: password }
+        telefono: { type: string }
+        direccion: { type: string }
+        fechaNacimiento: { type: string, format: date }
+        idRol: { type: integer }
+      required: [nombre, correo, contraseña, idRol]
+    Curso:
+      type: object
+      properties:
+        idCurso: { type: integer }
+        nombreCurso: { type: string }
+        descripcion: { type: string }
+        año: { type: integer }
+    Materia:
+      type: object
+      properties:
+        idMateria: { type: integer }
+        nombreMateria: { type: string }
+        creditos: { type: integer }
+        idCurso: { type: integer }
+    Calificacion:
+      type: object
+      properties:
+        idCalificacion: { type: integer }
+        idEstudiante: { type: integer }
+        idMateria: { type: integer }
+        nota: { type: number }
+        periodo: { type: string }
+        fecha: { type: string, format: date }
+    Asistencia:
+      type: object
+      properties:
+        idAsistencia: { type: integer }
+        idEstudiante: { type: integer }
+        idClase: { type: integer }
+        fecha: { type: string, format: date }
+        estado:
+          type: string
+          enum: [Presente, Ausente, Tardanza, Justificado]
+    Clase:
+      type: object
+      properties:
+        idClase: { type: integer }
+        idMateria: { type: integer }
+        idProfesor: { type: integer }
+        fecha: { type: string, format: date-time }
+        salon: { type: string }
+        tema: { type: string }
+    Material:
+      type: object
+      properties:
+        idMaterial: { type: integer }
+        titulo: { type: string }
+        descripcion: { type: string }
+        url: { type: string }
+        idMateria: { type: integer }
+        tipo:
+          type: string
+          enum: [PDF, Video, Presentación, Enlace, Otro]
+    Mensaje:
+      type: object
+      properties:
+        idMensaje: { type: integer }
+        idRemitente: { type: integer }
+        idDestinatario: { type: integer }
+        asunto: { type: string }
+        contenido: { type: string }
+        fecha: { type: string, format: date-time }
+        leido: { type: boolean }
+    Evento:
+      type: object
+      properties:
+        idEvento: { type: integer }
+        titulo: { type: string }
+        descripcion: { type: string }
+        fecha: { type: string, format: date-time }
+        lugar: { type: string }
+        tipo:
+          type: string
+          enum: [Académico, Cultural, Deportivo, Administrativo]
+  responses:
+    UnauthorizedError:
+      description: Token no válido o no proporcionado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ForbiddenError:
+      description: No tiene permisos para acceder a este recurso
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFoundError:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequestError:
+      description: Solicitud inválida
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+security:
+  - bearerAuth: []
+paths:
+  /api/auth/register:
+    post:
+      tags: [Autenticación]
+      summary: Registrar un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Usuario creado
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+  /api/auth/login:
+    post:
+      tags: [Autenticación]
+      summary: Login de usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/auth/forgot-password:
+    post:
+      tags: [Autenticación]
+      summary: Solicitar reset de contraseña
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correo: { type: string }
+      responses:
+        '200':
+          description: Email enviado si existe la cuenta
+  /api/auth/reset-password:
+    post:
+      tags: [Autenticación]
+      summary: Resetear contraseña usando token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token: { type: string }
+                contraseña: { type: string }
+      responses:
+        '200':
+          description: Contraseña actualizada
+  /api/auth/me:
+    get:
+      tags: [Autenticación]
+      summary: Obtener usuario logueado
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Información del usuario
+  /api/users:
+    get:
+      tags: [Usuarios]
+      summary: Obtener lista de usuarios (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+    post:
+      tags: [Usuarios]
+      summary: Crear usuario (admin)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Usuario creado
+  /api/users/upload-profile:
+    post:
+      tags: [Usuarios]
+      summary: Subir foto de perfil
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fotoPerfil:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: URL de la imagen subida
+  /api/users/{correo}:
+    get:
+      tags: [Usuarios]
+      summary: Obtener usuario por correo
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: correo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuario encontrado
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+    put:
+      tags: [Usuarios]
+      summary: Actualizar usuario por correo
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: correo
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '200':
+          description: Usuario actualizado
+    delete:
+      tags: [Usuarios]
+      summary: Eliminar usuario por correo
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: correo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Usuario eliminado
+  /api/users/mis-estudiantes/list:
+    get:
+      tags: [Usuarios]
+      summary: Obtener estudiantes asignados a un acudiente
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de estudiantes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+  /api/profesor/dashboard/{idProfesor}:
+    get:
+      tags: [Profesor]
+      summary: Obtener dashboard del profesor
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idProfesor
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Dashboard data
+  /api/profesor/perfil/{idProfesor}:
+    get:
+      tags: [Profesor]
+      summary: Obtener perfil de profesor
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idProfesor
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Perfil del profesor
+    put:
+      tags: [Profesor]
+      summary: Actualizar perfil del profesor
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '200':
+          description: Perfil actualizado
+  /api/profesor/horario/{idProfesor}:
+    get:
+      tags: [Profesor]
+      summary: Obtener horario
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idProfesor
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Horario del profesor
+  /api/profesor/cursos:
+    get:
+      tags: [Profesor]
+      summary: Obtener cursos del profesor
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de cursos
+  /api/profesor/cursos/{idCurso}/estudiantes:
+    get:
+      tags: [Profesor]
+      summary: Obtener estudiantes por curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de estudiantes
+  /api/profesor/estadisticas/curso/{idCurso}:
+    get:
+      tags: [Profesor]
+      summary: Estadísticas de curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Datos estadísticos
+  /api/profesor/reportes/curso/{idCurso}:
+    get:
+      tags: [Profesor]
+      summary: Obtener reporte del curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Reporte del curso
+  /api/profesor/reportes/estudiante/{idEstudiante}/curso/{idCurso}:
+    get:
+      tags: [Profesor]
+      summary: Obtener reporte individual de estudiante
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idEstudiante
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Reporte individual
+  /api/cursos:
+    post:
+      tags: [Cursos]
+      summary: Crear curso
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Curso'
+      responses:
+        '201':
+          description: Curso creado
+    get:
+      tags: [Cursos]
+      summary: Obtener todos los cursos (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de cursos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Curso'
+  /api/cursos/profesor/{idProfesor}:
+    get:
+      tags: [Cursos]
+      summary: Obtener cursos de un profesor
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idProfesor
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Cursos del profesor
+  /api/cursos/{idCurso}:
+    get:
+      tags: [Cursos]
+      summary: Obtener curso por id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Curso encontrado
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+    put:
+      tags: [Cursos]
+      summary: Actualizar curso
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Curso'
+      responses:
+        '200':
+          description: Curso actualizado
+    delete:
+      tags: [Cursos]
+      summary: Eliminar curso
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Curso eliminado
+  /api/cursos/{idCurso}/estudiantes:
+    get:
+      tags: [Cursos]
+      summary: Obtener estudiantes de un curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de estudiantes
+    post:
+      tags: [Cursos]
+      summary: Añadir estudiante a un curso
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idEstudiante: { type: integer }
+      responses:
+        '201':
+          description: Estudiante añadido
+  /api/cursos/{idCurso}/estudiante/{idEstudiante}/estado:
+    put:
+      tags: [Cursos]
+      summary: Actualizar estado de estudiante en curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: idEstudiante
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                estado: { type: string }
+      responses:
+        '200':
+          description: Estado actualizado
+  /api/cursos/{idCurso}/estudiante/{idEstudiante}:
+    delete:
+      tags: [Cursos]
+      summary: Eliminar estudiante de curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: idEstudiante
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Estudiante removido
+  /api/cursos/admin/assign-profesor:
+    post:
+      tags: [Cursos]
+      summary: Asignar profesor a un curso (admin)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idCurso: { type: integer }
+                idProfesor: { type: integer }
+      responses:
+        '200':
+          description: Profesor asignado
+  /api/cursos/{idCurso}/admin/assign-student:
+    post:
+      tags: [Cursos]
+      summary: Asignar estudiante a un curso (admin)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idEstudiante: { type: integer }
+      responses:
+        '201':
+          description: Estudiante asignado
+  /api/estudiante/cursos/mis-cursos:
+    get:
+      tags: [Cursos]
+      summary: Obtener cursos del estudiante
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de cursos
+  /api/estudiante/cursos/{idCurso}/clases:
+    get:
+      tags: [Cursos]
+      summary: Obtener clases de un curso para estudiante
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de clases
+  /api/calificaciones/curso/{idCurso}:
+    get:
+      tags: [Calificaciones]
+      summary: Obtener calificaciones de un curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de calificaciones
+  /api/calificaciones/curso/{idCurso}/estudiante/{idEstudiante}:
+    get:
+      tags: [Calificaciones]
+      summary: Obtener calificaciones de un estudiante en un curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: idEstudiante
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Calificaciones del estudiante
+  /api/calificaciones:
+    post:
+      tags: [Calificaciones]
+      summary: Crear calificación
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Calificacion'
+      responses:
+        '201':
+          description: Calificación creada
+    put:
+      tags: [Calificaciones]
+      summary: Actualizar calificación (se usa /:idCalificacion en ruta)
+  /api/calificaciones/{idCalificacion}:
+    put:
+      tags: [Calificaciones]
+      summary: Actualizar calificación
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCalificacion
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Calificacion'
+      responses:
+        '200':
+          description: Calificación actualizada
+    delete:
+      tags: [Calificaciones]
+      summary: Eliminar calificación
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Calificación eliminada
+  /api/calificaciones/curso/{idCurso}/promedio:
+    get:
+      tags: [Calificaciones]
+      summary: Obtener promedio de un curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Promedio del curso
+  /api/asistencia/clase/{idClase}:
+    post:
+      tags: [Asistencia]
+      summary: Registrar asistencia en una clase
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idClase
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                asistencias:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Asistencia'
+      responses:
+        '201':
+          description: Asistencias registradas
+  /api/asistencia/clase/{idClase}:
+    get:
+      tags: [Asistencia]
+      summary: Obtener asistencia de una clase
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idClase
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de asistencias
+  /api/asistencia/curso/{idCurso}/reporte:
+    get:
+      tags: [Asistencia]
+      summary: Obtener reporte de asistencia de un curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Reporte de asistencia
+  /api/asistencia/{idAsistencia}:
+    put:
+      tags: [Asistencia]
+      summary: Actualizar registro de asistencia
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idAsistencia
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Asistencia'
+      responses:
+        '200':
+          description: Asistencia actualizada
+  /api/asistencia/estudiante/{idEstudiante}/curso/{idCurso}:
+    get:
+      tags: [Asistencia]
+      summary: Obtener asistencia de un estudiante en un curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idEstudiante
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Asistencia del estudiante
+  /api/clases:
+    post:
+      tags: [Clases]
+      summary: Crear clase
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Clase'
+      responses:
+        '201':
+          description: Clase creada
+  /api/clases/curso/{idCurso}:
+    get:
+      tags: [Clases]
+      summary: Obtener clases por curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de clases
+  /api/clases/{idClase}:
+    get:
+      tags: [Clases]
+      summary: Obtener clase por id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idClase
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Clase encontrada
+    put:
+      tags: [Clases]
+      summary: Actualizar clase
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Clase'
+      responses:
+        '200':
+          description: Clase actualizada
+    delete:
+      tags: [Clases]
+      summary: Eliminar clase
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Clase eliminada
+  /api/mensajes:
+    post:
+      tags: [Mensajes]
+      summary: Enviar mensaje
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Mensaje'
+      responses:
+        '201':
+          description: Mensaje enviado
+    get:
+      tags: [Mensajes]
+      summary: Obtener mensajes recibidos (usa /recibidos y /enviados)
+  /api/mensajes/recibidos:
+    get:
+      tags: [Mensajes]
+      summary: Obtener mensajes recibidos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de mensajes recibidos
+  /api/mensajes/enviados:
+    get:
+      tags: [Mensajes]
+      summary: Obtener mensajes enviados
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de mensajes enviados
+  /api/mensajes/{idMensaje}/leer:
+    put:
+      tags: [Mensajes]
+      summary: Marcar mensaje como leído
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idMensaje
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Mensaje marcado
+  /api/materiales/curso/{idCurso}:
+    get:
+      tags: [Materiales]
+      summary: Obtener materiales por curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de materiales
+    post:
+      tags: [Materiales]
+      summary: Crear material
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Material'
+      responses:
+        '201':
+          description: Material creado
+  /api/materiales/{idMaterial}:
+    delete:
+      tags: [Materiales]
+      summary: Eliminar material
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idMaterial
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Material eliminado
+  /api/eventos:
+    get:
+      tags: [Eventos]
+      summary: Obtener eventos
+      responses:
+        '200':
+          description: Lista de eventos
+    post:
+      tags: [Eventos]
+      summary: Crear evento (admin)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evento'
+      responses:
+        '201':
+          description: Evento creado
+  /api/eventos/{idEvento}:
+    put:
+      tags: [Eventos]
+      summary: Actualizar evento (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idEvento
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evento'
+      responses:
+        '200':
+          description: Evento actualizado
+    delete:
+      tags: [Eventos]
+      summary: Eliminar evento (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Evento eliminado
+  /api/materias:
+    get:
+      tags: [Materias]
+      summary: Obtener materias
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de materias
+    post:
+      tags: [Materias]
+      summary: Crear materia (admin)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Materia'
+      responses:
+        '201':
+          description: Materia creada
+  /api/materias/{idMateria}:
+    put:
+      tags: [Materias]
+      summary: Actualizar materia (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idMateria
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Materia'
+      responses:
+        '200':
+          description: Materia actualizada
+    delete:
+      tags: [Materias]
+      summary: Eliminar materia (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Materia eliminada
+  /api/reportes/curso/{idCurso}/rendimiento:
+    post:
+      tags: [Reportes]
+      summary: Generar reporte de rendimiento del curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Reporte generado
+  /api/reportes/{idReporte}:
+    get:
+      tags: [Reportes]
+      summary: Obtener reporte por id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idReporte
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Reporte encontrado
+    delete:
+      tags: [Reportes]
+      summary: Eliminar reporte
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Reporte eliminado
+  /api/reportes/curso/{idCurso}:
+    get:
+      tags: [Reportes]
+      summary: Obtener reportes por curso
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de reportes
+  /api/admin/reportes/users-by-role/{idRol}:
+    get:
+      tags: [Reportes]
+      summary: Obtener usuarios filtrados por rol (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idRol
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de usuarios
+  /api/admin/reportes/teacher-assignments/{idProfesor}:
+    get:
+      tags: [Reportes]
+      summary: Obtener asignaciones de un profesor (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idProfesor
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de asignaciones
+  /api/admin/reportes/course-enrollments/{idCurso}:
+    get:
+      tags: [Reportes]
+      summary: Obtener inscripciones por curso (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de inscripciones
+  /api/admin/reportes/activity-log:
+    get:
+      tags: [Reportes]
+      summary: Obtener log de actividad (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Log de actividad
+  /api/admin/reportes/grades-by-course/{idCurso}:
+    get:
+      tags: [Reportes]
+      summary: Obtener calificaciones por curso (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de calificaciones por curso
+  /api/admin/reportes/student-attendance/{idEstudiante}:
+    get:
+      tags: [Reportes]
+      summary: Obtener asistencia de estudiante (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idEstudiante
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Asistencia del estudiante
+  /api/admin/reportes/course-attendance/{idCurso}:
+    get:
+      tags: [Reportes]
+      summary: Obtener asistencia por curso (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idCurso
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Asistencia por curso
+  /api:
+    get:
+      tags: [Reportes]
+      summary: Raíz con enlaces importantes
+      responses:
+        '200':
+          description: Info de la API
+

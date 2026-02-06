@@ -1,0 +1,38 @@
+<div class="create-edit-profesor">
+  <h2 *ngIf="!editMode">Crear Profesor</h2>
+  <h2 *ngIf="editMode">Editar Profesor</h2>
+  <form #f="ngForm" (ngSubmit)="onSubmit()" novalidate>
+    <label>Nombres *</label>
+    <input [(ngModel)]="profesor.nombres" name="nombres" required #nombres="ngModel">
+    <div class="error" *ngIf="nombres.invalid && nombres.touched">Nombres es requerido.</div>
+
+    <label>Apellidos *</label>
+    <input [(ngModel)]="profesor.apellidos" name="apellidos" required #apellidos="ngModel">
+    <div class="error" *ngIf="apellidos.invalid && apellidos.touched">Apellidos es requerido.</div>
+
+    <label>Correo *</label>
+    <input type="email" [(ngModel)]="profesor.correo" name="correo" required #correo="ngModel">
+    <div class="error" *ngIf="correo.invalid && correo.touched">
+  <span *ngIf="correo.errors?.['required']">Correo es requerido.</span>
+  <span *ngIf="correo.errors?.['email']">Formato de correo inválido.</span>
+    </div>
+
+    <label>Teléfono</label>
+    <input [(ngModel)]="profesor.telefono" name="telefono">
+
+    <label>Documento</label>
+    <input [(ngModel)]="profesor.documento" name="documento">
+
+    <label>Dirección</label>
+    <input [(ngModel)]="profesor.direccion" name="direccion">
+
+    <label>Cargo</label>
+    <input [(ngModel)]="profesor.cargo" name="cargo">
+
+    <label>Foto de perfil</label>
+    <input type="file" (change)="onFileSelected($event)">
+    <div *ngIf="profesor.fotoPerfil"><img [src]="profesor.fotoPerfil" alt="foto" style="max-width:120px"></div>
+
+    <button type="submit" [disabled]="f.invalid">Guardar</button>
+  </form>
+</div>

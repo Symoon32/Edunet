@@ -1,0 +1,174 @@
+<div class="container py-4">
+  <div class="mb-4">
+    <h1 class="h3">Generador de Reportes</h1>
+    <p class="text-muted">Genera reportes detallados por curso o estudiante.</p>
+  </div>
+
+  <!-- Panel de Control -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="row g-3">
+        <!-- Selector de Curso -->
+        <div class="col-md-6">
+          <label class="form-label fw-bold">1. Seleccionar Curso</label>
+          <div class="input-group">
+            <select
+              class="form-select"
+              [(ngModel)]="selectedCursoId"
+              (change)="onCursoChange()"
+            >
+              <option [ngValue]="null">-- Selecciona --</option>
+              <option *ngFor="let curso of cursos" [ngValue]="curso.idCurso">
+                {{ curso.nombre }} - {{ curso.materia }}
+              </option>
+            </select>
+            <button
+              class="btn btn-primary"
+              [disabled]="!selectedCursoId"
+              (click)="generarReporteCurso()"
+            >
+              Generar
+            </button>
+          </div>
+        </div>
+
+        <!-- Selector de Estudiante -->
+        <div class="col-md-6">
+          <label class="form-label fw-bold">2. Seleccionar Estudiante (Opcional)</label>
+          <div class="input-group">
+            <select
+              class="form-select"
+              [(ngModel)]="selectedEstudianteId"
+              [disabled]="!selectedCursoId"
+            >
+              <option [ngValue]="null">-- Todos --</option>
+              <option *ngFor="let est of estudiantes" [ngValue]="est.idUsuarios">
+                {{ est.nombres }} {{ est.apellidos }}
+              </option>
+            </select>
+             <button
+              class="btn btn-success"
+              [disabled]="!selectedEstudianteId"
+              (click)="generarReporteEstudiante()"
+            >
+              Generar Individual
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading / Error -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 text-primary">Generando reporte...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger mb-4">
+    {{ error }}
+  </div>
+
+  <!-- Vista: Reporte de Curso -->
+  <div *ngIf="tipoReporteActual === 'curso' && reporteData && !loading" class="card shadow-sm">
+    <div class="card-header bg-white">
+      <h5 class="mb-0">Reporte General del Curso</h5>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Estudiante</th>
+            <th>Actividad</th>
+            <th>Fecha</th>
+            <th>Nota</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of reporteData">
+            <td>{{ item.apellidos }}, {{ item.nombres }}</td>
+            <td>{{ item.nombre_actividad }}</td>
+            <td>{{ item.fecha | date:'shortDate' }}</td>
+            <td [class.text-danger]="item.valor < 3" class="fw-bold">{{ item.valor }}</td>
+          </tr>
+          <tr *ngIf="reporteData.length === 0">
+            <td colspan="4" class="text-center text-muted p-4">No hay registros para este curso.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Vista: Reporte Individual -->
+  <div *ngIf="tipoReporteActual === 'estudiante' && reporteData && !loading" class="row g-4">
+
+    <!-- Notas -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">Historial de Calificaciones</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Actividad</th>
+                <th>Fecha</th>
+                <th>Nota</th>
+              </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let nota of reporteData.notas">
+                <td>{{ nota.nombre_actividad }}</td>
+                <td>{{ nota.fecha | date:'shortDate' }}</td>
+                <td class="fw-bold">{{ nota.valor }}</td>
+               </tr>
+               <tr *ngIf="reporteData.notas?.length === 0">
+                <td colspan="3" class="text-center text-muted p-3">Sin calificaciones.</td>
+               </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Asistencia -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">Historial de Asistencia</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Observación</th>
+              </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let asis of reporteData.asistencia">
+                <td>{{ asis.fecha | date:'shortDate' }}</td>
+                <td>
+                  <span
+                    class="badge"
+                    [ngClass]="asis.asistio ? 'bg-success' : 'bg-danger'">
+                    {{ asis.asistio ? 'Asistió' : 'Falta' }}
+                  </span>
+                </td>
+                <td class="text-muted fst-italic">{{ asis.observacion || '-' }}</td>
+               </tr>
+               <tr *ngIf="reporteData.asistencia?.length === 0">
+                <td colspan="3" class="text-center text-muted p-3">Sin registros de asistencia.</td>
+               </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

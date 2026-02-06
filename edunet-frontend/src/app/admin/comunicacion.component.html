@@ -1,0 +1,119 @@
+<div class="row g-0 h-100" style="min-height: 80vh;">
+  <!-- Sidebar Menu -->
+  <div class="col-md-3 border-end bg-white">
+    <div class="p-3">
+      <button class="btn btn-primary w-100 mb-4 shadow-sm" (click)="switchTab('compose')">
+        <i class="bi bi-pencil-square me-2"></i> Redactar
+      </button>
+
+      <div class="list-group list-group-flush">
+        <button class="list-group-item list-group-item-action border-0 rounded mb-1"
+                [class.active]="activeTab === 'inbox'" (click)="switchTab('inbox')">
+          <i class="bi bi-inbox me-2"></i> Recibidos
+          <span class="badge bg-danger float-end" *ngIf="mensajesRecibidos.length > 0">{{ mensajesRecibidos.length }}</span>
+        </button>
+        <button class="list-group-item list-group-item-action border-0 rounded"
+                [class.active]="activeTab === 'sent'" (click)="switchTab('sent')">
+          <i class="bi bi-send me-2"></i> Enviados
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="col-md-9 bg-light">
+
+    <!-- INBOX / SENT LIST -->
+    <div *ngIf="activeTab !== 'compose' && !mensajeSeleccionado" class="h-100 d-flex flex-column">
+      <div class="p-3 border-bottom bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">{{ activeTab === 'inbox' ? 'Bandeja de Entrada' : 'Enviados' }}</h5>
+        <button class="btn btn-sm btn-outline-secondary" (click)="activeTab === 'inbox' ? loadInbox() : loadSent()">
+          <i class="bi bi-arrow-clockwise"></i>
+        </button>
+      </div>
+
+      <div class="flex-grow-1 overflow-auto p-3">
+        <div class="list-group shadow-sm">
+          <button *ngFor="let msg of (activeTab === 'inbox' ? mensajesRecibidos : mensajesEnviados)"
+                  class="list-group-item list-group-item-action p-3 border-start-0 border-end-0"
+                  (click)="verMensaje(msg)">
+            <div class="d-flex w-100 justify-content-between mb-1">
+              <h6 class="mb-0 fw-bold" [class.text-primary]="!msg.leido && activeTab === 'inbox'">
+                {{ activeTab === 'inbox' ? (msg.remitenteNombre || 'Usuario ' + msg.remitenteId) : (msg.destinatarioNombre || 'Destinatario ' + msg.destinatarioId) }}
+              </h6>
+              <small class="text-muted">{{ msg.fecha_envio | date:'short' }}</small>
+            </div>
+            <p class="mb-1 text-dark">{{ msg.asunto }}</p>
+            <small class="text-muted text-truncate d-block">{{ msg.contenido }}</small>
+          </button>
+
+          <div *ngIf="(activeTab === 'inbox' ? mensajesRecibidos : mensajesEnviados).length === 0"
+               class="text-center py-5 text-muted">
+            <i class="bi bi-envelope-open fs-1 mb-3 d-block"></i>
+            No hay mensajes.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGE DETAIL -->
+    <div *ngIf="mensajeSeleccionado" class="h-100 d-flex flex-column bg-white">
+      <div class="p-3 border-bottom d-flex align-items-center">
+        <button class="btn btn-light me-3" (click)="mensajeSeleccionado = null">
+          <i class="bi bi-arrow-left"></i>
+        </button>
+        <h5 class="mb-0 text-truncate">{{ mensajeSeleccionado.asunto }}</h5>
+      </div>
+      <div class="p-4 flex-grow-1 overflow-auto">
+        <div class="d-flex justify-content-between mb-4">
+          <div>
+            <strong>De:</strong> {{ mensajeSeleccionado.remitenteNombre || mensajeSeleccionado.remitenteId }}<br>
+            <strong>Para:</strong> {{ mensajeSeleccionado.destinatarioNombre || mensajeSeleccionado.destinatarioId }}
+          </div>
+          <div class="text-muted small">
+            {{ mensajeSeleccionado.fecha_envio | date:'medium' }}
+          </div>
+        </div>
+        <hr>
+        <div class="message-body mt-4" style="white-space: pre-wrap;">
+          {{ mensajeSeleccionado.contenido }}
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPOSE FORM -->
+    <div *ngIf="activeTab === 'compose'" class="h-100 d-flex flex-column bg-white">
+      <div class="p-3 border-bottom">
+        <h5 class="mb-0 fw-bold">Nuevo Mensaje</h5>
+      </div>
+      <div class="p-4">
+        <form [formGroup]="composeForm" (ngSubmit)="enviarMensaje()">
+          <div class="mb-3">
+            <label class="form-label">Destinatario</label>
+            <select class="form-select" formControlName="destinatarioId">
+              <option value="">Seleccionar usuario...</option>
+              <option *ngFor="let user of usuarios" [value]="user.idUsuarios">
+                {{ user.nombres }} {{ user.apellidos }} ({{ user.correo }})
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Asunto</label>
+            <input type="text" class="form-control" formControlName="asunto" placeholder="Asunto del mensaje">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Mensaje</label>
+            <textarea class="form-control" rows="10" formControlName="contenido" placeholder="Escribe tu mensaje aquí..."></textarea>
+          </div>
+          <div class="d-flex justify-content-end">
+             <button type="button" class="btn btn-light me-2" (click)="switchTab('inbox')">Descartar</button>
+             <button type="submit" class="btn btn-primary px-4" [disabled]="composeForm.invalid">
+               <i class="bi bi-send me-2"></i> Enviar
+             </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
