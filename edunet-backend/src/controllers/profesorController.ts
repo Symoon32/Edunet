@@ -205,7 +205,7 @@ export const getCursosProfesor = async (req: Request, res: Response) => {
         }
 
         const [cursos]: any = await conn.execute(`
-            SELECT c.idCurso, c.nombre, m.nombre as materia
+            SELECT c.idCurso, m.nombre as materia, c.grado, c.seccion, c.anio
             FROM cursos c
             JOIN materias m ON c.idMateria = m.idMateria
             WHERE c.idProfesor = ?
@@ -302,12 +302,13 @@ export const getEstadisticasCurso = async (req: Request, res: Response) => {
         const [asistencias]: any = await conn.execute(`
             SELECT u.nombres, u.apellidos,
             COUNT(a.idAsistencia) as totalClases,
-            SUM(CASE WHEN a.asistio = 1 THEN 1 ELSE 0 END) as asistencias
+            SUM(CASE WHEN a.estado = 'presente' THEN 1 ELSE 0 END) as asistencias
             FROM usuarios u
             JOIN curso_estudiante ce ON u.idUsuarios = ce.idEstudiante
             LEFT JOIN asistencia a ON u.idUsuarios = a.idEstudiante
             LEFT JOIN clases cl ON a.idClase = cl.idClase
-            WHERE ce.idCurso = ? AND cl.idCurso = ? AND cl.idProfesor = ?
+            JOIN cursos cur ON cl.idCurso = cur.idCurso
+            WHERE ce.idCurso = ? AND cl.idCurso = ? AND cur.idProfesor = ?
             GROUP BY u.idUsuarios
         `, [idCurso, idCurso, profesorId]);
 
@@ -339,12 +340,12 @@ export const getReporteCurso = async (req: Request, res: Response) => {
 
         // Obtener todas las calificaciones de todos los estudiantes en este curso (para la materia del profesor)
         const [notas]: any = await conn.execute(`
-            SELECT u.nombres, u.apellidos, cal.nombre_actividad, cal.valor, cal.fecha
+            SELECT u.nombres, u.apellidos, cal.nombre, cal.valor, cal.fecha_asignacion as fecha
             FROM calificaciones cal
             JOIN usuarios u ON cal.idEstudiante = u.idUsuarios
             JOIN cursos c ON cal.idCurso = c.idCurso
             WHERE c.idCurso = ? AND c.idProfesor = ?
-            ORDER BY u.apellidos, u.nombres, cal.fecha
+            ORDER BY u.apellidos, u.nombres, cal.fecha_asignacion
         `, [idCurso, profesorId]);
 
         res.json(notas);
@@ -368,18 +369,19 @@ export const getReporteEstudiante = async (req: Request, res: Response) => {
 
         // Detalle de notas
         const [notas]: any = await conn.execute(`
-            SELECT nombre_actividad, valor, fecha, observacion
+            SELECT nombre, valor, fecha_asignacion as fecha, comentarios as observacion
             FROM calificaciones
             WHERE idEstudiante = ? AND idCurso = ?
-            ORDER BY fecha DESC
+            ORDER BY fecha_asignacion DESC
         `, [idEstudiante, idCurso]);
 
         // Detalle de asistencia
         const [asistencia]: any = await conn.execute(`
-            SELECT cl.fecha, a.asistio, a.observacion
+            SELECT cl.fecha, a.estado, a.observaciones
             FROM asistencia a
             JOIN clases cl ON a.idClase = cl.idClase
-            WHERE a.idEstudiante = ? AND cl.idCurso = ? AND cl.idProfesor = ?
+            JOIN cursos cur ON cl.idCurso = cur.idCurso
+            WHERE a.idEstudiante = ? AND cl.idCurso = ? AND cur.idProfesor = ?
             ORDER BY cl.fecha DESC
         `, [idEstudiante, idCurso, profesorId]);
 
