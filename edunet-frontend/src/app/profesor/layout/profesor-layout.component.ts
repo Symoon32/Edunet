@@ -22,20 +22,23 @@ export class ProfesorLayoutComponent {
       this.sidebarOpen = false;
     }
 
-    const token = localStorage.getItem('token');
-    if (token) {
-       try {
-           const payload = JSON.parse(atob(token.split('.')[1]));
-           // Just displaying basic info, for full profile we might need to fetch user
-           // For now, use payload data or placeholder
-           this.currentUser = {
-               nombres: payload.correo.split('@')[0], // Placeholder
-               fotoPerfil: 'assets/default-avatar.png',
-               rol: 'Profesor'
-           };
-       } catch (e) {
-           console.error(e);
-       }
+    const userJson = localStorage.getItem('user');
+    if (userJson) {
+      this.currentUser = JSON.parse(userJson);
+    } else {
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          this.currentUser = {
+            nombres: payload.correo.split('@')[0],
+            fotoPerfil: 'assets/default-avatar.png',
+            rol: 'Profesor'
+          };
+        } catch (e) {
+          console.error(e);
+        }
+      }
     }
   }
 
@@ -44,7 +47,9 @@ export class ProfesorLayoutComponent {
   }
 
   logout() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('auth_role');
+    localStorage.removeItem('user');
     this.router.navigate(['/']);
   }
 }
