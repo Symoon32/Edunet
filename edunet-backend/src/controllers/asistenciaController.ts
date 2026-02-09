@@ -44,13 +44,12 @@ export class AsistenciaController {
             throw new Error(`Estado inválido: ${asistencia.estado}`);
           }
 
+          // Usamos REPLACE INTO para compatibilidad entre MySQL y SQLite
+          // Esto funciona porque hay un índice único en (idClase, idEstudiante)
           await conn.execute(
-            `INSERT INTO asistencia
+            `REPLACE INTO asistencia
              (idClase, idEstudiante, estado, observaciones)
-             VALUES (?, ?, ?, ?)
-             ON DUPLICATE KEY UPDATE
-             estado = VALUES(estado),
-             observaciones = VALUES(observaciones)`,
+             VALUES (?, ?, ?, ?)`,
             [
               idClase,
               asistencia.idEstudiante,

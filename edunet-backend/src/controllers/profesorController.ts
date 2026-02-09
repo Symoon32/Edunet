@@ -15,13 +15,14 @@ export async function getDashboard(req: Request, res: Response) {
     };
 
     // Obtener próximas clases
+    // Usamos CURRENT_DATE para compatibilidad entre MySQL y SQLite
     const [clases]: any = await conn.execute(
       `SELECT c.*, m.nombre as materia, h.hora_inicio, h.hora_fin, h.salon
        FROM clases c
        INNER JOIN cursos cu ON c.idCurso = cu.idCurso
        INNER JOIN materias m ON cu.idMateria = m.idMateria
        INNER JOIN horarios h ON cu.idCurso = h.idCurso
-       WHERE cu.idProfesor = ? AND c.fecha >= CURDATE()
+       WHERE cu.idProfesor = ? AND c.fecha >= CURRENT_DATE
        ORDER BY c.fecha, h.hora_inicio
        LIMIT 5`,
       [idProfesor]
@@ -134,12 +135,10 @@ export async function updatePerfil(req: Request, res: Response) {
     `, [nombres, apellidos, idProfesor]);
 
     // Actualizar o insertar datos del profesor
+    // Usamos REPLACE INTO para compatibilidad entre MySQL y SQLite en este caso simple
     await conn.execute(`
-      INSERT INTO usuario_profesor (idUsuario, especialidad, titulo)
+      REPLACE INTO usuario_profesor (idUsuario, especialidad, titulo)
       VALUES (?, ?, ?)
-      ON DUPLICATE KEY UPDATE
-      especialidad = VALUES(especialidad),
-      titulo = VALUES(titulo)
     `, [idProfesor, especialidad, titulo]);
 
     await conn.commit();

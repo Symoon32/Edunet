@@ -366,9 +366,10 @@ export async function addEstudianteCurso(req: Request, res: Response) {
     }
 
     // Agregar estudiante al curso
+    // Usamos CURRENT_TIMESTAMP para compatibilidad entre MySQL y SQLite
     await conn.execute(
       `INSERT INTO curso_estudiante (idCurso, idEstudiante, fechaInscripcion, estado)
-       VALUES (?, ?, NOW(), 'activo')`,
+       VALUES (?, ?, CURRENT_TIMESTAMP, 'activo')`,
       [idCurso, idEstudiante]
     );
 
