@@ -11,9 +11,9 @@ router.use(authMiddleware);
 router.use(authorizeRoles(2, 4));
 
 // Rutas
-router.post('/curso/:idCurso/rendimiento', reportesController.generarReporteRendimiento);
-router.get('/:idReporte', reportesController.getReporte);
-router.get('/curso/:idCurso', reportesController.getReportesCurso);
-router.delete('/:idReporte', reportesController.deleteReporte);
+router.post('/curso/:idCurso/rendimiento', (req, res) => reportesController.generarReporteRendimiento(req, res));
+router.get('/:idReporte', (req, res) => reportesController.getReporte(req, res));
+router.get('/curso/:idCurso', (req, res) => reportesController.getReportesCurso(req, res));
+router.delete('/:idReporte', (req, res) => reportesController.deleteReporte(req, res));
 
 export default router;

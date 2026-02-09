@@ -11,7 +11,7 @@ router.use(authMiddleware);
 router.use(authorizeRoles(1));
 
 // Rutas específicas para estudiantes
-router.get('/mis-cursos', cursosEstudianteController.getMisCursos);
-router.get('/:idCurso/clases', cursosEstudianteController.getClasesCursoEstudiante);
+router.get('/mis-cursos', (req, res) => cursosEstudianteController.getMisCursos(req, res));
+router.get('/:idCurso/clases', (req, res) => cursosEstudianteController.getClasesCursoEstudiante(req, res));
 
 export default router;

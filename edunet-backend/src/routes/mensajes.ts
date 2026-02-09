@@ -7,9 +7,9 @@ const mensajesController = new MensajesController();
 
 router.use(authMiddleware);
 
-router.post('/', mensajesController.sendMessage);
-router.get('/recibidos', mensajesController.getReceivedMessages);
-router.get('/enviados', mensajesController.getSentMessages);
-router.put('/:idMensaje/leer', mensajesController.markAsRead);
+router.post('/', (req, res) => mensajesController.sendMessage(req, res));
+router.get('/recibidos', (req, res) => mensajesController.getReceivedMessages(req, res));
+router.get('/enviados', (req, res) => mensajesController.getSentMessages(req, res));
+router.put('/:idMensaje/leer', (req, res) => mensajesController.markAsRead(req, res));
 
 export default router;
