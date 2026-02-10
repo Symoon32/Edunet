@@ -102,8 +102,10 @@ app.use((req: Request, res: Response) => {
 // Configuración del puerto y arranque del servidor
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`Servidor corriendo en http://localhost:${port}`);
+  });
+}
 
 export default app;

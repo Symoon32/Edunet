@@ -1,7 +1,17 @@
-# Frontend (Angular)
-Edunet_Proyecto/nexxa/edunet/node_modules/
-Edunet_Proyecto/nexxa/edunet/.angular/
-Edunet_Proyecto/nexxa/edunet/dist/
 
 # Backend (Node.js)
+# Frontend (Angular)
+*.log
+.angular/
+.env
 Edunet_Proyecto/nexxa/edunet-backend/node_modules/
+Edunet_Proyecto/nexxa/edunet/.angular/
+Edunet_Proyecto/nexxa/edunet/dist/
+Edunet_Proyecto/nexxa/edunet/node_modules/
+database.sqlite
+dist/
+node_modules/
+qa/reports/html/
+qa/reports/pdf/
+qa/reports/results.json
+qa/reports/screenshots/
