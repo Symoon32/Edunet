@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-reportes',
@@ -9,12 +10,25 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './reportes.html',
   styleUrls: ['./reportes.css']
 })
-export class Reportes {
-
+export class Reportes implements OnInit {
+  cursoId: number | null = null;
   estudiante: string = '';
   grado: string = '';
   detalle: string = '';
   resultado: string = '';
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('cursoId');
+      if (id) {
+        this.cursoId = +id;
+        // En una implementación real, aquí se cargarían datos del curso
+        console.log('Generando reportes para el curso:', this.cursoId);
+      }
+    });
+  }
 
   generarReporte() {
     if (!this.estudiante || !this.grado) {

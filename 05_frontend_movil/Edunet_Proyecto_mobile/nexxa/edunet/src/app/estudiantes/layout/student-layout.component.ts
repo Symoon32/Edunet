@@ -30,7 +30,7 @@ export class StudentLayoutComponent {
 
   logout() {
     // Clear token and user data
-    localStorage.removeItem('token');
+    localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
     this.router.navigate(['/']);
   }

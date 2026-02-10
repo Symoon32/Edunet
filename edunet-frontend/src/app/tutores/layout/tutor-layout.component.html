@@ -1,0 +1,82 @@
+<div class="admin-wrapper" [class.sidebar-collapsed]="!sidebarOpen">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-area">
+        <i class="bi bi-person-hearts logo-icon"></i>
+        <span class="logo-text">EduNet</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li class="section-title">
+          <span>SEGUIMIENTO</span>
+        </li>
+
+        <li>
+          <a routerLink="/tutores/notas" routerLinkActive="active" title="Calificaciones">
+            <i class="bi bi-award-fill"></i>
+            <span class="link-text">Calificaciones</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/tutores/observaciones" routerLinkActive="active" title="Observaciones">
+            <i class="bi bi-journal-text"></i>
+            <span class="link-text">Observaciones</span>
+          </a>
+        </li>
+
+        <li class="section-title">
+          <span>ORGANIZACIÓN</span>
+        </li>
+
+        <li>
+          <a routerLink="/tutores/calendario" routerLinkActive="active" title="Calendario">
+            <i class="bi bi-calendar-event"></i>
+            <span class="link-text">Calendario</span>
+          </a>
+        </li>
+
+        <li class="section-title">
+          <span>COMUNICACIÓN</span>
+        </li>
+
+        <li>
+          <a routerLink="/tutores/comunicacion" routerLinkActive="active" title="Mensajes">
+            <i class="bi bi-envelope-fill"></i>
+            <span class="link-text">Mensajería</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <img [src]="currentUser?.fotoPerfil || 'assets/default-avatar.png'" alt="User">
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ currentUser?.nombres || 'Tutor' }}</span>
+          <span class="user-role">Acudiente</span>
+        </div>
+        <button class="logout-btn" (click)="logout()" title="Cerrar Sesión">
+          <i class="bi bi-box-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="content-wrapper">
+    <button class="floating-toggle" (click)="toggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

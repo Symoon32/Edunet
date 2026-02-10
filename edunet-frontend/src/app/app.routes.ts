@@ -94,28 +94,27 @@ export const routes: Routes = [
     // Rutas para tutores
     {
         path: 'tutores',
-        loadComponent: () => import('./tutores/inicio-tutores.component').then(m => m.InicioTutoresComponent),
-        canActivate: [TutoresGuard]
-    },
-    {
-        path: 'tutores/comunicacion',
-        loadComponent: () => import('./tutores/comunicacion-tutores.component').then(m => m.ComunicacionTutoresComponent),
-        canActivate: [TutoresGuard]
-    },
-    {
-        path: 'tutores/calendario',
-        loadComponent: () => import('./tutores/calendario-tutores.component').then(m => m.CalendarioTutoresComponent),
-        canActivate: [TutoresGuard]
-    },
-    {
-        path: 'tutores/notas',
-        loadComponent: () => import('./tutores/notas-tutores.component').then(m => m.NotasTutoresComponent),
-        canActivate: [TutoresGuard]
-    },
-    {
-        path: 'tutores/observaciones',
-        loadComponent: () => import('./tutores/observaciones-tutores.component').then(m => m.ObservacionesTutoresComponent),
-        canActivate: [TutoresGuard]
+        loadComponent: () => import('./tutores/layout/tutor-layout.component').then(m => m.TutorLayoutComponent),
+        canActivate: [TutoresGuard],
+        children: [
+            { path: '', redirectTo: 'notas', pathMatch: 'full' },
+            {
+                path: 'notas',
+                loadComponent: () => import('./tutores/notas-tutores.component').then(m => m.NotasTutoresComponent)
+            },
+            {
+                path: 'comunicacion',
+                loadComponent: () => import('./tutores/comunicacion-tutores.component').then(m => m.ComunicacionTutoresComponent)
+            },
+            {
+                path: 'calendario',
+                loadComponent: () => import('./tutores/calendario-tutores.component').then(m => m.CalendarioTutoresComponent)
+            },
+            {
+                path: 'observaciones',
+                loadComponent: () => import('./tutores/observaciones-tutores.component').then(m => m.ObservacionesTutoresComponent)
+            }
+        ]
     },
     {
         path: 'estudiantes',

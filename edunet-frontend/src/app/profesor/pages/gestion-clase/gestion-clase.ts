@@ -134,33 +134,10 @@ export class GestionClase implements OnInit {
 
   // Navigation actions for a specific class or course context
   navigateTo(action: string, id: number, type: 'curso' | 'clase') {
-    // Construct URL based on action.
-    // Example: /profesor/calificar/:idCurso
-    // The router configuration must support these params.
-    // For now, let's assume we pass query params or route params.
-
-    // Based on user request: "lista de estudiantes, horario, tomar asistencia, agregar notas, reportes"
-
-    // Mapping actions to routes:
-    // 'estudiantes' -> /profesor/curso/:id/estudiantes
-    // 'horario' -> /profesor/horario/:id
-    // 'asistencia' -> /profesor/asistencia/:idClase
-    // 'notas' -> /profesor/notas/:idCurso
-
-    if (action === 'estudiantes') {
-      // Assuming a route or component exists or we pass data
-      // For now, log or simple alert as placeholders if routes don't exist yet
-      console.log('Navigating to students for course', id);
-    }
-
-    // TODO: Implement actual routing once those pages are verified/created.
-    // For now, I will create basic routed navigation structure or confirm with the user plan if I need to create those specific pages too.
-    // The plan said "Ensure these buttons link to the respective functional components".
-
-    // Let's try to map to existing routes or standard patterns
     switch(action) {
         case 'notas':
-            this.router.navigate(['/profesor/cargar-notas', { cursoId: this.selectedCurso.idCurso }]);
+            // Se envía el cursoId como parámetro de matriz para que CargarNotas lo detecte
+            this.router.navigate(['/profesor/cargar-notas', { cursoId: id }]);
             break;
         case 'asistencia':
              if (type === 'clase') {
@@ -168,14 +145,18 @@ export class GestionClase implements OnInit {
              }
              break;
         case 'reportes':
-             this.router.navigate(['/profesor/reportes', { cursoId: this.selectedCurso.idCurso }]);
+             this.router.navigate(['/profesor/reportes', { cursoId: id }]);
              break;
         case 'materiales':
              this.router.navigate(['/profesor/materiales', id]);
              break;
         case 'estudiantes':
-             // Navigate to generic student list or materials if no specific student page
-             // Or maybe we can link to materials/tareas here as "Gestion de Curso" action
+             // Podríamos redirigir a una lista de estudiantes si existiera,
+             // por ahora cargamos notas que ya muestra la lista
+             this.router.navigate(['/profesor/cargar-notas', { cursoId: id }]);
+             break;
+        case 'horario':
+             this.router.navigate(['/profesor/estadisticas']); // Fallback to stats if horario page is missing
              break;
     }
   }
