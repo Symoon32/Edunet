@@ -55,31 +55,41 @@ export class ProfesorService {
     return this.http.get<any>(`${this.apiUrl}/reportes/estudiante/${idEstudiante}/curso/${idCurso}`);
   }
 
-  // ⚠️ MOCK METHODS FOR BUILD COMPATIBILITY ⚠️
-  // These methods are temporarily added to satisfy build requirements for shared components.
-  // Real implementation should be added when the Professor module is fully updated.
+  // 🧑‍🏫 Professor management methods (connected to /api/users)
+  // These are often used by admin views or specific professor lists
 
   getProfesorById(id: number | string): Observable<any> {
-    return of({}); // Mock
+    const baseApi = this.apiUrl.replace('/profesor', '');
+    return this.http.get(`${baseApi}/users/id/${id}`);
   }
 
   updateProfesor(id: number | string, data: any): Observable<any> {
-    return of({}); // Mock
+    const baseApi = this.apiUrl.replace('/profesor', '');
+    // If we have correo, we use the standard updateUser route
+    if (data.correo) {
+      return this.http.put(`${baseApi}/users/${data.correo}`, data);
+    }
+    return of({ error: 'Correo is required for update' });
   }
 
   createProfesor(data: any): Observable<any> {
-    return of({}); // Mock
+    const baseApi = this.apiUrl.replace('/profesor', '');
+    const professorData = { ...data, rol: 2 }; // Ensure role is professor
+    return this.http.post(`${baseApi}/users`, professorData);
   }
 
   uploadProfilePhoto(formData: FormData): Observable<any> {
-    return of({}); // Mock
+    const baseApi = this.apiUrl.replace('/profesor', '');
+    return this.http.post<any>(`${baseApi}/users/upload-profile`, formData);
   }
 
   getProfesores(): Observable<any[]> {
-    return of([]); // Mock
+    const baseApi = this.apiUrl.replace('/profesor', '');
+    return this.http.get<any[]>(`${baseApi}/users?rol=2`);
   }
 
   deleteProfesor(id: number | string): Observable<any> {
-    return of({}); // Mock
+    const baseApi = this.apiUrl.replace('/profesor', '');
+    return this.http.delete(`${baseApi}/users/id/${id}`);
   }
 }

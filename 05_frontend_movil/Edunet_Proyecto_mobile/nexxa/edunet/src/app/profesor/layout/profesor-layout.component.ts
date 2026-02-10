@@ -22,7 +22,7 @@ export class ProfesorLayoutComponent {
       this.sidebarOpen = false;
     }
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('auth_token');
     if (token) {
        try {
            const payload = JSON.parse(atob(token.split('.')[1]));
@@ -44,7 +44,7 @@ export class ProfesorLayoutComponent {
   }
 
   logout() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('auth_token');
     this.router.navigate(['/']);
   }
 }

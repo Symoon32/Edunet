@@ -4,18 +4,17 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../users/services/user-service';
 
 @Component({
-  selector: 'app-admin-layout',
+  selector: 'app-tutor-layout',
   standalone: true,
   imports: [RouterModule, CommonModule],
-  templateUrl: './admin-layout.component.html',
-  styleUrls: ['./admin-layout.component.css']
+  templateUrl: './tutor-layout.component.html',
+  styleUrls: ['./tutor-layout.component.css']
 })
-export class AdminLayoutComponent {
+export class TutorLayoutComponent {
   private router = inject(Router);
-  private userService = inject(UserService); // Assuming UserService has logout logic or we do it manually
+  private userService = inject(UserService);
 
   sidebarOpen = true;
-  userMenuOpen = false;
   currentUser: any = null;
 
   constructor() {
@@ -29,13 +28,10 @@ export class AdminLayoutComponent {
     this.sidebarOpen = !this.sidebarOpen;
   }
 
-  toggleUserMenu() {
-    this.userMenuOpen = !this.userMenuOpen;
-  }
-
   logout() {
     // Clear token and user data
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('auth_role');
     localStorage.removeItem('user');
     this.router.navigate(['/']);
   }

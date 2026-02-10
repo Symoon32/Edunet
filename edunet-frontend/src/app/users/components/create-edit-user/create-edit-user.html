@@ -36,7 +36,7 @@
 						<input placeholder="Contraseña" type="password" class="form-control" id="password" name="password" [(ngModel)]="usuario.password" required>
 					</div>
 					<div class="mb-3">
-						<select class="form-select" id="rol" name="rol" [(ngModel)]="usuario.rol" required (change)="onRolChange()">
+						<select class="form-select" id="rol" name="idRol" [(ngModel)]="usuario.idRol" required (change)="onRolChange()">
 							<option value="" selected disabled>Seleccione un rol</option>
 							<option value="1">Estudiante</option>
 							<option value="2">Profesor</option>
@@ -47,7 +47,7 @@
 
 
 					<!-- Campos para Estudiante -->
-					@if (usuario.rol == '1') {
+					@if (usuario.idRol == '1') {
 						<div class="mb-3">
 							<input placeholder="Grado" type="text" class="form-control mb-2" name="grado" [(ngModel)]="usuario.grado">
 							<hr>
@@ -58,25 +58,25 @@
 					}
 
 					<!-- Campos para Profesor -->
-					@if (usuario.rol == '2') {
+					@if (usuario.idRol == '2') {
 						<div class="mb-3">
 							<input placeholder="Curso asignado" type="text" class="form-control" name="curso_asignado" [(ngModel)]="usuario.curso_asignado">
 						</div>
 					}
 
 					<!-- Campos para Acudiente -->
-					@if (usuario.rol == '3') {
+					@if (usuario.idRol == '3') {
 						<div class="mb-3">
-							<input placeholder="Nombre del estudiante a cargo" type="text" class="form-control mb-2" name="estudiante_relacionado" [(ngModel)]="usuario.estudiante_relacionado">
+							<input placeholder="Nombre del estudiante a cargo" type="text" class="form-control mb-2" name="nombre_estudiante_acargo" [(ngModel)]="usuario.nombre_estudiante_acargo">
 							<input placeholder="Documento de Identidad del Estudiante" type="text" class="form-control mb-2" name="documento_estudiante" [(ngModel)]="usuario.documento_estudiante">
-							<input placeholder="Parentesco" type="text" class="form-control" name="parentesco" [(ngModel)]="usuario.parentesco">
+							<input placeholder="Parentesco" type="text" class="form-control" name="parentezco" [(ngModel)]="usuario.parentezco">
 						</div>
 					}
 
 					<!-- Campos para Admin -->
-					@if (usuario.rol == '4') {
+					@if (usuario.idRol == '4') {
 						<div class="mb-3">
-							<input placeholder="Cargo dentro de la institución (Ej: Director)" type="text" class="form-control" name="cargo" [(ngModel)]="usuario.cargo">
+							<input placeholder="Cargo dentro de la institución (Ej: Director)" type="text" class="form-control" name="cargo_admin" [(ngModel)]="usuario.cargo_admin">
 						</div>
 						@if (isCurrentUserRector) {
 						  <div class="form-check mb-3">

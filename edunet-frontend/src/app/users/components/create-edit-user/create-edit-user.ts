@@ -23,15 +23,15 @@ export class CreateEditUser {
     direccion: '',
     fotoPerfil: '',
     password: '',
-    rol: '',
+    idRol: '',
     grado: '',
     contacto_emergencia: '',
     telefono_contacto_emergencia: '',
     curso_asignado: '',
-    estudiante_relacionado: '',
+    nombre_estudiante_acargo: '',
     documento_estudiante: '',
-    parentesco: '',
-    cargo: ''
+    parentezco: '',
+    cargo_admin: ''
   };
   editMode = false;
   selectedFile: File | null = null;
@@ -83,7 +83,7 @@ export class CreateEditUser {
         this.userService.updateUser(this.usuario.correo, usuarioEdit).subscribe({
           next: () => {
             alert('Usuario actualizado correctamente');
-            this.navigateBack(this.usuario.rol);
+            this.navigateBack(this.usuario.idRol);
           },
           error: (err) => {
             alert('Error al actualizar usuario: ' + (err.error?.error || 'Error desconocido'));
@@ -93,7 +93,7 @@ export class CreateEditUser {
         this.userService.createUser(this.usuario).subscribe({
           next: () => {
             alert('Usuario registrado correctamente');
-            const rol = this.usuario.rol;
+            const rol = this.usuario.idRol;
             this.resetUsuario(); // método para limpiar el objeto
             this.navigateBack(rol);
           },
@@ -133,21 +133,23 @@ private resetUsuario() {
     direccion: '',
     fotoPerfil: '',
     password: '',
-    rol: '',
+    idRol: '',
     grado: '',
     contacto_emergencia: '',
     telefono_contacto_emergencia: '',
     curso_asignado: '',
-    estudiante_relacionado: '',
-      documento_estudiante: '',
-    parentesco: '',
-      cargo: ''
+    nombre_estudiante_acargo: '',
+    documento_estudiante: '',
+    parentezco: '',
+    cargo_admin: ''
     };
 }
 
   private navigateBack(rol: string | number) {
     const rolNum = Number(rol);
-    switch (rolNum) {
+    // Support both idRol and rol for navigation
+    const finalRol = rolNum || Number(this.usuario.idRol);
+    switch (finalRol) {
       case 1:
         this.router.navigate(['/admin/gestion-estudiantes']);
         break;
@@ -165,20 +167,20 @@ private resetUsuario() {
 
   onRolChange() {
     // Limpiar campos específicos al cambiar de rol si es necesario
-    if (this.usuario.rol !== '1') {
+    if (this.usuario.idRol !== '1') {
       this.usuario.grado = '';
       this.usuario.contacto_emergencia = '';
       this.usuario.telefono_contacto_emergencia = '';
     }
-    if (this.usuario.rol !== '2') {
+    if (this.usuario.idRol !== '2') {
       this.usuario.curso_asignado = '';
     }
-    if (this.usuario.rol !== '3') {
-      this.usuario.estudiante_relacionado = '';
-      this.usuario.parentesco = '';
+    if (this.usuario.idRol !== '3') {
+      this.usuario.nombre_estudiante_acargo = '';
+      this.usuario.parentezco = '';
     }
-    if (this.usuario.rol !== '4') {
-      this.usuario.cargo = '';
+    if (this.usuario.idRol !== '4') {
+      this.usuario.cargo_admin = '';
     }
   }
     onFileSelected(event: any) {

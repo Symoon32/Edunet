@@ -6,8 +6,10 @@ import {
   getUsers,
   createUser,
   getUserByEmail,
+  getUserById,
   updateUser,
   deleteUser,
+  deleteUserById,
   getMisEstudiantes
 } from '../controllers/usersController';
 
@@ -27,10 +29,14 @@ router.post('/upload-profile', authenticateToken, upload.single('fotoPerfil'), (
 router.get('/', authenticateToken, authorizeRoles(4), getUsers);
 // Ruta para crear usuarios - Solo accesible para el rol 4 (administrador)
 router.post('/', authenticateToken, authorizeRoles(4), createUser);
+// Ruta para obtener usuario por ID
+router.get('/id/:id', authenticateToken, authorizeRoles(1, 2, 3, 4), getUserById);
 // Ruta para obtener usuario por correo - Accesible para roles 1, 2, 3, 4
 router.get('/:correo', authenticateToken, authorizeRoles(1, 2, 3, 4), getUserByEmail);
 // Ruta para actualizar usuario por correo - Accesible para roles 1, 2, 3, 4
 router.put('/:correo', authenticateToken, authorizeRoles(1, 2, 3, 4), updateUser);
+// Ruta para eliminar usuario por ID
+router.delete('/id/:id', authenticateToken, authorizeRoles(4), deleteUserById);
 // Ruta para eliminar usuario por correo - Solo accesible para el rol 4 (administrador)
 router.delete('/:correo', authenticateToken, authorizeRoles(4), deleteUser);
 

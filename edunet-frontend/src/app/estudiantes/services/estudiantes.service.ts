@@ -57,7 +57,7 @@ export class EstudiantesService {
 
   // Cursos y Profesores asignados
   getMisCursos(): Observable<Curso[]> {
-    return this.http.get<Curso[]>(`${this.apiUrl}/estudiantes/cursos`);
+    return this.http.get<Curso[]>(`${this.apiUrl}/estudiante/cursos/mis-cursos`);
   }
 
   // Calificaciones
