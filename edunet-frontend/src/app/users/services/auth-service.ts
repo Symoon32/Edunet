@@ -7,10 +7,11 @@ export interface AuthResponse {
   rol: number;
 }
 
+import { API_BASE_URL } from '../../api-config';
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // El backend monta las rutas de auth en '/api' y el login está en '/api/login'
-  private apiUrl = 'http://localhost:3000/api/auth/login'; // Ajustado al backend
+  private apiUrl = `${API_BASE_URL}/auth/login`;
 
   constructor(private http: HttpClient) {}
 

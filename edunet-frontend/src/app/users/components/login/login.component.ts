@@ -31,22 +31,24 @@ export class LoginComponent {
       next: (res: AuthResponse) => {
         this.rol = res.rol;
         this.errorMessage = '';
-        // Usar AuthStateService para propagar el estado de autenticación
-        this.authState.setAuth(res.token, res.rol);
 
-        // Guardar información básica del usuario para los layouts
+        // Extraer info del usuario del token
+        let user = null;
         try {
           const payload = JSON.parse(atob(res.token.split('.')[1]));
-          localStorage.setItem('user', JSON.stringify({
+          user = {
             id: payload.id,
             correo: payload.correo,
             nombres: payload.nombres || payload.correo.split('@')[0],
             fotoPerfil: payload.fotoPerfil,
             is_rector: payload.is_rector
-          }));
+          };
         } catch (e) {
-          console.error('Error saving user to localStorage', e);
+          console.error('Error decoding token', e);
         }
+
+        // Usar AuthStateService para propagar el estado de autenticación
+        this.authState.setAuth(res.token, res.rol, user);
 
         let rolNombre = '';
         let ruta = '';

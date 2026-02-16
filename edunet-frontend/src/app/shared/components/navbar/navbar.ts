@@ -21,30 +21,31 @@ export class Navbar implements OnDestroy {
   isAcudiente = false;
   private sub?: Subscription;
   constructor(private router: Router, private authState: AuthStateService) {
-    this.loadUserInfo();
     // Suscribirse al estado de autenticación
     this.sub = this.authState.authState$.subscribe(s => {
       this.isAdmin = s.role === 4;
       this.isProfesor = s.role === 2;
       this.isEstudiante = s.role === 1;
       this.isAcudiente = s.role === 3;
-      this.loadUserInfo();
+      this.updateUserInfo(s.user);
     });
   }
 
-  private loadUserInfo() {
-    const userJson = localStorage.getItem('user');
-    if (userJson) {
-      const user = JSON.parse(userJson);
+  private updateUserInfo(user: any) {
+    if (user) {
       this.userName = user.nombres || '';
       this.userEmail = user.correo || '';
       if (user.fotoPerfil) {
         this.profileImgUrl = user.fotoPerfil.startsWith('http')
           ? user.fotoPerfil
-          : `http://localhost:3000${user.fotoPerfil}`;
+          : `${window.location.protocol}//${window.location.hostname}:3000${user.fotoPerfil}`;
       } else {
         this.profileImgUrl = '';
       }
+    } else {
+      this.userName = '';
+      this.userEmail = '';
+      this.profileImgUrl = '';
     }
   }
 

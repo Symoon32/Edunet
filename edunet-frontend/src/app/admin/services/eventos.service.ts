@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../api-config';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -6,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class EventosService {
-  private apiUrl = 'http://localhost:3000/api/eventos';
+  private apiUrl = `${API_BASE_URL}/eventos`;
   private http = inject(HttpClient);
 
   getEventos(): Observable<any[]> {

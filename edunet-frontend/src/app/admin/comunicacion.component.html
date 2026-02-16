@@ -27,14 +27,20 @@
     <div *ngIf="activeTab !== 'compose' && !mensajeSeleccionado" class="h-100 d-flex flex-column">
       <div class="p-3 border-bottom bg-white d-flex justify-content-between align-items-center">
         <h5 class="mb-0 fw-bold">{{ activeTab === 'inbox' ? 'Bandeja de Entrada' : 'Enviados' }}</h5>
-        <button class="btn btn-sm btn-outline-secondary" (click)="activeTab === 'inbox' ? loadInbox() : loadSent()">
-          <i class="bi bi-arrow-clockwise"></i>
-        </button>
+        <div class="d-flex gap-2">
+          <div class="input-group input-group-sm" style="max-width: 250px;">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+            <input type="text" class="form-control border-start-0" placeholder="Buscar mensajes..." [(ngModel)]="searchTerm">
+          </div>
+          <button class="btn btn-sm btn-outline-secondary" (click)="activeTab === 'inbox' ? loadInbox() : loadSent()">
+            <i class="bi bi-arrow-clockwise"></i>
+          </button>
+        </div>
       </div>
 
       <div class="flex-grow-1 overflow-auto p-3">
         <div class="list-group shadow-sm">
-          <button *ngFor="let msg of (activeTab === 'inbox' ? mensajesRecibidos : mensajesEnviados)"
+          <button *ngFor="let msg of mensajesFiltrados"
                   class="list-group-item list-group-item-action p-3 border-start-0 border-end-0"
                   (click)="verMensaje(msg)">
             <div class="d-flex w-100 justify-content-between mb-1">

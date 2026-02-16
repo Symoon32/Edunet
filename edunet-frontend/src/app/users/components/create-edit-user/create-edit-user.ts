@@ -4,6 +4,7 @@ import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user-service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthStateService } from '../../services/auth-state.service';
 
 @Component({
   selector: 'app-create-edit-user',
@@ -38,13 +39,14 @@ export class CreateEditUser {
   currentUser: any = null; // To store the logged-in user's info
   isCurrentUserRector = false;
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) {
-    // This is a simplified way to get the current user. In a real app, this would come from a global state/service.
-    const userJson = localStorage.getItem('user');
-    if (userJson) {
-      this.currentUser = JSON.parse(userJson);
-      this.isCurrentUserRector = this.currentUser?.is_rector;
-    }
+  constructor(
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authState: AuthStateService
+  ) {
+    this.currentUser = this.authState.snapshot.user;
+    this.isCurrentUserRector = this.currentUser?.is_rector;
 
     this.route.paramMap.subscribe(params => {
       const correo = params.get('correo');
@@ -83,7 +85,7 @@ export class CreateEditUser {
         this.userService.updateUser(this.usuario.correo, usuarioEdit).subscribe({
           next: () => {
             alert('Usuario actualizado correctamente');
-            // If updating self, refresh localStorage
+            // If updating self, refresh state
             if (this.currentUser && this.currentUser.correo === this.usuario.correo) {
               const updatedUser = {
                 ...this.currentUser,
@@ -91,9 +93,7 @@ export class CreateEditUser {
                 fotoPerfil: this.usuario.fotoPerfil,
                 is_rector: this.usuario.is_rector
               };
-              localStorage.setItem('user', JSON.stringify(updatedUser));
-              // Optional: trigger a page reload or state update to refresh navbar
-              window.location.reload();
+              this.authState.updateUser(updatedUser);
             }
             this.navigateBack(this.usuario.idRol);
           },

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../api-config';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -6,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class MensajesService {
-  private apiUrl = 'http://localhost:3000/api/mensajes';
+  private apiUrl = `${API_BASE_URL}/mensajes`;
 
   constructor(private http: HttpClient) {}
 

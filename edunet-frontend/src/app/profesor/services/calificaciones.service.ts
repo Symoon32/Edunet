@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../api-config';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -16,7 +17,7 @@ export interface CalificacionPayload {
   providedIn: 'root'
 })
 export class CalificacionesService {
-  private apiUrl = 'http://localhost:3000/api/calificaciones';
+  private apiUrl = `${API_BASE_URL}/calificaciones`;
 
   constructor(private http: HttpClient) {}
 
