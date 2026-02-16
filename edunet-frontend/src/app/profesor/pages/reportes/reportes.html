@@ -1,34 +1,74 @@
 <main class="main-container container my-5">
   <section class="reportes bg-white p-4 rounded shadow-sm">
-    <h2 class="text-primary mb-4">Generar Reportes de Progreso Académico</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="text-primary mb-0">Reportes de Progreso Académico</h2>
+      <div class="text-muted" *ngIf="cursoId">Curso ID: {{ cursoId }}</div>
+    </div>
 
-    <form (ngSubmit)="generarReporte()">
-      <div class="mb-3">
-        <label for="estudiante" class="form-label">Estudiante</label>
-        <input [(ngModel)]="estudiante" name="estudiante" type="text" id="estudiante" class="form-control" placeholder="Nombre del estudiante" required>
+    <div class="card mb-4 border-0 bg-light">
+      <div class="card-body">
+        <h5 class="fw-bold mb-3">Generar Nuevo Reporte</h5>
+        <form (ngSubmit)="generarReporte()" class="row g-3 align-items-end">
+          <div class="col-md-8">
+            <label for="periodo" class="form-label">Periodo Académico</label>
+            <select [(ngModel)]="periodo" name="periodo" id="periodo" class="form-select" required>
+              <option value="">Seleccione el periodo</option>
+              <option value="Primer Periodo">Primer Periodo</option>
+              <option value="Segundo Periodo">Segundo Periodo</option>
+              <option value="Tercer Periodo">Tercer Periodo</option>
+              <option value="Cuarto Periodo">Cuarto Periodo</option>
+              <option value="Final">Final Anual</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <button type="submit" class="btn btn-primary w-100" [disabled]="loading || !periodo">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              Generar Reporte
+            </button>
+          </div>
+        </form>
+        @if (resultado) {
+          <div class="mt-3 alert py-2 mb-0" [class.alert-success]="resultado.includes('✅')" [class.alert-danger]="resultado.includes('❌')" [innerHTML]="resultado"></div>
+        }
       </div>
+    </div>
 
-      <div class="mb-3">
-        <label for="grado" class="form-label">Grado</label>
-        <select [(ngModel)]="grado" name="grado" id="grado" class="form-select" required>
-          <option value="">Seleccione</option>
-          <option value="6">Sexto</option>
-          <option value="7">Séptimo</option>
-          <option value="8">Octavo</option>
-          <option value="9">Noveno</option>
-          <option value="10">Décimo</option>
-          <option value="11">Undécimo</option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label for="detalle" class="form-label">Observaciones</label>
-        <textarea [(ngModel)]="detalle" name="detalle" id="detalle" class="form-control" rows="5" placeholder="Notas u observaciones del desempeño..."></textarea>
-      </div>
-
-      <button type="submit" class="btn btn-primary w-100">Generar reporte</button>
-    </form>
-
-    <div *ngIf="resultado" id="resultadoReporte" class="reporte-generado alert alert-info mt-4" [innerHTML]="resultado"></div>
+    <h5 class="fw-bold mb-3">Historial de Reportes</h5>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Periodo</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (reporte of reportes; track reporte.idReporte) {
+            <tr>
+              <td>{{ reporte.fecha_generacion | date:'short' }}</td>
+              <td><span class="badge bg-info text-dark text-capitalize">{{ reporte.tipo }}</span></td>
+              <td>{{ reporte.periodo }}</td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-outline-primary me-2" (click)="verDetalle(reporte)">
+                  <i class="bi bi-eye"></i> Ver
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="eliminarReporte(reporte.idReporte)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          }
+          @if (reportes.length === 0 && !loading) {
+            <tr>
+              <td colspan="4" class="text-center py-4 text-muted">
+                No hay reportes generados para este curso.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </section>
 </main>

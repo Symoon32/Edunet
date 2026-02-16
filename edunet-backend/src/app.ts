@@ -28,6 +28,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Archivos estáticos
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 // Simple request logger (no external dependency) — muestra método, ruta y timestamp
 app.use((req: Request, res: Response, next: NextFunction) => {
   console.log(`${new Date().toISOString()} ${req.method} ${req.originalUrl}`);

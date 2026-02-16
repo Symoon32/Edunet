@@ -13,25 +13,39 @@ import { Subscription } from 'rxjs';
 })
 export class Navbar implements OnDestroy {
   profileImgUrl: string = '';
+  userName: string = '';
+  userEmail: string = '';
   isAdmin = false;
   isProfesor = false;
   isEstudiante = false;
   isAcudiente = false;
   private sub?: Subscription;
   constructor(private router: Router, private authState: AuthStateService) {
-   
-    this.profileImgUrl = '';
+    this.loadUserInfo();
     // Suscribirse al estado de autenticación
     this.sub = this.authState.authState$.subscribe(s => {
       this.isAdmin = s.role === 4;
       this.isProfesor = s.role === 2;
       this.isEstudiante = s.role === 1;
       this.isAcudiente = s.role === 3;
+      this.loadUserInfo();
     });
   }
 
-  private updateRoleFlags() {
-    
+  private loadUserInfo() {
+    const userJson = localStorage.getItem('user');
+    if (userJson) {
+      const user = JSON.parse(userJson);
+      this.userName = user.nombres || '';
+      this.userEmail = user.correo || '';
+      if (user.fotoPerfil) {
+        this.profileImgUrl = user.fotoPerfil.startsWith('http')
+          ? user.fotoPerfil
+          : `http://localhost:3000${user.fotoPerfil}`;
+      } else {
+        this.profileImgUrl = '';
+      }
+    }
   }
 
   logout() {

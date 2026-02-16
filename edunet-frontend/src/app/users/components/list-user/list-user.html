@@ -14,13 +14,13 @@
       <div class="card-body p-4">
         <!-- Filters -->
         <div class="d-flex flex-wrap gap-3 mb-4">
-          <div class="input-group shadow-sm" style="max-width: 400px;">
+          <div class="input-group shadow-sm" style="max-width: 350px;">
             <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
             <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar por nombre o correo..."
                    [(ngModel)]="busqueda" (input)="buscarUsuario()">
           </div>
 
-          <div class="input-group shadow-sm" style="max-width: 250px;">
+          <div class="input-group shadow-sm" style="max-width: 200px;">
              <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-funnel"></i></span>
              <select class="form-select border-start-0 ps-0" [(ngModel)]="filtroEstado" (change)="aplicarFiltroEstado()">
                <option value="todos">Todos los Estados</option>
@@ -28,6 +28,19 @@
                <option value="inactivos">Inactivos</option>
              </select>
           </div>
+
+          @if (!rolFiltrado) {
+            <div class="input-group shadow-sm" style="max-width: 200px;">
+               <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-person-badge"></i></span>
+               <select class="form-select border-start-0 ps-0" [(ngModel)]="filtroRol" (change)="filtrarUsuarios()">
+                 <option value="todos">Todos los Roles</option>
+                 <option value="1">Estudiantes</option>
+                 <option value="2">Profesores</option>
+                 <option value="3">Acudientes</option>
+                 <option value="4">Administradores</option>
+               </select>
+            </div>
+          }
         </div>
 
         <!-- User Table -->
@@ -69,7 +82,7 @@
                     </span>
                   </td>
                   <td class="text-end">
-                    <button class="btn btn-sm btn-light text-primary me-2" (click)="modificarUsuario()" title="Editar">
+                    <button class="btn btn-sm btn-light text-primary me-2" (click)="modificarUsuario(user)" title="Editar">
                       <i class="bi bi-pencil-square"></i>
                     </button>
                     <button class="btn btn-sm btn-light text-danger me-2" (click)="inactivarUsuario()" title="Cambiar Estado">

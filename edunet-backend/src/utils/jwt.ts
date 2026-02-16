@@ -22,6 +22,8 @@ export interface TokenPayload {
   id: number;
   correo: string;
   rol: number;
+  nombres?: string;
+  fotoPerfil?: string;
   is_rector?: boolean;
 }
 

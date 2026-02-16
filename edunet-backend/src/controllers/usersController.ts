@@ -263,7 +263,7 @@ export async function deleteUser(req: Request, res: Response) { // Now this is s
             return res.status(403).json({ error: 'No puedes inactivarte a ti mismo' });
         }
 
-        await conn.execute('UPDATE usuarios SET is_active = false WHERE correo = ?', [correo]);
+        await conn.execute('UPDATE usuarios SET is_active = 0 WHERE correo = ?', [correo]);
 
         // Log the action
         await logAction(loggedInUser.id, 'INACTIVATE_USER', { inactivatedUserEmail: correo });
@@ -299,7 +299,7 @@ export async function deleteUserById(req: Request, res: Response) {
             return res.status(403).json({ error: 'No puedes inactivarte a ti mismo' });
         }
 
-        await conn.execute('UPDATE usuarios SET is_active = false WHERE idUsuarios = ?', [id]);
+        await conn.execute('UPDATE usuarios SET is_active = 0 WHERE idUsuarios = ?', [id]);
 
         await logAction(loggedInUser.id, 'INACTIVATE_USER', { inactivatedUserId: id, inactivatedUserEmail: userToInactivate.correo });
 

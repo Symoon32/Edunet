@@ -83,6 +83,18 @@ export class CreateEditUser {
         this.userService.updateUser(this.usuario.correo, usuarioEdit).subscribe({
           next: () => {
             alert('Usuario actualizado correctamente');
+            // If updating self, refresh localStorage
+            if (this.currentUser && this.currentUser.correo === this.usuario.correo) {
+              const updatedUser = {
+                ...this.currentUser,
+                nombres: `${this.usuario.nombres} ${this.usuario.apellidos}`,
+                fotoPerfil: this.usuario.fotoPerfil,
+                is_rector: this.usuario.is_rector
+              };
+              localStorage.setItem('user', JSON.stringify(updatedUser));
+              // Optional: trigger a page reload or state update to refresh navbar
+              window.location.reload();
+            }
             this.navigateBack(this.usuario.idRol);
           },
           error: (err) => {

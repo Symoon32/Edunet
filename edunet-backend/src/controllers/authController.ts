@@ -26,9 +26,14 @@ import { RowDataPacket } from 'mysql2';
 
 interface Usuarios extends RowDataPacket {
   idUsuarios: number;
+  nombres: string;
+  apellidos: string;
   correo: string;
   password: string;
   idRol: number;
+  is_active: number;
+  fotoPerfil: string;
+  is_rector: number;
 }
 
 export async function login(req: Request, res: Response) {
@@ -59,7 +64,7 @@ export async function login(req: Request, res: Response) {
 
     // Consulta preparada con campos específicos por seguridad
     const [rows]: [Usuarios[], any] = await conn.execute(
-      'SELECT idUsuarios, correo, password, idRol FROM usuarios WHERE correo = ?', 
+      'SELECT idUsuarios, nombres, apellidos, correo, password, idRol, is_active, fotoPerfil, is_rector FROM usuarios WHERE correo = ?',
       [usuarios]
     );
 
@@ -74,6 +79,14 @@ export async function login(req: Request, res: Response) {
     const user = rows[0];
     console.log('[authController] user found, id:', user.idUsuarios);
 
+    // Verificar si el usuario está activo
+    if (Number(user.is_active) === 0) {
+      return res.status(403).json({
+        error: 'Usuario inactivado',
+        details: 'Su cuenta ha sido desactivada. Por favor, contacte al administrador.'
+      });
+    }
+
     const valid = await comparePasswords(password, user.password);
     console.log('[authController] password validation:', valid ? 'success' : 'failed');
 
@@ -87,7 +100,10 @@ export async function login(req: Request, res: Response) {
     const token = generateToken({
       id: user.idUsuarios,
       correo: user.correo,
-      rol: user.idRol
+      rol: user.idRol,
+      nombres: `${user.nombres} ${user.apellidos}`,
+      fotoPerfil: user.fotoPerfil,
+      is_rector: !!user.is_rector
     });
 
     console.log('[authController] login successful for user:', user.idUsuarios);
