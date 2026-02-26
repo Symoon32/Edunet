@@ -26,9 +26,11 @@ export class MaterialesComponent implements OnInit {
     url_archivo: '',
     idCurso: 0
   };
+  selectedFile: File | null = null;
 
   feedbackMessage = '';
   feedbackType: 'success' | 'error' = 'success';
+  ngModelUrl = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -73,10 +75,26 @@ export class MaterialesComponent implements OnInit {
     });
   }
 
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
   crearMaterial() {
     if (!this.newMaterial.titulo || !this.idCurso) return;
 
-    this.materialesService.createMaterial(this.newMaterial).subscribe({
+    const formData = new FormData();
+    formData.append('titulo', this.newMaterial.titulo);
+    formData.append('descripcion', this.newMaterial.descripcion);
+    formData.append('tipo', this.newMaterial.tipo);
+    formData.append('idCurso', this.newMaterial.idCurso.toString());
+
+    if (this.selectedFile) {
+      formData.append('archivo', this.selectedFile);
+    } else {
+      formData.append('url_archivo', this.newMaterial.url_archivo);
+    }
+
+    this.materialesService.createMaterial(formData).subscribe({
       next: (res) => {
         this.feedbackMessage = 'Material publicado exitosamente';
         this.feedbackType = 'success';
@@ -112,6 +130,8 @@ export class MaterialesComponent implements OnInit {
       url_archivo: '',
       idCurso: this.idCurso || 0
     };
+    this.selectedFile = null;
+    this.ngModelUrl = '';
   }
 
   goBack() {

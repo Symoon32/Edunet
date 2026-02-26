@@ -19,7 +19,9 @@ router.post('/upload-profile', authenticateToken, upload.single('fotoPerfil'), (
     return res.status(400).json({ error: 'No se subió ningún archivo' });
   }
   
-  const url = `/uploads/${req.file.filename}`;
+  // Si usamos S3, multer-s3 añade la propiedad 'location'
+  const file = req.file as any;
+  const url = file.location ? file.location : `/uploads/${file.filename}`;
   res.json({ url });
 });
 
