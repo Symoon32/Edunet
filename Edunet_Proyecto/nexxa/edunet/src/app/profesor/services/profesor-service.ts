@@ -1,3 +1,4 @@
+import { environment } from "@env/environment";
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
@@ -6,7 +7,7 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root'
 })
 export class ProfesorService {
-  private apiUrl = 'http://localhost:3000/api/profesor'; // URL base del backend
+  private apiUrl = environment.apiUrl + '/api/profesor'; // URL base del backend
 
   constructor(private http: HttpClient) {}
 

@@ -1,3 +1,4 @@
+import { environment } from "@env/environment";
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -51,7 +52,7 @@ export interface Evento {
   providedIn: 'root'
 })
 export class EstudiantesService {
-  private apiUrl = 'http://localhost:3000/api'; // Base URL - should be environment configurable but hardcoded for now as per memory
+  private apiUrl = environment.apiUrl + '/api'; // Base URL - should be environment configurable but hardcoded for now as per memory
 
   constructor(private http: HttpClient) {}
 

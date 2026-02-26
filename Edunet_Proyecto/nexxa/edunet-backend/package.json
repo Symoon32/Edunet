@@ -18,6 +18,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer-s3": "^3.0.3",
     "@types/node": "^24.5.2",
     "@types/sqlite3": "^3.1.11",
     "nodemon": "^3.1.10",
@@ -25,11 +26,13 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.999.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "multer-s3": "^3.0.1",
     "mysql2": "^3.15.0",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"

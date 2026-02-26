@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { MaterialesController } from '../controllers/materialesController';
 import { authMiddleware } from '../middleware/auth';
 import { authorizeRoles, authorize } from '../middleware/authorize';
+import { upload } from '../middleware/upload';
 
 const router = Router();
 const materialesController = new MaterialesController();
@@ -12,7 +13,7 @@ router.use(authMiddleware);
 router.get('/curso/:idCurso', materialesController.getMaterialesCurso);
 
 // Solo profes y admin pueden crear/borrar
-router.post('/', authorize('profesor', 'administrador'), materialesController.createMaterial);
+router.post('/', authorize('profesor', 'administrador'), upload.single('archivo'), materialesController.createMaterial);
 router.delete('/:idMaterial', authorize('profesor', 'administrador'), materialesController.deleteMaterial);
 
 export default router;

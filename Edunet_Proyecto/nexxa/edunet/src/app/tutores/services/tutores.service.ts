@@ -1,3 +1,4 @@
+import { environment } from "@env/environment";
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -6,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class TutoresService {
-  private apiUrl = 'http://localhost:3000/api/users'; // Base URL for users
+  private apiUrl = environment.apiUrl + '/api/users'; // Base URL for users
 
   constructor(private http: HttpClient) {}
 

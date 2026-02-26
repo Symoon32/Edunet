@@ -5,7 +5,14 @@ export class MaterialesController {
   // Publicar material (Profesor/Admin)
   async createMaterial(req: Request, res: Response) {
     try {
-      const { idCurso, titulo, descripcion, url_archivo, tipo } = req.body;
+      const { idCurso, titulo, descripcion, tipo } = req.body;
+      let { url_archivo } = req.body;
+
+      // Si se subió un archivo a través de multer
+      if (req.file) {
+        const file = req.file as any;
+        url_archivo = file.location ? file.location : `/uploads/${file.filename}`;
+      }
 
       const [result]: any = await connection.execute(
         `INSERT INTO materiales (idCurso, titulo, descripcion, url_archivo, tipo)
