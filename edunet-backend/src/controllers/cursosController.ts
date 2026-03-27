@@ -366,9 +366,10 @@ export async function addEstudianteCurso(req: Request, res: Response) {
     }
 
     // Agregar estudiante al curso
+    // Usamos CURRENT_TIMESTAMP para compatibilidad entre MySQL y SQLite
     await conn.execute(
       `INSERT INTO curso_estudiante (idCurso, idEstudiante, fechaInscripcion, estado)
-       VALUES (?, ?, NOW(), 'activo')`,
+       VALUES (?, ?, CURRENT_TIMESTAMP, 'activo')`,
       [idCurso, idEstudiante]
     );
 
@@ -408,11 +409,12 @@ export async function removeEstudianteCurso(req: Request, res: Response) {
     );
 
     // Eliminar asistencias
+    // Usamos una subconsulta para compatibilidad entre MySQL y SQLite
     await conn.execute(
-      `DELETE a FROM asistencia a
-       INNER JOIN clases c ON a.idClase = c.idClase
-       WHERE c.idCurso = ? AND a.idEstudiante = ?`,
-      [idCurso, idEstudiante]
+      `DELETE FROM asistencia
+       WHERE idEstudiante = ?
+       AND idClase IN (SELECT idClase FROM clases WHERE idCurso = ?)`,
+      [idEstudiante, idCurso]
     );
 
     // Eliminar inscripción

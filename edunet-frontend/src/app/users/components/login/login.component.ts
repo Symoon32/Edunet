@@ -33,6 +33,19 @@ export class LoginComponent {
         this.errorMessage = '';
         // Usar AuthStateService para propagar el estado de autenticación
         this.authState.setAuth(res.token, res.rol);
+
+        // Guardar información básica del usuario para los layouts
+        try {
+          const payload = JSON.parse(atob(res.token.split('.')[1]));
+          localStorage.setItem('user', JSON.stringify({
+            id: payload.id,
+            correo: payload.correo,
+            nombres: payload.correo.split('@')[0] // Fallback name
+          }));
+        } catch (e) {
+          console.error('Error saving user to localStorage', e);
+        }
+
         let rolNombre = '';
         let ruta = '';
         switch (res.rol) {

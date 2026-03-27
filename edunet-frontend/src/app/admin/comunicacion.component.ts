@@ -43,7 +43,7 @@ export class ComunicacionComponent implements OnInit {
   }
 
   getCurrentUser() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('auth_token');
     if (token) {
       try {
         this.currentUser = jwtDecode<TokenPayload>(token);

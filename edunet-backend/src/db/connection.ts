@@ -59,6 +59,21 @@ class SQLiteWrapper implements DBConnection {
     return this.execute(sql, params);
   }
 
+  async beginTransaction() {
+    const db = await this.dbPromise;
+    await db.run('BEGIN TRANSACTION');
+  }
+
+  async commit() {
+    const db = await this.dbPromise;
+    await db.run('COMMIT');
+  }
+
+  async rollback() {
+    const db = await this.dbPromise;
+    await db.run('ROLLBACK');
+  }
+
   async getConnection() {
     // Return self as the connection, since SQLite is file-based and "pool" concept is different
     // We add a 'release' method to satisfy pool consumers
@@ -66,9 +81,9 @@ class SQLiteWrapper implements DBConnection {
       execute: this.execute.bind(this),
       query: this.query.bind(this),
       release: () => {}, // No-op
-      beginTransaction: async () => { /* Not implemented in this simple wrapper */ },
-      commit: async () => { /* Not implemented */ },
-      rollback: async () => { /* Not implemented */ }
+      beginTransaction: this.beginTransaction.bind(this),
+      commit: this.commit.bind(this),
+      rollback: this.rollback.bind(this)
     };
   }
 

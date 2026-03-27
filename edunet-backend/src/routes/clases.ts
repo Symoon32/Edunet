@@ -11,10 +11,10 @@ router.use(authMiddleware);
 router.use(authorizeRoles(2, 4));
 
 // Rutas
-router.post('/', clasesController.createClase);
-router.get('/curso/:idCurso', clasesController.getClasesCurso);
-router.get('/:idClase', clasesController.getClase);
-router.put('/:idClase', clasesController.updateClase);
-router.delete('/:idClase', clasesController.deleteClase);
+router.post('/', (req, res) => clasesController.createClase(req, res));
+router.get('/curso/:idCurso', (req, res) => clasesController.getClasesCurso(req, res));
+router.get('/:idClase', (req, res) => clasesController.getClase(req, res));
+router.put('/:idClase', (req, res) => clasesController.updateClase(req, res));
+router.delete('/:idClase', (req, res) => clasesController.deleteClase(req, res));
 
 export default router;
