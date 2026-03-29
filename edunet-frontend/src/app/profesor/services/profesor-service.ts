@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { API_BASE_URL } from '../../api-config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfesorService {
-  private apiUrl = 'http://localhost:3000/api/profesor'; // URL base del backend
+  private apiUrl = `${API_BASE_URL}/profesor`;
 
   constructor(private http: HttpClient) {}
 

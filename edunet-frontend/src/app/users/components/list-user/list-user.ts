@@ -19,6 +19,7 @@ export class ListUser {
   usuariosFiltrados: any[] = [];
   busqueda: string = '';
   filtroEstado: string = 'todos';
+  filtroRol: string = 'todos';
   usuarioSeleccionado: any = null;
   tituloVista: string = 'Gestión de Usuarios';
   rolFiltrado: number | null = null;
@@ -75,12 +76,18 @@ export class ListUser {
       // 2. Status filter
       let matchesStatus = true;
       if (this.filtroEstado === 'activos') {
-        matchesStatus = !!u.is_active;
+        matchesStatus = Number(u.is_active) === 1;
       } else if (this.filtroEstado === 'inactivos') {
-        matchesStatus = !u.is_active;
+        matchesStatus = Number(u.is_active) === 0;
       }
 
-      return matchesSearch && matchesStatus;
+      // 3. Role filter
+      let matchesRol = true;
+      if (this.filtroRol !== 'todos') {
+        matchesRol = u.idRol.toString() === this.filtroRol;
+      }
+
+      return matchesSearch && matchesStatus && matchesRol;
     });
   }
 
@@ -107,7 +114,7 @@ export class ListUser {
   modificarUsuario(user: any = null) {
     const usuario = user || this.usuarioSeleccionado;
     if (usuario) {
-      this.router.navigate(['/edit-user', usuario.correo]);
+      this.router.navigate(['/admin/edit-user', usuario.correo]);
     }
   }
 

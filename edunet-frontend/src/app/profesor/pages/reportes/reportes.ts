@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ReportesService } from '../../services/reportes.service';
 
 @Component({
   selector: 'app-reportes',
@@ -12,35 +13,74 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class Reportes implements OnInit {
   cursoId: number | null = null;
-  estudiante: string = '';
-  grado: string = '';
-  detalle: string = '';
+  periodo: string = '';
+  reportes: any[] = [];
+  loading = false;
   resultado: string = '';
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private reportesService: ReportesService) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('cursoId');
       if (id) {
         this.cursoId = +id;
-        // En una implementación real, aquí se cargarían datos del curso
-        console.log('Generando reportes para el curso:', this.cursoId);
+        this.cargarReportes();
       }
     });
   }
 
+  cargarReportes() {
+    if (this.cursoId) {
+      this.loading = true;
+      this.reportesService.getReportesCurso(this.cursoId).subscribe({
+        next: (data) => {
+          this.reportes = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error cargando reportes', err);
+          this.loading = false;
+        }
+      });
+    }
+  }
+
   generarReporte() {
-    if (!this.estudiante || !this.grado) {
-      this.resultado = '⚠️ Debes completar todos los campos obligatorios.';
+    if (!this.cursoId || !this.periodo) {
+      this.resultado = '⚠️ Debes seleccionar un periodo.';
       return;
     }
 
-    this.resultado = `
-      📘 Reporte generado con éxito:<br><br>
-      👤 <b>Estudiante:</b> ${this.estudiante}<br>
-      🎓 <b>Grado:</b> ${this.grado}<br>
-      📝 <b>Observaciones:</b> ${this.detalle || 'Sin observaciones adicionales.'}
-    `;
+    this.loading = true;
+    this.reportesService.generarReporteRendimiento(this.cursoId, { periodo: this.periodo }).subscribe({
+      next: (res) => {
+        this.resultado = '✅ Reporte de rendimiento generado con éxito.';
+        this.cargarReportes();
+        this.loading = false;
+      },
+      error: (err) => {
+        this.resultado = '❌ Error al generar el reporte.';
+        this.loading = false;
+      }
+    });
+  }
+
+  verDetalle(reporte: any) {
+    // Para simplificar, mostramos el contenido en una alerta o consola
+    // En una app real, esto podría abrir un modal o navegar a otra vista
+    console.log('Detalle del reporte:', JSON.parse(reporte.contenido));
+    alert('Contenido del reporte (ver consola para JSON):\n' + reporte.tipo + ' - ' + reporte.periodo);
+  }
+
+  eliminarReporte(idReporte: number) {
+    if (confirm('¿Seguro que deseas eliminar este reporte?')) {
+      this.reportesService.deleteReporte(idReporte).subscribe({
+        next: () => {
+          this.cargarReportes();
+        },
+        error: (err) => alert('Error al eliminar reporte')
+      });
+    }
   }
 }

@@ -14,6 +14,7 @@ export class ListProfesor {
   profesores: any[] = [];
   profesoresFiltrados: any[] = [];
   busqueda: string = '';
+  filtroEstado: string = 'todos';
   profesorSeleccionado: any = null;
 
   private router = inject(Router);
@@ -31,10 +32,20 @@ export class ListProfesor {
 
   filtrarProfesores() {
     const filtro = this.busqueda.trim().toLowerCase();
-    if (!filtro) this.profesoresFiltrados = this.profesores;
-    else this.profesoresFiltrados = this.profesores.filter(p =>
-      (p.nombres + ' ' + p.apellidos).toLowerCase().includes(filtro) || (p.correo || '').toLowerCase().includes(filtro)
-    );
+
+    this.profesoresFiltrados = this.profesores.filter(p => {
+      const matchesSearch = (p.nombres + ' ' + p.apellidos).toLowerCase().includes(filtro) ||
+                          (p.correo || '').toLowerCase().includes(filtro);
+
+      let matchesStatus = true;
+      if (this.filtroEstado === 'activos') {
+        matchesStatus = Number(p.is_active) === 1;
+      } else if (this.filtroEstado === 'inactivos') {
+        matchesStatus = Number(p.is_active) === 0;
+      }
+
+      return matchesSearch && matchesStatus;
+    });
   }
 
   buscarProfesor() { this.filtrarProfesores(); this.profesorSeleccionado = null; }

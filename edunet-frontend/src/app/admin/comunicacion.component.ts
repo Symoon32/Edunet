@@ -23,6 +23,7 @@ export class ComunicacionComponent implements OnInit {
   mensajesRecibidos: any[] = [];
   mensajesEnviados: any[] = [];
   usuarios: any[] = []; // For recipient selection
+  searchTerm: string = '';
   currentUser: TokenPayload | null = null;
 
   composeForm: FormGroup;
@@ -57,6 +58,19 @@ export class ComunicacionComponent implements OnInit {
 
   loadSent() {
     this.mensajesService.getEnviados().subscribe((data: any) => this.mensajesEnviados = data);
+  }
+
+  get mensajesFiltrados() {
+    const term = this.searchTerm.toLowerCase().trim();
+    const lista = this.activeTab === 'inbox' ? this.mensajesRecibidos : this.mensajesEnviados;
+    if (!term) return lista;
+
+    return lista.filter(m =>
+      (m.asunto || '').toLowerCase().includes(term) ||
+      (m.contenido || '').toLowerCase().includes(term) ||
+      (m.remitenteNombre || '').toLowerCase().includes(term) ||
+      (m.destinatarioNombre || '').toLowerCase().includes(term)
+    );
   }
 
   loadUsers() {

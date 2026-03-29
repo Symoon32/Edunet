@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../api-config';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -6,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class MaterialesService {
-  private apiUrl = 'http://localhost:3000/api/materiales';
+  private apiUrl = `${API_BASE_URL}/materiales`;
 
   constructor(private http: HttpClient) {}
 

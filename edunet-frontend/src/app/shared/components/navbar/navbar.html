@@ -4,9 +4,12 @@
 		<h1 class="h4 mb-0" *ngIf="!isProfesor">Edunet</h1>
 		<h1 class="h4 mb-0" *ngIf="isProfesor">Edunet <small class="fs-6 opacity-75">| Portal Docente</small></h1>
 	</div>
-	<a class="profile-img-link" [routerLink]="['/perfil']" title="Ver mi perfil">
-		<img [src]="profileImgUrl || 'public/foto-perfil.avif' || 'public/foto perfil.avif'" alt="Foto de perfil" class="profile-img" />
-	</a>
+  <div class="d-flex align-items-center gap-3">
+    <span class="d-none d-md-inline small fw-semibold">{{ userName }}</span>
+    <a class="profile-img-link" [routerLink]="isAdmin ? '/admin/edit-user/' + userEmail : (isEstudiante ? '/estudiantes/perfil' : '/perfil')" title="Ver mi perfil">
+      <img [src]="profileImgUrl || 'public/foto-perfil.avif' || 'public/foto perfil.avif'" alt="Foto de perfil" class="profile-img border border-2 border-white shadow-sm" />
+    </a>
+  </div>
 </header>
 <nav [class.bg-dark]="!isProfesor" [class.navbar-profesor]="isProfesor" class="navbar-expand-lg">
 	<div class="container">

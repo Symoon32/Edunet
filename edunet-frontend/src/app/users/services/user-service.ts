@@ -2,13 +2,14 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { API_BASE_URL } from '../../api-config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:3000/api/users';
-  private authUrl = 'http://localhost:3000/api/auth';
+  private apiUrl = `${API_BASE_URL}/users`;
+  private authUrl = `${API_BASE_URL}/auth`;
   private http = inject(HttpClient);
 
   getUsers(role: number | null = null): Observable<any> {

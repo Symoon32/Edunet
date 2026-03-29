@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService, AuthResponse } from '../../services/auth-service';
 import { AuthStateService } from '../../services/auth-state.service';
 
@@ -11,7 +11,7 @@ import { AuthStateService } from '../../services/auth-state.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbCarouselModule]
+  imports: [CommonModule, FormsModule, NgbCarouselModule, RouterModule]
 })
 export class LoginComponent {
   correo: string = '';
@@ -31,20 +31,24 @@ export class LoginComponent {
       next: (res: AuthResponse) => {
         this.rol = res.rol;
         this.errorMessage = '';
-        // Usar AuthStateService para propagar el estado de autenticación
-        this.authState.setAuth(res.token, res.rol);
 
-        // Guardar información básica del usuario para los layouts
+        // Extraer info del usuario del token
+        let user = null;
         try {
           const payload = JSON.parse(atob(res.token.split('.')[1]));
-          localStorage.setItem('user', JSON.stringify({
+          user = {
             id: payload.id,
             correo: payload.correo,
-            nombres: payload.correo.split('@')[0] // Fallback name
-          }));
+            nombres: payload.nombres || payload.correo.split('@')[0],
+            fotoPerfil: payload.fotoPerfil,
+            is_rector: payload.is_rector
+          };
         } catch (e) {
-          console.error('Error saving user to localStorage', e);
+          console.error('Error decoding token', e);
         }
+
+        // Usar AuthStateService para propagar el estado de autenticación
+        this.authState.setAuth(res.token, res.rol, user);
 
         let rolNombre = '';
         let ruta = '';
@@ -69,9 +73,13 @@ export class LoginComponent {
         
         this.router.navigate([ruta]);
       },
-      error: () => {
+      error: (err) => {
         this.rol = null;
-        this.errorMessage = 'Usuario o contraseña incorrectos';
+        if (err.status === 403) {
+          this.errorMessage = err.error?.error || 'Usuario inactivado';
+        } else {
+          this.errorMessage = 'Usuario o contraseña incorrectos';
+        }
       }
     });
   }

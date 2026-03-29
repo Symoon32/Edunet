@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../api-config';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -56,7 +57,7 @@ export class MensajesEstudiantesComponent implements OnInit {
   };
 
   loading: boolean = false;
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = `${API_BASE_URL}`;
 
   constructor(
     private http: HttpClient,
